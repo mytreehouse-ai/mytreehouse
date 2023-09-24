@@ -1,0 +1,1 @@
+export const UNKNOWN_CITY = "3323750f-270c-43b9-bd46-7c077309c948";
