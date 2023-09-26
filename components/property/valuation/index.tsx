@@ -13,7 +13,7 @@ import PropertyDetails from "./propertyDetails";
 
 const Valuation: React.FC = () => {
   return (
-    <Card className="w-1/3">
+    <Card className="w-full h-screen overflow-y-auto rounded-t-3xl rounded-b-none">
       <CardHeader>
         <CardTitle>Card Title</CardTitle>
         <CardDescription>Card Description</CardDescription>
