@@ -28,6 +28,7 @@ export function Search() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+
   const form = useForm<z.infer<typeof SearchSchema>>({
     resolver: zodResolver(SearchSchema),
     defaultValues: {
@@ -45,12 +46,10 @@ export function Search() {
         scroll: false,
       });
     }
-
-    console.log(data);
   }
 
   return (
-    <div className="flex w-full items-center justify-center gap-x-2">
+    <div className="flex items-center justify-center w-full gap-x-2">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -63,7 +62,7 @@ export function Search() {
               <FormItem>
                 <FormControl>
                   {/* Add this div with a relative position */}
-                  <div className="relative rounded-lg border">
+                  <div className="relative border rounded-lg">
                     <Input
                       className="py-6 placeholder:text-base"
                       placeholder="Search property"
@@ -72,7 +71,7 @@ export function Search() {
                     {/* Position your button absolutely within the parent div */}
                     <Button
                       type="submit"
-                      className="absolute right-0 top-1/2 mr-1 flex -translate-y-1/2 transform items-center px-3 text-base"
+                      className="absolute right-0 flex items-center px-3 mr-1 text-base transform -translate-y-1/2 top-1/2"
                     >
                       Search
                     </Button>
@@ -84,10 +83,10 @@ export function Search() {
         </form>
       </Form>
       <Button className="py-6 text-base" onClick={() => setOpen(true)}>
-        Filters <BsFilter className="ml-1 h-6 w-6" />
+        Filters <BsFilter className="w-6 h-6 ml-1" />
       </Button>
       <Button className="py-6 text-base">
-        Map <BsMap className="ml-1 h-6 w-6" />
+        Map <BsMap className="w-6 h-6 ml-1" />
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
@@ -98,13 +97,13 @@ export function Search() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid items-center grid-cols-4 gap-4">
               <Label htmlFor="name" className="text-right">
                 Name
               </Label>
               <Input id="name" value="Pedro Duarte" className="col-span-3" />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid items-center grid-cols-4 gap-4">
               <Label htmlFor="username" className="text-right">
                 Username
               </Label>
