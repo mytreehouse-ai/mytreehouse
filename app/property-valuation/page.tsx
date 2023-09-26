@@ -1,6 +1,6 @@
 
 const page = () => {
-return <>PropertyValuation</>
+    return <>PropertyValuation</>
 }
 
 export default page;
