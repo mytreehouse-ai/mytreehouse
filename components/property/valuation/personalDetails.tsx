@@ -30,6 +30,7 @@ const PersonalDetails: React.FC = () => {
 
   return (
     <Form {...form}>
+      <h2 className="w-full text-lg text-neutral-800 font-bold">Tell us more about the seller</h2>
       <form
         name="test"
         onSubmit={form.handleSubmit(onSubmit)}

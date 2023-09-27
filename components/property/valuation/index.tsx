@@ -38,7 +38,7 @@ export const personalDetailsFormSchema = z.object({
 })
 
 const Valuation: React.FC = () => {
-  const { steps, currentStepIndex } = ValuationStepper()
+  const { steps, currentStepIndex, markStepAsComplete } = ValuationStepper()
 
   const ComponentToRender =
     componentsMap[
@@ -48,7 +48,7 @@ const Valuation: React.FC = () => {
   return (
     <Card className="relative w-full h-[calc(100vh)] overflow-y-auto rounded-t-3xl rounded-b-none">
       <div className="p-6 sticky top-0 left-0 h-20 w-full bg-white z-20">
-        <Progress value={currentStepIndex === 1 ? 33.33 : currentStepIndex === 2 ? 66.6 : currentStepIndex === 3 ? 100 : 0} />
+        <Progress value={currentStepIndex === 1 ? 33.33 : currentStepIndex === 2 ? 100 : currentStepIndex === 3 ? 100 : 0} />
       </div>
       <CardContent>
         {ComponentToRender && <ComponentToRender />}
