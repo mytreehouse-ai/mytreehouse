@@ -46,8 +46,8 @@ const Valuation: React.FC = () => {
     ] || null;
 
   return (
-    <Card className="relative w-full h-[calc(100vh)] overflow-y-auto rounded-t-3xl rounded-b-none">
-      <div className="p-6 sticky top-0 left-0 h-20 w-full bg-white z-20">
+    <Card className="relative w-full h-[calc(100vh)] md:h-[calc(100vh_-_70%)] overflow-y-auto rounded-t-3xl rounded-b-none md:rounded-xl">
+      <div className="px-6 py-6 sticky top-0 left-0 h-20 w-full bg-white z-20 md:pt-6 md:pb-2">
         <Progress value={currentStepIndex === 1 ? 33.33 : currentStepIndex === 2 ? 100 : currentStepIndex === 3 ? 100 : 0} />
       </div>
       <CardContent>
