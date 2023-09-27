@@ -19,27 +19,26 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-const formSchema = z.object({
-  propertyType: z.string().nonempty(),
-  address: z.string().nonempty(),
-  location: z.string().nonempty(),
-  sqm: z.preprocess((val) => Number(val), z.number().positive()),
-  yearBuilt: z.string().nonempty(),
-  whenAreyouLookingToSell: z.string().nonempty(),
-});
+import ValuationStepper from "@/hooks/useStepperStore";
+import { propertyValuationFormSchema } from ".";
 
 const PropertyDetails: React.FC = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper()
+
+  const form = useForm<z.infer<typeof propertyValuationFormSchema>>({
+    resolver: zodResolver(propertyValuationFormSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof propertyValuationFormSchema>) {
     console.log(values);
+    if (currentStepIndex < steps.length - 1) {
+      setCurrentStepIndex(+ 1);
+    }
   }
 
   return (
     <Form {...form}>
+      <h2 className="w-full text-lg text-neutral-800 font-bold">Tell us about your property</h2>
       <form
         name="test"
         onSubmit={form.handleSubmit(onSubmit)}
@@ -153,9 +152,12 @@ const PropertyDetails: React.FC = () => {
             </FormItem>
           )}
         />
+
         <Button className="w-full" type="submit">
-          Submit
+          Next
         </Button>
+
+
       </form>
     </Form>
   );
