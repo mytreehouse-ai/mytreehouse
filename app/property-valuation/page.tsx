@@ -5,7 +5,7 @@ const Page = () => {
   return (
     <div className="relative flex flex-col h-full py-20 mt-14 px-14 md:flex-row md:items-center md:justify-center">
       <Image
-        className="absolute border-4 border-red-700 brightness-50"
+        className="absolute brightness-50"
         src="/property-valuation-bg.jpg"
         alt="propery_valuation_bg"
         sizes="(max-width: 768px) 100vw"
