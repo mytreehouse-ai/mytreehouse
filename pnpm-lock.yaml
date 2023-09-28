@@ -26,6 +26,9 @@ dependencies:
   '@radix-ui/react-popover':
     specifier: ^1.0.6
     version: 1.0.6(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
+  '@radix-ui/react-progress':
+    specifier: ^1.0.3
+    version: 1.0.3(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-select':
     specifier: ^1.2.2
     version: 1.2.2(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
@@ -82,7 +85,7 @@ dependencies:
     version: 7.46.1(react@18.2.0)
   react-icons-all-files:
     specifier: github:alisamar/react-icons-all-files#4.8.0
-    version: git/github.com+alisamar/react-icons-all-files/7f607f596c600ffdcea65e0388f21c8a4fd17943(react@18.2.0)
+    version: github.com/alisamar/react-icons-all-files/7f607f596c600ffdcea65e0388f21c8a4fd17943(react@18.2.0)
   react-select:
     specifier: ^5.7.5
     version: 5.7.5(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
@@ -95,6 +98,9 @@ dependencies:
   zod:
     specifier: ^3.22.2
     version: 3.22.2
+  zustand:
+    specifier: ^4.4.1
+    version: 4.4.1(@types/react@18.2.21)(react@18.2.0)
 
 devDependencies:
   '@tanstack/eslint-plugin-query':
@@ -1075,6 +1081,28 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
+  /@radix-ui/react-progress@1.0.3(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-5G6Om/tYSxjSeEdrb1VfKkfZfn/1IlPWd731h2RfPuSbIfNUgfqAwbKfJCg/PP6nuUCTrYzalwHSpSinoWoCag==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.15
+      '@radix-ui/react-context': 1.0.1(@types/react@18.2.21)(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
+      '@types/react': 18.2.21
+      '@types/react-dom': 18.2.7
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /@radix-ui/react-roving-focus@1.0.4(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-2mUg5Mgcu001VkGy+FfzZyzbmuUWzgWkj3rvv4yu+mLw03+mTzbxZHvfcGyFp2b8EkQeMkpRQ5FiA2Vr2O6TeQ==}
     peerDependencies:
@@ -1794,7 +1822,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.10
-      caniuse-lite: 1.0.30001538
+      caniuse-lite: 1.0.30001540
       fraction.js: 4.3.6
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -1851,7 +1879,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001538
+      caniuse-lite: 1.0.30001540
       electron-to-chromium: 1.4.523
       node-releases: 2.0.13
       update-browserslist-db: 1.0.11(browserslist@4.21.10)
@@ -1883,8 +1911,8 @@ packages:
     resolution: {integrity: sha512-vlPVrhsCS7XaSh2VvWluIQEzVhefrUQcEsQWSS5A5V+dM07uv1qHeQzAOTGIMy9i3e9bH15+muvI/UHojVgS/Q==}
     dev: false
 
-  /caniuse-lite@1.0.30001538:
-    resolution: {integrity: sha512-HWJnhnID+0YMtGlzcp3T9drmBJUVDchPJ08tpUGFLs9CYlwWPH2uLgpHn8fND5pCgXVtnGS3H4QR9XLMHVNkHw==}
+  /caniuse-lite@1.0.30001540:
+    resolution: {integrity: sha512-9JL38jscuTJBTcuETxm8QLsFr/F6v0CYYTEU6r5+qSM98P2Q0Hmu0eG1dTG5GBUmywU3UlcVOUSIJYY47rdFSw==}
     dev: true
 
   /chalk@2.4.2:
@@ -4242,9 +4270,29 @@ packages:
     resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
     dev: false
 
-  git/github.com+alisamar/react-icons-all-files/7f607f596c600ffdcea65e0388f21c8a4fd17943(react@18.2.0):
-    resolution: {commit: 7f607f596c600ffdcea65e0388f21c8a4fd17943, repo: git@github.com:alisamar/react-icons-all-files.git, type: git}
-    id: git@github.com+alisamar/react-icons-all-files/7f607f596c600ffdcea65e0388f21c8a4fd17943
+  /zustand@4.4.1(@types/react@18.2.21)(react@18.2.0):
+    resolution: {integrity: sha512-QCPfstAS4EBiTQzlaGP1gmorkh/UL1Leaj2tdj+zZCZ/9bm0WS7sI2wnfD5lpOszFqWJ1DcPnGoY8RDL61uokw==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.21
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  github.com/alisamar/react-icons-all-files/7f607f596c600ffdcea65e0388f21c8a4fd17943(react@18.2.0):
+    resolution: {tarball: https://codeload.github.com/alisamar/react-icons-all-files/tar.gz/7f607f596c600ffdcea65e0388f21c8a4fd17943}
+    id: github.com/alisamar/react-icons-all-files/7f607f596c600ffdcea65e0388f21c8a4fd17943
     name: react-icons-all-files
     version: 4.8.0
     peerDependencies:
