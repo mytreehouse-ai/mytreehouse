@@ -27,7 +27,7 @@ const SearchSchema = z.object({
 export function Search() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const form = useForm<z.infer<typeof SearchSchema>>({
     resolver: zodResolver(SearchSchema),
@@ -82,13 +82,13 @@ export function Search() {
           />
         </form>
       </Form>
-      <Button className="py-6 text-base" onClick={() => setOpen(true)}>
+      <Button className="py-6 text-base" onClick={() => setFilterOpen(true)}>
         Filters <BsFilter className="w-6 h-6 ml-1" />
       </Button>
       <Button className="py-6 text-base">
         Map <BsMap className="w-6 h-6 ml-1" />
       </Button>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Edit profile</DialogTitle>
