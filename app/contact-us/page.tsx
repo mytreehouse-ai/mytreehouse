@@ -1,9 +1,10 @@
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import ContactCard from "@/components/property/contact/contactCard";
 
 const page = async () => {
-  await wait(5000);
 
-  return <>ContactUs</>;
+  return <>
+    <ContactCard />
+  </>;
 };
 
 export default page;
