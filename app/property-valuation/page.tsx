@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Page = () => {
   return (
-    <div className="relative flex flex-col h-full mt-14 md:flex-row md:items-center">
+    <div className="relative flex flex-col h-full pb-20 px-14 py-36 md:flex-row md:items-center md:justify-center">
       <Image
         className="absolute brightness-50"
         src="/property-valuation-bg.jpg"
@@ -22,7 +22,7 @@ const Page = () => {
           confidence
         </p>
       </div>
-      <div className="w-full mb-14 md:mb-0 md:px-6">
+      <div className="w-full md:mb-0 md:px-6">
         <Valuation />
       </div>
     </div>
