@@ -23,7 +23,7 @@ import ValuationStepper from "@/hooks/useStepperStore";
 import { propertyValuationFormSchema } from ".";
 
 const PropertyDetails: React.FC = () => {
-  const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper()
+  const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
 
   const form = useForm<z.infer<typeof propertyValuationFormSchema>>({
     resolver: zodResolver(propertyValuationFormSchema),
@@ -32,13 +32,15 @@ const PropertyDetails: React.FC = () => {
   function onSubmit(values: z.infer<typeof propertyValuationFormSchema>) {
     console.log(values);
     if (currentStepIndex < steps.length - 1) {
-      setCurrentStepIndex(+ 1);
+      setCurrentStepIndex(+1);
     }
   }
 
   return (
     <Form {...form}>
-      <h2 className="w-full text-lg text-neutral-800 font-bold">Tell us about your property</h2>
+      <h2 className="w-full text-lg font-bold text-neutral-800">
+        Tell us about your property
+      </h2>
       <form
         name="test"
         onSubmit={form.handleSubmit(onSubmit)}
@@ -152,12 +154,9 @@ const PropertyDetails: React.FC = () => {
             </FormItem>
           )}
         />
-
         <Button className="w-full" type="submit">
           Next
         </Button>
-
-
       </form>
     </Form>
   );

@@ -1,16 +1,12 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import PropertyDetails from "./propertyDetails";
 import ValuationStepper from "@/hooks/useStepperStore";
 import PersonalDetails from "./personalDetails";
 import ValuationResults from "./valuationResults";
-import z from 'zod'
-
+import z from "zod";
 
 const componentsMap = {
   Property: PropertyDetails,
@@ -34,26 +30,34 @@ export const personalDetailsFormSchema = z.object({
   phoneNumber: z.string().nonempty(),
   emailAddress: z.string().nonempty(),
   termsAndConditions: z.boolean().optional(),
-  offers: z.boolean().optional()
-})
+  offers: z.boolean().optional(),
+});
 
 const Valuation: React.FC = () => {
-  const { steps, currentStepIndex, markStepAsComplete } = ValuationStepper()
+  const { steps, currentStepIndex, markStepAsComplete } = ValuationStepper();
 
   const ComponentToRender =
     componentsMap[
-    steps[currentStepIndex]?.name as keyof typeof componentsMap
+      steps[currentStepIndex]?.name as keyof typeof componentsMap
     ] || null;
 
   return (
-    <Card className="relative w-full h-[calc(100vh)] md:h-[calc(100vh_-_70%)] overflow-y-auto rounded-t-3xl rounded-b-none md:rounded-xl">
-      <div className="px-6 py-6 sticky top-0 left-0 h-20 w-full bg-white z-20 md:pt-6 md:pb-2">
-        <Progress value={currentStepIndex === 1 ? 33.33 : currentStepIndex === 2 ? 100 : currentStepIndex === 3 ? 100 : 0} />
+    <Card className="relative w-full overflow-y-auto rounded-b-none rounded-t-3xl md:rounded-xl">
+      <div className="sticky top-0 left-0 z-10 w-full h-20 px-6 py-6 bg-white md:pb-2 md:pt-6">
+        <Progress
+          value={
+            currentStepIndex === 1
+              ? 33.33
+              : currentStepIndex === 2
+              ? 100
+              : currentStepIndex === 3
+              ? 100
+              : 0
+          }
+        />
       </div>
-      <CardContent>
-        {ComponentToRender && <ComponentToRender />}
-      </CardContent>
-    </Card >
+      <CardContent>{ComponentToRender && <ComponentToRender />}</CardContent>
+    </Card>
   );
 };
 
