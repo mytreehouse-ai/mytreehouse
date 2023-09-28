@@ -3,6 +3,13 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+} from "@/components/ui/form";
+import {
     Card,
     CardContent,
     CardDescription,
@@ -10,17 +17,113 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
 
 const ContactCard = () => {
+
+    const contactFormSchema = z.object({
+        fullName: z.string().nonempty({ message: "Please enter your full name" }),
+        contactNumber: z.string().nonempty({ message: "Please enter your contact number" }),
+        emailAddress: z.string().nonempty({ message: "Please enter your email address" }),
+        message: z.string().nonempty({ message: "Please enter your message" }),
+    });
+
+    const form = useForm<z.infer<typeof contactFormSchema>>({
+        resolver: zodResolver(contactFormSchema),
+    });
+
+    const onSubmit = (values: z.infer<typeof contactFormSchema>) => {
+        console.log(values);
+    }
+
     return (
         <Card>
-            <CardHeader>
-                <CardTitle>Contact</CardTitle>
+            <CardHeader className="p-4">
+                <CardTitle>We&apos;d love to hear from you</CardTitle>
                 <CardDescription>Send us a message</CardDescription>
             </CardHeader>
+            <Separator />
+            <CardContent>
+                <Form {...form}>
+                    <form
+                        name="contactForm"
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="space-y-4 mt-4"
+                    >
+                        <FormField
+                            control={form.control}
+                            name="fullName"
+                            render={({ field }) => (
+                                <FormItem className="w-full">
+                                    <FormLabel>Full name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter your full name" type="text" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
 
+                        <FormField
+                            control={form.control}
+                            name="contactNumber"
+                            render={({ field }) => (
+                                <FormItem className="w-full">
+                                    <FormLabel>Contact number</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter your contact number" type="number" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="emailAddress"
+                            render={({ field }) => (
+                                <FormItem className="w-full">
+                                    <FormLabel>Email address</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter email address" type="text" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="message"
+                            render={({ field }) => (
+                                <FormItem className="w-full">
+                                    <FormLabel>Email address</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Leave us a message"  {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+
+                        <div className="flex space-x-2">
+                            <Checkbox id="report" />
+                            <label
+                                htmlFor="report"
+                                className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                                Did you get your free MyTreeHouse report?
+                            </label>
+                        </div>
+                    </form>
+                </Form>
+                <Button className="w-full mt-8" type="submit">
+                    Submit
+                </Button>
+            </CardContent>
         </Card>
     )
 }
