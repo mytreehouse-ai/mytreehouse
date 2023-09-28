@@ -22,7 +22,7 @@ const Page = () => {
           confidence
         </p>
       </div>
-      <div className="w-full md:px-6 ">
+      <div className="w-full mb-14 md:mb-0 md:px-6">
         <Valuation />
       </div>
     </div>
