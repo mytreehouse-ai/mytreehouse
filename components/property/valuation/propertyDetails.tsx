@@ -44,7 +44,7 @@ const PropertyDetails: React.FC = () => {
       <form
         name="test"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4"
+        className="space-y-4 mt-4"
       >
         <FormField
           control={form.control}
@@ -84,11 +84,11 @@ const PropertyDetails: React.FC = () => {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Location</FormLabel>
+              <FormLabel>City</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Property location" />
+                    <SelectValue placeholder="Select a city" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -100,39 +100,43 @@ const PropertyDetails: React.FC = () => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="sqm"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Sqm</FormLabel>
-              <FormControl>
-                <Input placeholder="Sqm" type="number" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="yearBuilt"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Location</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+
+        <div className="md:flex md:gap-x-6 w-full">
+          <FormField
+            control={form.control}
+            name="sqm"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Sqm</FormLabel>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Year built" />
-                  </SelectTrigger>
+                  <Input placeholder="Sqm" type="number" {...field} />
                 </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="yearBuilt"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Year built</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Year built" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="m@example.com">m@example.com</SelectItem>
+                    <SelectItem value="m@google.com">m@google.com</SelectItem>
+                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
           name="whenAreyouLookingToSell"

@@ -1,9 +1,12 @@
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import ContactCard from "@/components/property/contact/contactCard";
 
 const page = async () => {
-  await wait(5000);
 
-  return <>ContactUs</>;
+  return (
+    <main className="md:w-1/4 mx-auto md:py-10 ">
+      <ContactCard />
+    </main>
+  )
 };
 
 export default page;
