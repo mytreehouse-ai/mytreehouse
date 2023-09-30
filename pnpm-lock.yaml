@@ -133,6 +133,9 @@ devDependencies:
   eslint-config-next:
     specifier: ^13.5.3
     version: 13.5.3(eslint@8.50.0)(typescript@5.2.2)
+  husky:
+    specifier: ^8.0.3
+    version: 8.0.3
   postcss:
     specifier: ^8.4.30
     version: 8.4.31
@@ -2927,6 +2930,12 @@ packages:
     dependencies:
       react-is: 16.13.1
     dev: false
+
+  /husky@8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
 
   /ignore@5.2.4:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
