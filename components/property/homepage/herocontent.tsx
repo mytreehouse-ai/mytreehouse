@@ -93,6 +93,7 @@ const HeroContent: React.FC = () => {
             </Tabs>
             <Form {...form}>
               <form
+                name="main_page_search"
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="w-full space-y-6"
               >

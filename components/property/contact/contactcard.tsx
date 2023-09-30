@@ -52,7 +52,7 @@ const ContactCard = () => {
       <CardContent>
         <Form {...form}>
           <form
-            name="contactForm"
+            name="contact_form"
             onSubmit={form.handleSubmit(onSubmit)}
             className="mt-4 space-y-4"
           >

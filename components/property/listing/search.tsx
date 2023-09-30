@@ -72,6 +72,7 @@ export function Search() {
     <div className="flex w-full items-center justify-center gap-x-4">
       <Form {...form}>
         <form
+          name="property_search"
           onSubmit={form.handleSubmit(onSubmit)}
           className="relative w-1/3 space-y-8"
         >
