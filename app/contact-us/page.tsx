@@ -3,21 +3,30 @@ import Image from "next/image";
 
 const page = async () => {
   return (
-    <main className="relative h-[calc(100vh)] overflow-y-auto">
+    <main className="relative mt-14 flex h-full flex-col py-20 md:flex-row md:items-center md:justify-center md:px-14 lg:px-48 xl:px-72">
       <Image
-        className="absolute w-full object-cover opacity-90"
-        src="/satellite-map-bg.png"
-        alt="satellite_map_bg"
-        sizes="(max-width: 1200px)  100vw"
+        className="absolute brightness-50"
+        src="/contact-bg.jpg"
+        alt="contact_bg"
+        sizes="(max-width: 758px)  100vw"
         objectFit=""
         priority={true}
         fill={true}
       />
-      <section className="absolute z-10 mt-36 flex h-full w-full items-center bg-white/60 backdrop-blur-sm md:mt-0">
-        <div className="mx-auto md:w-1/4 md:py-10">
-          <ContactCard />
-        </div>
-      </section>
+      <div className="z-10 w-full space-y-2 px-6 py-8 text-white md:mb-40">
+        <h1 className="bg-gradient-to-r from-emerald-300 to-emerald-600 bg-clip-text text-2xl font-bold text-transparent md:text-4xl">
+          We&apos;d love to <br />
+          hear from you
+        </h1>
+        <p className="text-xs md:text-xl lg:text-base">
+          Get in touch with our Licensed Appraisers whenever you need them. The
+          form on the right is your gateway to an in-depth property value
+          discussion.
+        </p>
+      </div>
+      <div className="w-full md:mb-0 md:px-6">
+        <ContactCard />
+      </div>
     </main>
   );
 };
