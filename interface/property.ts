@@ -5,7 +5,7 @@ export interface Property {
   property_type_name: string;
   listing_type_name: string;
   turnover_status_name: string;
-  current_price: string;
+  current_price: number;
   floor_area: number | null;
   lot_area: number | null;
   sqm: number;

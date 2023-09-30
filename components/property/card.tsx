@@ -7,6 +7,14 @@ interface cardProps {
   property: Property;
 }
 
+const formatToPhp = (number: number) => {
+  const formattedNumber = new Intl.NumberFormat("en-PH", {
+    style: "currency",
+    currency: "PHP",
+  }).format(number);
+  return formattedNumber;
+};
+
 const Card: React.FC<cardProps> = ({ property }) => {
   return (
     <div className="group relative space-y-2.5">
@@ -41,7 +49,7 @@ const Card: React.FC<cardProps> = ({ property }) => {
       </h3>
       <p className="mt-1 text-sm text-gray-500">{property.address}</p>
       <p className="mt-1 text-base font-bold text-gray-700">
-        {property.current_price}
+        {formatToPhp(property.current_price)}
       </p>
     </div>
   );
