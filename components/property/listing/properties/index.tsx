@@ -1,7 +1,7 @@
 "use client";
 import { usePropertyListingHook } from "@/hooks/usePropertyListingHook";
-import Card from "../../card";
-import Grid from "../../grid";
+import Card from "../../Card";
+import Grid from "../../Grid";
 import PropertyCardSkeletonLoader from "./PropertyCardSkeletonLoader";
 import { useSearchParams } from "next/navigation";
 

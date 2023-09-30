@@ -1,5 +1,5 @@
-import Card from "@/components/property/card";
-import Grid from "@/components/property/grid";
+import Card from "@/components/property/Card";
+import Grid from "@/components/property/Grid";
 import Footer from "@/components/layouts/footer";
 import HeroContent from "@/components/property/homepage/HeroContent";
 import HeroImageBanner from "@/components/property/homepage/HeroImageBanner";
