@@ -19,7 +19,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
 
   return (
     <div className="text-sm">
-      {JSON.stringify(data)}
+      {data.address}
       <Link href="/">Go Back</Link>
     </div>
   );
