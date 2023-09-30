@@ -49,7 +49,7 @@ export async function GET(req: Request) {
             ${
               query.data?.text_search
                 ? sql`
-            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')), websearch_to_tsquery(${query.data.text_search})) as rank
+            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')), plainto_tsquery(${query.data.text_search})) as rank
             `
                 : sql``
             }
@@ -66,7 +66,7 @@ export async function GET(req: Request) {
           ${
             query.data?.text_search
               ? sql`
-          and to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')) @@ websearch_to_tsquery(${query.data.text_search})
+          and to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')) @@ plainto_tsquery(${query.data.text_search})
           `
               : sql``
           }
