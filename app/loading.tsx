@@ -1,5 +1,7 @@
+import Mytreehouse from "@/components/loader/mytreehouse";
+
 const loading = () => {
-  return <>loading</>;
+  return <Mytreehouse />;
 };
 
 export default loading;

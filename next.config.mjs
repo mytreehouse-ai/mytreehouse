@@ -10,6 +10,7 @@ const nextConfig = {
       "static-mp.lamudi.com",
       "static-ph.lamudi.com",
       "tailwindui.com",
+      "loading.io",
     ],
     remotePatterns: [
       {
