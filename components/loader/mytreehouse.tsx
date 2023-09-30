@@ -1,20 +1,18 @@
-"use client";
-
 import Image from "next/image";
 
-const Mytreehouse = () => {
+const MyTreehouse = () => {
   return (
     <main className="flex h-screen items-center justify-center">
-      <Image
-        style={{ width: "auto", height: "auto" }}
-        src="/mytreehouse-text-loader.svg"
-        priority
-        width="280"
-        height="280"
-        alt="mytreehouse-text-loader"
-      />
+      <div className="flex-shrink-0">
+        <Image
+          src="/mytreehouse-text-loader.svg"
+          width={280}
+          height={280}
+          alt="mytreehouse-text-loader"
+        />
+      </div>
     </main>
   );
 };
 
-export default Mytreehouse;
+export default MyTreehouse;
