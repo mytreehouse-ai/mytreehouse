@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -44,7 +43,7 @@ const PropertyDetails: React.FC = () => {
       <form
         name="test"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 mt-4"
+        className="mt-4 space-y-4"
       >
         <FormField
           control={form.control}
@@ -101,7 +100,7 @@ const PropertyDetails: React.FC = () => {
           )}
         />
 
-        <div className="md:flex md:gap-x-6 w-full">
+        <div className="w-full md:flex md:gap-x-6">
           <FormField
             control={form.control}
             name="sqm"
@@ -120,7 +119,10 @@ const PropertyDetails: React.FC = () => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Year built</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Year built" />
