@@ -18,10 +18,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const SearchSchema = z.object({
   text_search: z.string(),
@@ -104,6 +104,7 @@ interface PropertyFiltersProps {
 }
 
 const PropertyFilters = ({ filterOpen, setFilterOpen }: PropertyFiltersProps) => {
+  const [priceValue, setPriceValue] = useState<number[]>([999999])
 
   const additionalFiltersForm = useForm()
 
@@ -254,9 +255,17 @@ const PropertyFilters = ({ filterOpen, setFilterOpen }: PropertyFiltersProps) =>
               >
                 Maximum price
               </label>
-              <Slider id='maximumPrice' defaultValue={[33]} max={100} step={1} />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Slider id='maximumPrice' defaultValue={priceValue} onValueChange={(e) => setPriceValue([...e])} max={9999999} step={1} />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{priceValue}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
-
           </form>
         </Form>
 
@@ -264,6 +273,6 @@ const PropertyFilters = ({ filterOpen, setFilterOpen }: PropertyFiltersProps) =>
           <Button type="submit">Save changes</Button>
         </DialogFooter>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   )
 }
