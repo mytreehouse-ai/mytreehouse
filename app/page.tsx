@@ -1,8 +1,8 @@
-import Card from "@/components/property/Card";
-import Grid from "@/components/property/Grid";
+import Card from "@/components/property/card";
+import Grid from "@/components/property/grid";
 import Footer from "@/components/layouts/footer";
-import HeroContent from "@/components/property/homepage/HeroContent";
-import HeroImageBanner from "@/components/property/homepage/HeroImageBanner";
+import HeroContent from "@/components/property/homepage/herocontent";
+import HeroImageBanner from "@/components/property/homepage/heroimagebanner";
 import Navbar from "@/components/layouts/navbar";
 import { Property } from "@/interface/property";
 import { env } from "@/lib/env.mjs";

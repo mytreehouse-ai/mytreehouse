@@ -1,4 +1,4 @@
-import { Search } from "@/components/property/listing/Search";
+import { Search } from "@/components/property/listing/search";
 
 interface pageProps {
   params: {

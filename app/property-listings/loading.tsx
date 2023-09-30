@@ -1,4 +1,4 @@
-import Mytreehouse from "@/components/loader/Mytreehouse";
+import Mytreehouse from "@/components/loader/mytreehouse";
 
 const loading = () => {
   return <Mytreehouse />;

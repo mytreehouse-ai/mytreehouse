@@ -1,4 +1,4 @@
-import ContactCard from "@/components/property/contact/ContactCard";
+import ContactCard from "@/components/property/contact/contactcard";
 import Image from "next/image";
 
 const page = async () => {
