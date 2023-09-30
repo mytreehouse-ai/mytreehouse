@@ -270,7 +270,7 @@ const PropertyFilters = ({ filterOpen, setFilterOpen }: PropertyFiltersProps) =>
         </Form>
 
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit">Set filter</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog >
