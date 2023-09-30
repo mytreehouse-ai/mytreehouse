@@ -2,18 +2,11 @@ import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { Property } from "@/interface/property";
 import Link from "next/link";
+import { formatToPhp } from "@/lib/utils";
 
 interface cardProps {
   property: Property;
 }
-
-const formatToPhp = (number: number) => {
-  const formattedNumber = new Intl.NumberFormat("en-PH", {
-    style: "currency",
-    currency: "PHP",
-  }).format(number);
-  return formattedNumber;
-};
 
 const Card: React.FC<cardProps> = ({ property }) => {
   return (
