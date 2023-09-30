@@ -1,9 +1,9 @@
 "use client";
 import { usePropertyListingHook } from "@/hooks/usePropertyListingHook";
-import Card from "../../Card";
-import Grid from "../../Grid";
 import PropertyCardSkeletonLoader from "./PropertyCardSkeletonLoader";
 import { useSearchParams } from "next/navigation";
+import Grid from "../../Grid";
+import Card from "../../Card";
 
 const Properties: React.FC = () => {
   const searchParams = useSearchParams();

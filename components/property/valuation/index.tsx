@@ -1,12 +1,12 @@
 "use client";
 
+import z from "zod";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import ValuationStepper from "@/hooks/useStepperStore";
 import PropertyDetails from "./PropertyDetails";
 import PersonalDetails from "./PersonalDetails";
 import ValuationResults from "./ValuationResults";
-import z from "zod";
 
 const componentsMap = {
   Property: PropertyDetails,
