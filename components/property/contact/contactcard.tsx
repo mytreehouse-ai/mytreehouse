@@ -30,6 +30,7 @@ const ContactCard = () => {
       .nonempty({ message: "Please enter your contact number" }),
     emailAddress: z
       .string()
+      .email()
       .nonempty({ message: "Please enter your email address" }),
     message: z.string().nonempty({ message: "Please enter your message" }),
   });
@@ -112,7 +113,7 @@ const ContactCard = () => {
               name="message"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Email address</FormLabel>
+                  <FormLabel>Message</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Leave us a message" {...field} />
                   </FormControl>
@@ -129,11 +130,11 @@ const ContactCard = () => {
                 Did you get your free MyTreeHouse report?
               </label>
             </div>
+            <Button className="mt-8 w-full" type="submit">
+              Submit
+            </Button>
           </form>
         </Form>
-        <Button className="mt-8 w-full" type="submit">
-          Submit
-        </Button>
       </CardContent>
     </Card>
   );
