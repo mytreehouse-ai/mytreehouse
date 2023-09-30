@@ -44,12 +44,7 @@ const ContactCard = () => {
   };
 
   return (
-    <Card>
-      <CardHeader className="p-4">
-        <CardTitle>We&apos;d love to hear from you</CardTitle>
-        <CardDescription>Send us a message</CardDescription>
-      </CardHeader>
-      <Separator />
+    <Card className="relative w-full overflow-y-auto rounded-t-3xl md:rounded-xl">
       <CardContent>
         <Form {...form}>
           <form

@@ -5,7 +5,6 @@ const MyTreehouse = () => {
     <main className="flex h-screen items-center justify-center">
       <div className="flex-shrink-0">
         <Image
-          priority={true}
           className="h-auto w-auto"
           src="/mytreehouse-text-loader.svg"
           width={280}
