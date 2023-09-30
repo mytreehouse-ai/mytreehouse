@@ -1,4 +1,4 @@
-import ContactCard from "@/components/property/contact/contactCard";
+import ContactCard from "@/components/property/contact/ContactCard";
 import Image from "next/image";
 
 const page = async () => {
@@ -14,7 +14,7 @@ const page = async () => {
         fill={true}
       />
       <section className="absolute z-10 mt-36 flex h-full w-full items-center bg-white/60 backdrop-blur-sm md:mt-0">
-        <div className="mx-auto  md:w-1/4 md:py-10">
+        <div className="mx-auto md:w-1/4 md:py-10">
           <ContactCard />
         </div>
       </section>

@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const Loader: React.FC = () => {
+const PropertyCardSkeletonLoader: React.FC = () => {
   return (
     <div className="flex h-full w-full items-center justify-center px-5 pt-40">
       <div className="grid h-full w-full grid-cols-4 gap-x-4">
@@ -17,4 +17,4 @@ const Loader: React.FC = () => {
   );
 };
 
-export default Loader;
+export default PropertyCardSkeletonLoader;

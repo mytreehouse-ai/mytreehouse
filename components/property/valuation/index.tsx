@@ -2,10 +2,10 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import PropertyDetails from "./propertyDetails";
 import ValuationStepper from "@/hooks/useStepperStore";
-import PersonalDetails from "./personalDetails";
-import ValuationResults from "./valuationResults";
+import PropertyDetails from "./PropertyDetails";
+import PersonalDetails from "./PersonalDetails";
+import ValuationResults from "./ValuationResults";
 import z from "zod";
 
 const componentsMap = {
@@ -38,21 +38,21 @@ const Valuation: React.FC = () => {
 
   const ComponentToRender =
     componentsMap[
-    steps[currentStepIndex]?.name as keyof typeof componentsMap
+      steps[currentStepIndex]?.name as keyof typeof componentsMap
     ] || null;
 
   return (
     <Card className="relative w-full overflow-y-auto rounded-t-3xl md:rounded-xl">
-      <div className="sticky top-0 left-0 z-10 flex items-center justify-center w-full h-20 px-6 bg-white">
+      <div className="sticky left-0 top-0 z-10 flex h-20 w-full items-center justify-center bg-white px-6">
         <Progress
           value={
             currentStepIndex === 1
               ? 33.33
               : currentStepIndex === 2
-                ? 100
-                : currentStepIndex === 3
-                  ? 100
-                  : 0
+              ? 100
+              : currentStepIndex === 3
+              ? 100
+              : 0
           }
         />
       </div>

@@ -2,7 +2,7 @@
 import { usePropertyListingHook } from "@/hooks/usePropertyListingHook";
 import Card from "../../card";
 import Grid from "../../grid";
-import Loader from "./loader";
+import PropertyCardSkeletonLoader from "./PropertyCardSkeletonLoader";
 import { useSearchParams } from "next/navigation";
 
 const Properties: React.FC = () => {
@@ -10,11 +10,11 @@ const Properties: React.FC = () => {
 
   const { isLoading, data } = usePropertyListingHook({
     text_search: searchParams.has("text_search")
-      ? (searchParams.get("text_search") as string)
+      ? String(searchParams.get("text_search"))
       : undefined,
   });
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <PropertyCardSkeletonLoader />;
 
   return (
     <div className="mx-5 mb-10 mt-40">
