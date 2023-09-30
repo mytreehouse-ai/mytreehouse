@@ -21,7 +21,7 @@ const Card: React.FC<cardProps> = ({ property }) => {
           />
         ) : (
           <Image
-            src="/placeholder.webp"
+            src="/placeholder.jpg"
             alt="property_placeholder_image"
             priority={true}
             fill={true}
