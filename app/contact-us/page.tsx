@@ -8,8 +8,7 @@ const page = async () => {
         className="absolute brightness-50"
         src="/contact-bg.jpg"
         alt="contact_bg"
-        sizes="(max-width: 758px)  100vw"
-        objectFit=""
+        sizes="(max-width: 758px) 100vw"
         priority={true}
         fill={true}
       />
