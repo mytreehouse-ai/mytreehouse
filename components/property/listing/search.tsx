@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { BsFilter } from "react-icons-all-files/bs/BsFilter";
@@ -19,6 +19,9 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 
 const SearchSchema = z.object({
   text_search: z.string(),
@@ -49,7 +52,7 @@ export function Search() {
   }
 
   return (
-    <div className="flex items-center justify-center w-full gap-x-2">
+    <div className="flex items-center justify-center w-full gap-x-4">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -82,39 +85,185 @@ export function Search() {
           />
         </form>
       </Form>
-      <Button className="py-6 text-base" onClick={() => setFilterOpen(true)}>
+      <Button className="py-6 text-sm" onClick={() => setFilterOpen(true)} variant="ghost" size="sm">
         Filters <BsFilter className="w-6 h-6 ml-1" />
       </Button>
-      <Button className="py-6 text-base">
+      <Button className="py-6 text-sm" variant="secondary" size="sm">
         Map <BsMap className="w-6 h-6 ml-1" />
       </Button>
-      <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when youre done.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid items-center grid-cols-4 gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input id="name" value="Pedro Duarte" className="col-span-3" />
-            </div>
-            <div className="grid items-center grid-cols-4 gap-4">
-              <Label htmlFor="username" className="text-right">
-                Username
-              </Label>
-              <Input id="username" value="@peduarte" className="col-span-3" />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <>
+        <PropertyFilters filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
+      </>
     </div>
   );
+}
+
+interface PropertyFiltersProps {
+  filterOpen: boolean;
+  setFilterOpen: (open: boolean) => void;
+}
+
+const PropertyFilters = ({ filterOpen, setFilterOpen }: PropertyFiltersProps) => {
+
+  const additionalFiltersForm = useForm()
+
+  const onSubmit = () => {
+    console.log('added');
+  }
+
+  return (
+    <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Filters</DialogTitle>
+          <DialogDescription>
+            Refine your property search with specific criteria and filters
+          </DialogDescription>
+        </DialogHeader>
+        <Separator />
+        <DialogTitle className="mt-2">Location and Type</DialogTitle>
+        <Form {...additionalFiltersForm}>
+          <form
+            name="additionalFilters"
+            onSubmit={additionalFiltersForm.handleSubmit(onSubmit)}
+            className="space-y-4"
+          >
+            <FormField
+              control={additionalFiltersForm.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>City</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="City location" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="m@example.com">m@example.com</SelectItem>
+                      <SelectItem value="m@google.com">m@google.com</SelectItem>
+                      <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={additionalFiltersForm.control}
+              name="listingType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Listing type</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Type of listing" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="m@example.com">m@example.com</SelectItem>
+                      <SelectItem value="m@google.com">m@google.com</SelectItem>
+                      <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={additionalFiltersForm.control}
+              name="propertyType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Property type</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Type of property" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="m@example.com">m@example.com</SelectItem>
+                      <SelectItem value="m@google.com">m@google.com</SelectItem>
+                      <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+
+            <DialogTitle>Property Requirements</DialogTitle>
+            <div className="flex space-x-4">
+              <FormField
+                control={additionalFiltersForm.control}
+                name="bedroom"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Bedroom</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter bedroom count" type="text" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={additionalFiltersForm.control}
+                name="bathroom"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Bathroom</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter bathroom count" type="text" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex space-x-4">
+              <FormField
+                control={additionalFiltersForm.control}
+                name="minimumSqm"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Minimum sqm</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter minimum sqm" type="number" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={additionalFiltersForm.control}
+                name="maximumSqm"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Maximum sqm</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter maximum sqm" type="number" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="space-y-4">
+              <label
+                htmlFor="offers"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Maximum price
+              </label>
+              <Slider id='maximumPrice' defaultValue={[33]} max={100} step={1} />
+            </div>
+
+          </form>
+        </Form>
+
+        <DialogFooter>
+          <Button type="submit">Save changes</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
 }
