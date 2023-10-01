@@ -73,7 +73,10 @@ const PropertyDetails: React.FC = () => {
             <FormItem>
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Input placeholder="Address" {...field} />
+                <Input placeholder="Address"
+                  {...field}
+                  value={field.value ?? ''}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -108,7 +111,10 @@ const PropertyDetails: React.FC = () => {
               <FormItem className="w-full">
                 <FormLabel>Sqm</FormLabel>
                 <FormControl>
-                  <Input placeholder="Sqm" type="number" {...field} />
+                  <Input placeholder="Sqm" type="number"
+                    {...field}
+                    value={field.value ?? ''}
+                  />
                 </FormControl>
               </FormItem>
             )}

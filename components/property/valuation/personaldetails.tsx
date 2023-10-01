@@ -46,7 +46,9 @@ const PersonalDetails: React.FC = () => {
               <FormItem>
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Type your Last name" {...field} />
+                  <Input placeholder="Type your Last name" {...field}
+                    value={field.value ?? ''}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -58,7 +60,8 @@ const PersonalDetails: React.FC = () => {
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Type your First name" {...field} />
+                  <Input placeholder="Type your First name" {...field}
+                    value={field.value ?? ''} />
                 </FormControl>
               </FormItem>
             )}
@@ -67,24 +70,12 @@ const PersonalDetails: React.FC = () => {
 
         <FormField
           control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Address</FormLabel>
-              <FormControl>
-                <Input placeholder="Type your address" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="phoneNumber"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Phone number</FormLabel>
               <FormControl>
-                <Input placeholder="Type your phone number here" {...field} />
+                <Input placeholder="Type your phone number here" {...field} value={field.value ?? ''} />
               </FormControl>
             </FormItem>
           )}
@@ -96,7 +87,7 @@ const PersonalDetails: React.FC = () => {
             <FormItem>
               <FormLabel>Email Address</FormLabel>
               <FormControl>
-                <Input placeholder="Type your email address here" {...field} />
+                <Input placeholder="Type your email address here" {...field} value={field.value ?? ''} />
               </FormControl>
             </FormItem>
           )}
@@ -123,7 +114,9 @@ const PersonalDetails: React.FC = () => {
             properties, offers and news
           </label>
         </div>
-
+        <Button className="w-full" type="submit">
+          Next
+        </Button>
         <Button className="w-full" type="submit">
           Next
         </Button>
