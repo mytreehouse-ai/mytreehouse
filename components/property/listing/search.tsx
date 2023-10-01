@@ -58,7 +58,7 @@ export function Search() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof SearchSchema>) {
+  const onSubmit = (data: z.infer<typeof SearchSchema>) => {
     const searchParams = createSearchParams(data);
 
     if (searchParams && searchParams.size) {
@@ -138,9 +138,6 @@ const PropertyFilters = ({
   const router = useRouter()
   const searchParams = useSearchParams();
 
-  console.log(searchParams.get("bedroom"))
-  console.log(router)
-
   const filterSchema = z.object({
     city: z.string().optional(),
     listingType: z.string().optional(),
@@ -154,8 +151,39 @@ const PropertyFilters = ({
 
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
-
+    defaultValues: {
+      city: searchParams.has("city") ? (searchParams.get("city") as string) : "",
+      listingType: searchParams.has("listingType")
+        ? (searchParams.get("listingType") as string)
+        : "",
+      propertyType: searchParams.has("propertyType")
+        ? (searchParams.get("propertyType") as string)
+        : "",
+      bedroom: searchParams.has("bedroom")
+        ? (searchParams.get("bedroom") as string)
+        : "",
+      bathroom: searchParams.has("bathroom")
+        ? (searchParams.get("bathroom") as string)
+        : "",
+      minimumSqm: searchParams.has("minimumSqm")
+        ? (searchParams.get("minimumSqm") as string)
+        : "",
+      maximumSqm: searchParams.has("maximumSqm")
+        ? (searchParams.get("maximumSqm") as string)
+        : "",
+      // maximumPrice: searchParams.has("maximumPrice")
+      //   ? (searchParams.get("maximumPrice") as string)
+      //   : "",
+    }
   });
+
+  const onClearFilters = () => {
+    additionalFiltersForm.reset()
+    router.replace(window.location.pathname, {
+      scroll: false,
+    });
+    console.log(additionalFiltersForm.getValues())
+  }
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
     const filterSearchParams = createSearchParams(value);
@@ -168,6 +196,7 @@ const PropertyFilters = ({
 
     setFilterOpen(false)
   };
+
 
   return (
     <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
@@ -281,9 +310,10 @@ const PropertyFilters = ({
                     <FormLabel>Bedroom</FormLabel>
                     <FormControl>
                       <Input
+                        {...field}
+                        value={field.value ?? ''}
                         placeholder="Enter bedroom count"
                         type="text"
-                        {...field}
                       />
                     </FormControl>
                   </FormItem>
@@ -297,9 +327,11 @@ const PropertyFilters = ({
                     <FormLabel>Bathroom</FormLabel>
                     <FormControl>
                       <Input
+                        {...field}
+                        value={field.value ?? ''}
                         placeholder="Enter bathroom count"
                         type="text"
-                        {...field}
+
                       />
                     </FormControl>
                   </FormItem>
@@ -316,9 +348,11 @@ const PropertyFilters = ({
                     <FormLabel>Minimum sqm</FormLabel>
                     <FormControl>
                       <Input
+                        {...field}
+                        value={field.value ?? ''}
                         placeholder="Enter minimum sqm"
                         type="number"
-                        {...field}
+
                       />
                     </FormControl>
                   </FormItem>
@@ -332,9 +366,11 @@ const PropertyFilters = ({
                     <FormLabel>Maximum sqm</FormLabel>
                     <FormControl>
                       <Input
+                        {...field}
+                        value={field.value ?? ''}
                         placeholder="Enter maximum sqm"
                         type="number"
-                        {...field}
+
                       />
                     </FormControl>
                   </FormItem>
@@ -396,7 +432,8 @@ const PropertyFilters = ({
             />
 
             <DialogFooter>
-              <Button type="submit" >Submit</Button>
+              <Button type="reset" variant="outline" onClick={onClearFilters}>Clear</Button>
+              <Button type="submit" >Submit filters</Button>
             </DialogFooter>
           </form>
         </Form>
