@@ -16,17 +16,17 @@ const Card: React.FC<cardProps> = ({ property }) => {
           <Image
             src={property.images[0]}
             alt="property_image"
+            sizes="66vw(min-width: 1000px) 100vw, 700px"
             priority={true}
             fill={true}
-            sizes="66vw(min-width: 1000px) 100vw"
           />
         ) : (
           <Image
-            src="/placeholder.jpg"
+            src="/property-card-placeholder.jpg"
             alt="property_placeholder_image"
+            sizes="66vw(min-width: 1000px) 100vw, 700px"
             priority={true}
             fill={true}
-            sizes="66vw(min-width: 1000px) 100vw"
           />
         )}
         <div className="absolute inset-0 my-2 ml-2 space-x-2">
