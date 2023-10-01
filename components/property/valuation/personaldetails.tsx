@@ -28,6 +28,12 @@ const PersonalDetails: React.FC = () => {
     }
   };
 
+  const goBack = () => {
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(currentStepIndex - 1);
+    }
+  };
+
   return (
     <Form {...form}>
       <h2 className="w-full text-lg font-bold text-neutral-800">
@@ -114,12 +120,16 @@ const PersonalDetails: React.FC = () => {
             properties, offers and news
           </label>
         </div>
-        <Button className="w-full" type="submit">
-          Next
-        </Button>
-        <Button className="w-full" type="submit">
-          Next
-        </Button>
+
+        <div className="flex space-x-2" >
+          {/* <Button className="w-full" type="button" variant="outline" onClick={goBack}>
+            Previous
+          </Button> */}
+          <Button className="w-full" type="submit">
+            Next
+          </Button>
+        </div>
+
       </form>
     </Form>
   );
