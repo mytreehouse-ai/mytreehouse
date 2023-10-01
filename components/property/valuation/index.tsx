@@ -25,7 +25,6 @@ export const propertyValuationFormSchema = z.object({
 export const personalDetailsFormSchema = z.object({
   lastName: z.string().nonempty(),
   firstName: z.string().nonempty(),
-  address: z.string().nonempty(),
   phoneNumber: z.string().nonempty(),
   emailAddress: z.string().nonempty(),
   termsAndConditions: z.boolean().optional(),
@@ -37,7 +36,7 @@ const Valuation: React.FC = () => {
 
   const ComponentToRender =
     componentsMap[
-      steps[currentStepIndex]?.name as keyof typeof componentsMap
+    steps[currentStepIndex]?.name as keyof typeof componentsMap
     ] || null;
 
   return (
@@ -48,10 +47,10 @@ const Valuation: React.FC = () => {
             currentStepIndex === 1
               ? 33.33
               : currentStepIndex === 2
-              ? 100
-              : currentStepIndex === 3
-              ? 100
-              : 0
+                ? 100
+                : currentStepIndex === 3
+                  ? 100
+                  : 0
           }
         />
       </div>

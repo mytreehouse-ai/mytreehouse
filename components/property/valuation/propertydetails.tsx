@@ -20,16 +20,19 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ValuationStepper from "@/hooks/useStepperStore";
 import { propertyValuationFormSchema } from ".";
+import useValuationFormStore from "@/hooks/useValuationFormStore";
 
 const PropertyDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
+  const { propertyDetailValues, setPropertyDetailValues } = useValuationFormStore()
 
   const form = useForm<z.infer<typeof propertyValuationFormSchema>>({
     resolver: zodResolver(propertyValuationFormSchema),
+    values: propertyDetailValues
   });
 
   function onSubmit(values: z.infer<typeof propertyValuationFormSchema>) {
-    console.log(values);
+    setPropertyDetailValues(values)
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(+1);
     }
@@ -73,7 +76,10 @@ const PropertyDetails: React.FC = () => {
             <FormItem>
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Input placeholder="Address" {...field} />
+                <Input placeholder="Address"
+                  {...field}
+                  value={field.value ?? ''}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -108,7 +114,10 @@ const PropertyDetails: React.FC = () => {
               <FormItem className="w-full">
                 <FormLabel>Sqm</FormLabel>
                 <FormControl>
-                  <Input placeholder="Sqm" type="number" {...field} />
+                  <Input placeholder="Sqm" type="number"
+                    {...field}
+                    value={field.value ?? ''}
+                  />
                 </FormControl>
               </FormItem>
             )}

@@ -2,9 +2,14 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import ValuationStepper from "@/hooks/useStepperStore";
+import useValuationFormStore from "@/hooks/useValuationFormStore";
 
 const ValuationResults: React.FC = () => {
   const { setCurrentStepIndex } = ValuationStepper();
+  const { personalDetailValues, propertyDetailValues } = useValuationFormStore()
+
+  console.log("RESULTS", personalDetailValues, propertyDetailValues)
+
   return (
     <>
       <div className="relative mx-auto h-48 w-48 md:h-72 md:w-72">
