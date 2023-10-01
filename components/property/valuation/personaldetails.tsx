@@ -23,6 +23,7 @@ const PersonalDetails: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof personalDetailsFormSchema>) => {
+    console.log(values);
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
@@ -122,9 +123,9 @@ const PersonalDetails: React.FC = () => {
         </div>
 
         <div className="flex space-x-2" >
-          {/* <Button className="w-full" type="button" variant="outline" onClick={goBack}>
+          <Button className="w-full" type="button" variant="outline" onClick={goBack}>
             Previous
-          </Button> */}
+          </Button>
           <Button className="w-full" type="submit">
             Next
           </Button>
