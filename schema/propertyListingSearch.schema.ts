@@ -18,7 +18,30 @@ export const PropertyListingSearchSchema = z
     max_price: z.number().min(1),
     page_limit: z.number().min(1),
   })
-  .partial();
+  .partial()
+  .refine((input) => {
+    if (input?.sqm_min || input?.sqm_max) {
+      input.sqm = 0;
+    }
+
+    if (input?.sqm_min && !input?.sqm_max) {
+      input.sqm_max = 9999;
+    }
+
+    if (!input?.sqm_min && input?.sqm_max) {
+      input.sqm_min = 20;
+    }
+
+    if (input?.min_price && !input?.max_price) {
+      input.max_price = 999_999_999;
+    }
+
+    if (input?.max_price && !input.min_price) {
+      input.min_price = 1;
+    }
+
+    return true;
+  });
 
 export type PropertyListingSearchType = z.infer<
   typeof PropertyListingSearchSchema
