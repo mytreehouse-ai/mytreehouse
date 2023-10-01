@@ -135,10 +135,38 @@ const PropertyFilters = ({
 }: PropertyFiltersProps) => {
   const [priceValue, setPriceValue] = useState<number[]>([999999]);
 
-  const additionalFiltersForm = useForm();
+  const router = useRouter()
+  const searchParams = useSearchParams();
 
-  const onSubmit = () => {
-    console.log("added");
+  console.log(searchParams.get("bedroom"))
+  console.log(router)
+
+  const filterSchema = z.object({
+    city: z.string().optional(),
+    listingType: z.string().optional(),
+    propertyType: z.string().optional(),
+    bedroom: z.string().optional(),
+    bathroom: z.string().optional(),
+    minimumSqm: z.string().optional(),
+    maximumSqm: z.string().optional(),
+    maximumPrice: z.number().optional(),
+  });
+
+  const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
+    resolver: zodResolver(filterSchema),
+
+  });
+
+  const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
+    const filterSearchParams = createSearchParams(value);
+
+    if (filterSearchParams && filterSearchParams.size) {
+      router.replace(window.location.pathname + "?" + filterSearchParams.toString(), {
+        scroll: false,
+      });
+    }
+
+    setFilterOpen(false)
   };
 
   return (
@@ -155,7 +183,7 @@ const PropertyFilters = ({
         <Form {...additionalFiltersForm}>
           <form
             name="additionalFilters"
-            onSubmit={additionalFiltersForm.handleSubmit(onSubmit)}
+            onSubmit={additionalFiltersForm.handleSubmit(onFilterFormSubmit)}
             className="space-y-4"
           >
             <FormField
@@ -314,36 +342,64 @@ const PropertyFilters = ({
               />
             </div>
 
-            <div className="space-y-4">
-              <label
-                htmlFor="offers"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Maximum price
-              </label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
+            <FormField
+              control={additionalFiltersForm.control}
+              name="maximumPrice"
+              render={({ field: { value, onChange } }) => (
+                <FormItem>
+                  <FormControl>
                     <Slider
-                      id="maximumPrice"
-                      defaultValue={priceValue}
-                      onValueChange={(e) => setPriceValue([...e])}
+                      // id="maximumPrice"
+                      // defaultValue={priceValue}
+                      // onValueChange={(e) => {
+                      //   void onChange()
+                      //   setPriceValue([...e])
+                      // }}
+                      defaultValue={[value ?? 0]}
+                      onValueChange={(values) => onChange(values[0])}
+                      min={0}
                       max={9999999}
                       step={1}
                     />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{priceValue}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
+                    {/* <div className="space-y-4">
+                      <label
+                        htmlFor="offers"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Maximum price
+                      </label>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Slider
+                              id="maximumPrice"
+                              defaultValue={priceValue}
+                              onValueChange={(e) => {
+                                void onChange()
+                                setPriceValue([...e])
+                              }}
+                              min={0}
+                              max={9999999}
+                              step={1}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{priceValue}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div> */}
+                  </FormControl>
+                </FormItem>
+
+              )}
+            />
+
+            <DialogFooter>
+              <Button type="submit" >Submit</Button>
+            </DialogFooter>
           </form>
         </Form>
-
-        <DialogFooter>
-          <Button type="submit">Set filter</Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
