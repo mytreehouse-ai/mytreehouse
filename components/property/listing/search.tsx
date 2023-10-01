@@ -66,7 +66,7 @@ export function Search() {
         scroll: false,
       });
     }
-  }
+  };
 
   return (
     <div className="flex w-full items-center justify-center gap-x-4">
@@ -135,7 +135,7 @@ const PropertyFilters = ({
 }: PropertyFiltersProps) => {
   const [priceValue, setPriceValue] = useState<number[]>([999999]);
 
-  const router = useRouter()
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const filterSchema = z.object({
@@ -152,51 +152,53 @@ const PropertyFilters = ({
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
-      city: searchParams.has("city") ? (searchParams.get("city") as string) : "",
+      city: searchParams.has("city") ? String(searchParams.get("city")) : "",
       listingType: searchParams.has("listingType")
-        ? (searchParams.get("listingType") as string)
+        ? String(searchParams.get("listingType"))
         : "",
       propertyType: searchParams.has("propertyType")
-        ? (searchParams.get("propertyType") as string)
+        ? String(searchParams.get("propertyType"))
         : "",
       bedroom: searchParams.has("bedroom")
-        ? (searchParams.get("bedroom") as string)
+        ? String(searchParams.get("bedroom"))
         : "",
       bathroom: searchParams.has("bathroom")
-        ? (searchParams.get("bathroom") as string)
+        ? String(searchParams.get("bathroom"))
         : "",
       minimumSqm: searchParams.has("minimumSqm")
-        ? (searchParams.get("minimumSqm") as string)
+        ? String(searchParams.get("minimumSqm"))
         : "",
       maximumSqm: searchParams.has("maximumSqm")
-        ? (searchParams.get("maximumSqm") as string)
+        ? String(searchParams.get("maximumSqm"))
         : "",
       // maximumPrice: searchParams.has("maximumPrice")
       //   ? (searchParams.get("maximumPrice") as string)
       //   : "",
-    }
+    },
   });
 
   const onClearFilters = () => {
-    additionalFiltersForm.reset()
+    additionalFiltersForm.reset();
     router.replace(window.location.pathname, {
       scroll: false,
     });
-    console.log(additionalFiltersForm.getValues())
-  }
+    console.log(additionalFiltersForm.getValues());
+  };
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
     const filterSearchParams = createSearchParams(value);
 
     if (filterSearchParams && filterSearchParams.size) {
-      router.replace(window.location.pathname + "?" + filterSearchParams.toString(), {
-        scroll: false,
-      });
+      router.replace(
+        window.location.pathname + "?" + filterSearchParams.toString(),
+        {
+          scroll: false,
+        },
+      );
     }
 
-    setFilterOpen(false)
+    setFilterOpen(false);
   };
-
 
   return (
     <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
@@ -311,7 +313,7 @@ const PropertyFilters = ({
                     <FormControl>
                       <Input
                         {...field}
-                        value={field.value ?? ''}
+                        value={field.value ?? ""}
                         placeholder="Enter bedroom count"
                         type="text"
                       />
@@ -328,10 +330,9 @@ const PropertyFilters = ({
                     <FormControl>
                       <Input
                         {...field}
-                        value={field.value ?? ''}
+                        value={field.value ?? ""}
                         placeholder="Enter bathroom count"
                         type="text"
-
                       />
                     </FormControl>
                   </FormItem>
@@ -349,10 +350,9 @@ const PropertyFilters = ({
                     <FormControl>
                       <Input
                         {...field}
-                        value={field.value ?? ''}
+                        value={field.value ?? ""}
                         placeholder="Enter minimum sqm"
                         type="number"
-
                       />
                     </FormControl>
                   </FormItem>
@@ -367,10 +367,9 @@ const PropertyFilters = ({
                     <FormControl>
                       <Input
                         {...field}
-                        value={field.value ?? ''}
+                        value={field.value ?? ""}
                         placeholder="Enter maximum sqm"
                         type="number"
-
                       />
                     </FormControl>
                   </FormItem>
@@ -427,13 +426,14 @@ const PropertyFilters = ({
                     </div> */}
                   </FormControl>
                 </FormItem>
-
               )}
             />
 
             <DialogFooter>
-              <Button type="reset" variant="outline" onClick={onClearFilters}>Clear</Button>
-              <Button type="submit" >Submit filters</Button>
+              <Button type="reset" variant="outline" onClick={onClearFilters}>
+                Clear
+              </Button>
+              <Button type="submit">Submit filters</Button>
             </DialogFooter>
           </form>
         </Form>
