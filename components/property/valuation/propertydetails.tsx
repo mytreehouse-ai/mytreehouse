@@ -20,19 +20,19 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ValuationStepper from "@/hooks/useStepperStore";
 import { propertyValuationFormSchema } from ".";
-import useFormStore from "@/hooks/useFormStore";
+import useValuationFormStore from "@/hooks/useValuationFormStore";
 
 const PropertyDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
-  const { values, setValues } = useFormStore()
+  const { propertyDetailValues, setPropertyDetailValues } = useValuationFormStore()
 
   const form = useForm<z.infer<typeof propertyValuationFormSchema>>({
     resolver: zodResolver(propertyValuationFormSchema),
-    values: values
+    values: propertyDetailValues
   });
 
   function onSubmit(values: z.infer<typeof propertyValuationFormSchema>) {
-    setValues(values)
+    setPropertyDetailValues(values)
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(+1);
     }

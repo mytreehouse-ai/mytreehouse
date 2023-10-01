@@ -14,16 +14,18 @@ import z from "zod";
 import ValuationStepper from "@/hooks/useStepperStore";
 import { personalDetailsFormSchema } from ".";
 import { Checkbox } from "@/components/ui/checkbox";
+import useValuationFormStore from "@/hooks/useValuationFormStore";
 
 const PersonalDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
+  const { propertyDetailValues, setPersonalDetailValues } = useValuationFormStore();
 
   const form = useForm<z.infer<typeof personalDetailsFormSchema>>({
     resolver: zodResolver(personalDetailsFormSchema),
   });
 
   const onSubmit = (values: z.infer<typeof personalDetailsFormSchema>) => {
-    console.log(values);
+    setPersonalDetailValues(values)
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
