@@ -73,14 +73,11 @@ export async function GET() {
   const listing_type_id = "cb2fbe3c-b9d0-4cbe-8b62-c28693837d2c";
   const city_id = "9574d79e-f8bd-4d07-b19a-00d3a5b96202";
   const year_built = 2022;
-  const split_average_price_per_transaction = false;
 
   const {
     closedTransaction,
     scrappedTransaction,
     condominiumRemainingUsefulLife,
-    pricePerSqmInClosedTransaction,
-    pricePerSqmInScrapedTransaction,
     appraisalValueWithClosedTransaction,
     appraisalValueWithoutClosedTransaction,
     phpFormat,
@@ -91,9 +88,7 @@ export async function GET() {
     };
 
     const closedTransactionAverageQuery = await sqltrx`
-      select avg(p.current_price) ${
-        split_average_price_per_transaction ? sqltrx`* 0.6` : sqltrx``
-      } as average_property_price
+      select avg(p.current_price) as average_property_price
       from properties as p
       where 
         p.current_price > 0 
@@ -123,9 +118,7 @@ export async function GET() {
     };
 
     const scrappedPropertyTransactionAverageQuery = await sqltrx`
-      select avg(p.current_price)${
-        split_average_price_per_transaction ? sqltrx`* 0.4` : sqltrx``
-      } as average_property_price
+      select avg(p.current_price) as average_property_price
       from properties as p
       where 
         p.current_price > 0 
@@ -150,15 +143,15 @@ export async function GET() {
       CONDOMINIUM_LIFE_SPAN_IN_NUMBER_YEARS;
 
     const pricePerSqmInClosedTransaction =
-      closedTransaction.average_property_price / sqm;
+      (closedTransaction.average_property_price * 0.6 +
+        scrappedTransaction.average_property_price * 0.4) /
+      sqm;
+
+    const appraisalValueWithClosedTransaction =
+      pricePerSqmInClosedTransaction * sqm * condominiumRemainingUsefulLife;
 
     const pricePerSqmInScrapedTransaction =
       scrappedTransaction.average_property_price / sqm;
-
-    const appraisalValueWithClosedTransaction =
-      (pricePerSqmInClosedTransaction + pricePerSqmInScrapedTransaction) *
-      sqm *
-      condominiumRemainingUsefulLife;
 
     const appraisalValueWithoutClosedTransaction =
       pricePerSqmInScrapedTransaction * (sqm * condominiumRemainingUsefulLife);
@@ -167,24 +160,21 @@ export async function GET() {
       closedTransaction,
       scrappedTransaction,
       condominiumRemainingUsefulLife,
-      pricePerSqmInClosedTransaction,
-      pricePerSqmInScrapedTransaction,
       appraisalValueWithClosedTransaction,
       appraisalValueWithoutClosedTransaction,
       phpFormat: {
         withClosedTransaction: {
-          pricePerSqm: formatToPhp(0),
-          appraisalValue: formatToPhp(0),
+          pricePerSqm: formatToPhp(pricePerSqmInClosedTransaction),
+          appraisalValue: formatToPhp(appraisalValueWithClosedTransaction),
         },
         withoutClosedTransaction: {
           pricePerSqm: formatToPhp(pricePerSqmInScrapedTransaction),
-          appraisalValue: formatToPhp(appraisalValueWithClosedTransaction),
+          appraisalValue: formatToPhp(appraisalValueWithoutClosedTransaction),
         },
       },
       metadata: {
         sqm,
         year_built,
-        split_average_price_per_transaction,
       },
     };
   });
@@ -194,8 +184,6 @@ export async function GET() {
       closedTransaction,
       scrappedTransaction,
       condominiumRemainingUsefulLife,
-      pricePerSqmInClosedTransaction,
-      pricePerSqmInScrapedTransaction,
       appraisalValueWithClosedTransaction,
       appraisalValueWithoutClosedTransaction,
       phpFormat,
