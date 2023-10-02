@@ -6,10 +6,9 @@ const page = async () => {
     <main className="relative mt-14 flex h-full flex-col py-20 md:flex-row md:items-center md:justify-center md:px-14 lg:px-48 xl:px-72">
       <Image
         className="absolute brightness-50"
-        src="/contact-bg.jpg"
+        src="/contact-page-bg.jpg"
         alt="contact_bg"
-        sizes="(max-width: 758px)  100vw"
-        objectFit=""
+        sizes="(max-width: 758px) 100vw, 700px"
         priority={true}
         fill={true}
       />

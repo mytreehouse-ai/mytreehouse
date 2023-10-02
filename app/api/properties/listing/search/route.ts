@@ -1,9 +1,26 @@
+import { kv } from "@vercel/kv";
 import { UNKNOWN_CITY } from "@/lib/constant";
 import { PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
 import sql from "@/server/db";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
+
+  const UNTAGGED_TRANSACTION_ID: string | null = await kv.get(
+    "UNTAGGED_TRANSACTION_ID",
+  );
+
+  if (!UNTAGGED_TRANSACTION_ID) {
+    return new Response(
+      JSON.stringify({
+        message: "Config UNTAGGED_TRANSACTION_ID is empty in redis kv",
+      }),
+      {
+        status: 400,
+        statusText: "Bad request",
+      },
+    );
+  }
 
   const query = PropertyListingSearchSchema.safeParse(
     Object.fromEntries(searchParams),
@@ -49,7 +66,7 @@ export async function GET(req: Request) {
             ${
               query.data?.text_search
                 ? sql`
-            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')), websearch_to_tsquery(${query.data.text_search})) as rank
+            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')), plainto_tsquery(${query.data.text_search})) as rank
             `
                 : sql``
             }
@@ -61,12 +78,13 @@ export async function GET(req: Request) {
           where p.images is not null and
           p.longitude is not null and
           p.latitude is not null and
+          p.property_status_id != ${UNTAGGED_TRANSACTION_ID} and
           p.city_id != ${UNKNOWN_CITY} and
           p.current_price is distinct from 'NaN'::numeric
           ${
             query.data?.text_search
               ? sql`
-          and to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')) @@ websearch_to_tsquery(${query.data.text_search})
+          and to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')) @@ plainto_tsquery(${query.data.text_search})
           `
               : sql``
           }

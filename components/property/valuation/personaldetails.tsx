@@ -14,17 +14,26 @@ import z from "zod";
 import ValuationStepper from "@/hooks/useStepperStore";
 import { personalDetailsFormSchema } from ".";
 import { Checkbox } from "@/components/ui/checkbox";
+import useValuationFormStore from "@/hooks/useValuationFormStore";
 
 const PersonalDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
+  const { propertyDetailValues, setPersonalDetailValues } = useValuationFormStore();
 
   const form = useForm<z.infer<typeof personalDetailsFormSchema>>({
     resolver: zodResolver(personalDetailsFormSchema),
   });
 
   const onSubmit = (values: z.infer<typeof personalDetailsFormSchema>) => {
+    setPersonalDetailValues(values)
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
+    }
+  };
+
+  const goBack = () => {
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(currentStepIndex - 1);
     }
   };
 
@@ -46,7 +55,9 @@ const PersonalDetails: React.FC = () => {
               <FormItem>
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Type your Last name" {...field} />
+                  <Input placeholder="Type your Last name" {...field}
+                    value={field.value ?? ''}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -58,7 +69,8 @@ const PersonalDetails: React.FC = () => {
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Type your First name" {...field} />
+                  <Input placeholder="Type your First name" {...field}
+                    value={field.value ?? ''} />
                 </FormControl>
               </FormItem>
             )}
@@ -67,24 +79,12 @@ const PersonalDetails: React.FC = () => {
 
         <FormField
           control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Address</FormLabel>
-              <FormControl>
-                <Input placeholder="Type your address" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="phoneNumber"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Phone number</FormLabel>
               <FormControl>
-                <Input placeholder="Type your phone number here" {...field} />
+                <Input placeholder="Type your phone number here" {...field} value={field.value ?? ''} />
               </FormControl>
             </FormItem>
           )}
@@ -96,7 +96,7 @@ const PersonalDetails: React.FC = () => {
             <FormItem>
               <FormLabel>Email Address</FormLabel>
               <FormControl>
-                <Input placeholder="Type your email address here" {...field} />
+                <Input placeholder="Type your email address here" {...field} value={field.value ?? ''} />
               </FormControl>
             </FormItem>
           )}
@@ -124,9 +124,15 @@ const PersonalDetails: React.FC = () => {
           </label>
         </div>
 
-        <Button className="w-full" type="submit">
-          Next
-        </Button>
+        <div className="flex space-x-2" >
+          <Button className="w-full" type="button" variant="outline" onClick={goBack}>
+            Previous
+          </Button>
+          <Button className="w-full" type="submit">
+            Next
+          </Button>
+        </div>
+
       </form>
     </Form>
   );

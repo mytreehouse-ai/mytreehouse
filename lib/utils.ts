@@ -8,6 +8,17 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const formatToPhp = (number: number) => {
+  if (!number) number = 0;
+
+  const formattedNumber = new Intl.NumberFormat("en-PH", {
+    style: "currency",
+    currency: "PHP",
+  }).format(number);
+
+  return formattedNumber;
+};
+
 export function toUrlFriendlyLabel(str: string) {
   return str
     .toLowerCase()
