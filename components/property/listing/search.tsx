@@ -39,6 +39,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { CityCombobox } from "@/components/ui/citycombobox";
+import { propertyTypes } from "@/static_data/property-types";
+import { listingTypes } from "@/static_data/listing-types";
 
 const SearchSchema = z.object({
   text_search: z.string(),
@@ -139,41 +142,41 @@ const PropertyFilters = ({
   const searchParams = useSearchParams();
 
   const filterSchema = z.object({
-    city: z.string().optional(),
-    listingType: z.string().optional(),
-    propertyType: z.string().optional(),
-    bedroom: z.string().optional(),
-    bathroom: z.string().optional(),
-    minimumSqm: z.string().optional(),
-    maximumSqm: z.string().optional(),
-    maximumPrice: z.number().optional(),
+    location: z.string().optional(),
+    listing_type: z.string().optional(),
+    property_type: z.string().optional(),
+    bedroom_count: z.string().optional(),
+    bathroom_count: z.string().optional(),
+    sqm_min: z.string().optional(),
+    sqm_max: z.string().optional(),
+    max_price: z.number().optional(),
   });
 
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
-      city: searchParams.has("city") ? String(searchParams.get("city")) : "",
-      listingType: searchParams.has("listingType")
-        ? String(searchParams.get("listingType"))
+      location: searchParams.has("location") ? String(searchParams.get("location")) : "",
+      listing_type: searchParams.has("listing_type")
+        ? String(searchParams.get("listing_type"))
         : "",
-      propertyType: searchParams.has("propertyType")
-        ? String(searchParams.get("propertyType"))
+      property_type: searchParams.has("property_type")
+        ? String(searchParams.get("property_type"))
         : "",
-      bedroom: searchParams.has("bedroom")
-        ? String(searchParams.get("bedroom"))
+      bedroom_count: searchParams.has("bedroom_count")
+        ? String(searchParams.get("bedroom_count"))
         : "",
-      bathroom: searchParams.has("bathroom")
-        ? String(searchParams.get("bathroom"))
+      bathroom_count: searchParams.has("bathroom_count")
+        ? String(searchParams.get("bathroom_count"))
         : "",
-      minimumSqm: searchParams.has("minimumSqm")
-        ? String(searchParams.get("minimumSqm"))
+      sqm_min: searchParams.has("sqm_min")
+        ? String(searchParams.get("sqm_min"))
         : "",
-      maximumSqm: searchParams.has("maximumSqm")
-        ? String(searchParams.get("maximumSqm"))
+      sqm_max: searchParams.has("sqm_max")
+        ? String(searchParams.get("sqm_max"))
         : "",
-      // maximumPrice: searchParams.has("maximumPrice")
-      //   ? (searchParams.get("maximumPrice") as string)
-      //   : "",
+      max_price: searchParams.has("max_price")
+        ? (parseInt(searchParams.get("max_price") || ""))
+        : undefined,
     },
   });
 
@@ -219,35 +222,19 @@ const PropertyFilters = ({
           >
             <FormField
               control={additionalFiltersForm.control}
-              name="city"
+              name="location"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>City</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="City location" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="m@example.com">
-                        m@example.com
-                      </SelectItem>
-                      <SelectItem value="m@google.com">m@google.com</SelectItem>
-                      <SelectItem value="m@support.com">
-                        m@support.com
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <CityCombobox onCityChange={val => field.onChange(val)} />
+                  </FormControl>
                 </FormItem>
               )}
             />
             <FormField
               control={additionalFiltersForm.control}
-              name="listingType"
+              name="listing_type"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Listing type</FormLabel>
@@ -261,13 +248,11 @@ const PropertyFilters = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="m@example.com">
-                        m@example.com
-                      </SelectItem>
-                      <SelectItem value="m@google.com">m@google.com</SelectItem>
-                      <SelectItem value="m@support.com">
-                        m@support.com
-                      </SelectItem>
+                      {listingTypes.map((pt) => (
+                        <SelectItem key={pt.value} value={pt.value}>
+                          {pt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -275,7 +260,7 @@ const PropertyFilters = ({
             />
             <FormField
               control={additionalFiltersForm.control}
-              name="propertyType"
+              name="property_type"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Property type</FormLabel>
@@ -289,13 +274,11 @@ const PropertyFilters = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="m@example.com">
-                        m@example.com
-                      </SelectItem>
-                      <SelectItem value="m@google.com">m@google.com</SelectItem>
-                      <SelectItem value="m@support.com">
-                        m@support.com
-                      </SelectItem>
+                      {propertyTypes.map((pt) => (
+                        <SelectItem key={pt.value} value={pt.value}>
+                          {pt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -306,7 +289,7 @@ const PropertyFilters = ({
             <div className="flex space-x-4">
               <FormField
                 control={additionalFiltersForm.control}
-                name="bedroom"
+                name="bedroom_count"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Bedroom</FormLabel>
@@ -323,7 +306,7 @@ const PropertyFilters = ({
               />
               <FormField
                 control={additionalFiltersForm.control}
-                name="bathroom"
+                name="bathroom_count"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Bathroom</FormLabel>
@@ -343,7 +326,7 @@ const PropertyFilters = ({
             <div className="flex space-x-4">
               <FormField
                 control={additionalFiltersForm.control}
-                name="minimumSqm"
+                name="sqm_min"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Minimum sqm</FormLabel>
@@ -360,7 +343,7 @@ const PropertyFilters = ({
               />
               <FormField
                 control={additionalFiltersForm.control}
-                name="maximumSqm"
+                name="sqm_max"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Maximum sqm</FormLabel>
@@ -376,58 +359,42 @@ const PropertyFilters = ({
                 )}
               />
             </div>
+            <div className="space-y-4">
+              <label
+                htmlFor="maximumPrice"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Maximum price
+              </label>
+              <FormField
+                control={additionalFiltersForm.control}
+                name="max_price"
+                render={({ field: { value, onChange } }) => (
 
-            <FormField
-              control={additionalFiltersForm.control}
-              name="maximumPrice"
-              render={({ field: { value, onChange } }) => (
-                <FormItem>
-                  <FormControl>
-                    <Slider
-                      // id="maximumPrice"
-                      // defaultValue={priceValue}
-                      // onValueChange={(e) => {
-                      //   void onChange()
-                      //   setPriceValue([...e])
-                      // }}
-                      defaultValue={[value ?? 0]}
-                      onValueChange={(values) => onChange(values[0])}
-                      min={0}
-                      max={9999999}
-                      step={1}
-                    />
-                    {/* <div className="space-y-4">
-                      <label
-                        htmlFor="offers"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Maximum price
-                      </label>
+                  <FormItem>
+                    <FormControl>
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Slider
-                              id="maximumPrice"
-                              defaultValue={priceValue}
-                              onValueChange={(e) => {
-                                void onChange()
-                                setPriceValue([...e])
-                              }}
+                              defaultValue={[value ?? 0]}
+                              onValueChange={(values) => onChange(values[0])}
                               min={0}
                               max={9999999}
                               step={1}
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>{priceValue}</p>
+                            <p>{value}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    </div> */}
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+            </div>
 
             <DialogFooter>
               <Button type="reset" variant="outline" onClick={onClearFilters}>
