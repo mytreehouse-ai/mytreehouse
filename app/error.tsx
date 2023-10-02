@@ -8,7 +8,7 @@ interface errorProps {
 
 const error: React.FC<errorProps> = ({ error, reset }) => {
   return (
-    <main>
+    <main className="flex h-screen items-center justify-center">
       <p>{error.message}</p>
       <Button onClick={reset}>Try again</Button>
     </main>
