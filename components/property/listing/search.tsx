@@ -39,7 +39,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { usePropertyListingHook } from "@/hooks/usePropertyListingHook";
+import { CityCombobox } from "@/components/ui/citycombobox";
+import { propertyTypes } from "@/static_data/property-types";
+import { listingTypes } from "@/static_data/listing-types";
 
 const SearchSchema = z.object({
   text_search: z.string(),
@@ -140,7 +142,7 @@ const PropertyFilters = ({
   const searchParams = useSearchParams();
 
   const filterSchema = z.object({
-    city: z.string().optional(),
+    location: z.string().optional(),
     listing_type: z.string().optional(),
     property_type: z.string().optional(),
     bedroom_count: z.string().optional(),
@@ -153,7 +155,7 @@ const PropertyFilters = ({
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
-      city: searchParams.has("city") ? String(searchParams.get("city")) : "",
+      location: searchParams.has("location") ? String(searchParams.get("location")) : "",
       listing_type: searchParams.has("listing_type")
         ? String(searchParams.get("listing_type"))
         : "",
@@ -220,29 +222,13 @@ const PropertyFilters = ({
           >
             <FormField
               control={additionalFiltersForm.control}
-              name="city"
+              name="location"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>City</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="City location" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="m@example.com">
-                        m@example.com
-                      </SelectItem>
-                      <SelectItem value="m@google.com">m@google.com</SelectItem>
-                      <SelectItem value="m@support.com">
-                        m@support.com
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <CityCombobox onCityChange={val => field.onChange(val)} />
+                  </FormControl>
                 </FormItem>
               )}
             />
@@ -262,13 +248,11 @@ const PropertyFilters = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="m@example.com">
-                        m@example.com
-                      </SelectItem>
-                      <SelectItem value="m@google.com">m@google.com</SelectItem>
-                      <SelectItem value="m@support.com">
-                        m@support.com
-                      </SelectItem>
+                      {listingTypes.map((pt) => (
+                        <SelectItem key={pt.value} value={pt.value}>
+                          {pt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -290,13 +274,11 @@ const PropertyFilters = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="m@example.com">
-                        m@example.com
-                      </SelectItem>
-                      <SelectItem value="m@google.com">m@google.com</SelectItem>
-                      <SelectItem value="m@support.com">
-                        m@support.com
-                      </SelectItem>
+                      {propertyTypes.map((pt) => (
+                        <SelectItem key={pt.value} value={pt.value}>
+                          {pt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormItem>
