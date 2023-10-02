@@ -12,6 +12,7 @@ const Properties: React.FC = () => {
     text_search: searchParams.has("text_search")
       ? String(searchParams.get("text_search"))
       : undefined,
+
   });
 
   if (isLoading) return <PropertyCardSkeletonLoader />;

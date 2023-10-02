@@ -39,6 +39,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { usePropertyListingHook } from "@/hooks/usePropertyListingHook";
 
 const SearchSchema = z.object({
   text_search: z.string(),
@@ -140,39 +141,39 @@ const PropertyFilters = ({
 
   const filterSchema = z.object({
     city: z.string().optional(),
-    listingType: z.string().optional(),
-    propertyType: z.string().optional(),
-    bedroom: z.string().optional(),
-    bathroom: z.string().optional(),
-    minimumSqm: z.string().optional(),
-    maximumSqm: z.string().optional(),
-    maximumPrice: z.number().optional(),
+    listing_type: z.string().optional(),
+    property_type: z.string().optional(),
+    bedroom_count: z.string().optional(),
+    bathroom_count: z.string().optional(),
+    sqm_min: z.string().optional(),
+    sqm_max: z.string().optional(),
+    max_price: z.number().optional(),
   });
 
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
       city: searchParams.has("city") ? String(searchParams.get("city")) : "",
-      listingType: searchParams.has("listingType")
-        ? String(searchParams.get("listingType"))
+      listing_type: searchParams.has("listing_type")
+        ? String(searchParams.get("listing_type"))
         : "",
-      propertyType: searchParams.has("propertyType")
-        ? String(searchParams.get("propertyType"))
+      property_type: searchParams.has("property_type")
+        ? String(searchParams.get("property_type"))
         : "",
-      bedroom: searchParams.has("bedroom")
-        ? String(searchParams.get("bedroom"))
+      bedroom_count: searchParams.has("bedroom_count")
+        ? String(searchParams.get("bedroom_count"))
         : "",
-      bathroom: searchParams.has("bathroom")
-        ? String(searchParams.get("bathroom"))
+      bathroom_count: searchParams.has("bathroom_count")
+        ? String(searchParams.get("bathroom_count"))
         : "",
-      minimumSqm: searchParams.has("minimumSqm")
-        ? String(searchParams.get("minimumSqm"))
+      sqm_min: searchParams.has("sqm_min")
+        ? String(searchParams.get("sqm_min"))
         : "",
-      maximumSqm: searchParams.has("maximumSqm")
-        ? String(searchParams.get("maximumSqm"))
+      sqm_max: searchParams.has("sqm_max")
+        ? String(searchParams.get("sqm_max"))
         : "",
-      maximumPrice: searchParams.has("maximumPrice")
-        ? (parseInt(searchParams.get("maximumPrice") || "") || 0)
+      max_price: searchParams.has("max_price")
+        ? (parseInt(searchParams.get("max_price") || "") || 0)
         : 0,
     },
   });
@@ -247,7 +248,7 @@ const PropertyFilters = ({
             />
             <FormField
               control={additionalFiltersForm.control}
-              name="listingType"
+              name="listing_type"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Listing type</FormLabel>
@@ -275,7 +276,7 @@ const PropertyFilters = ({
             />
             <FormField
               control={additionalFiltersForm.control}
-              name="propertyType"
+              name="property_type"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Property type</FormLabel>
@@ -306,7 +307,7 @@ const PropertyFilters = ({
             <div className="flex space-x-4">
               <FormField
                 control={additionalFiltersForm.control}
-                name="bedroom"
+                name="bedroom_count"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Bedroom</FormLabel>
@@ -323,7 +324,7 @@ const PropertyFilters = ({
               />
               <FormField
                 control={additionalFiltersForm.control}
-                name="bathroom"
+                name="bathroom_count"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Bathroom</FormLabel>
@@ -343,7 +344,7 @@ const PropertyFilters = ({
             <div className="flex space-x-4">
               <FormField
                 control={additionalFiltersForm.control}
-                name="minimumSqm"
+                name="sqm_min"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Minimum sqm</FormLabel>
@@ -360,7 +361,7 @@ const PropertyFilters = ({
               />
               <FormField
                 control={additionalFiltersForm.control}
-                name="maximumSqm"
+                name="sqm_max"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Maximum sqm</FormLabel>
@@ -385,7 +386,7 @@ const PropertyFilters = ({
               </label>
               <FormField
                 control={additionalFiltersForm.control}
-                name="maximumPrice"
+                name="max_price"
                 render={({ field: { value, onChange } }) => (
 
                   <FormItem>
