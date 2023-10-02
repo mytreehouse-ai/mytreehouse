@@ -155,7 +155,9 @@ const PropertyFilters = ({
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
-      location: searchParams.has("location") ? String(searchParams.get("location")) : "",
+      location: searchParams.has("location")
+        ? String(searchParams.get("location"))
+        : "",
       listing_type: searchParams.has("listing_type")
         ? String(searchParams.get("listing_type"))
         : "",
@@ -175,7 +177,7 @@ const PropertyFilters = ({
         ? String(searchParams.get("sqm_max"))
         : "",
       max_price: searchParams.has("max_price")
-        ? (parseInt(searchParams.get("max_price") || ""))
+        ? parseInt(searchParams.get("max_price") || "")
         : undefined,
     },
   });
@@ -227,7 +229,7 @@ const PropertyFilters = ({
                 <FormItem>
                   <FormLabel>City</FormLabel>
                   <FormControl>
-                    <CityCombobox onCityChange={val => field.onChange(val)} />
+                    <CityCombobox onCityChange={field.onChange} />
                   </FormControl>
                 </FormItem>
               )}
@@ -370,7 +372,6 @@ const PropertyFilters = ({
                 control={additionalFiltersForm.control}
                 name="max_price"
                 render={({ field: { value, onChange } }) => (
-
                   <FormItem>
                     <FormControl>
                       <TooltipProvider>
@@ -393,7 +394,6 @@ const PropertyFilters = ({
                   </FormItem>
                 )}
               />
-
             </div>
 
             <DialogFooter>
