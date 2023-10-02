@@ -1,4 +1,6 @@
+"use client";
 import Image from "next/image";
+import { imageKitLoader } from "@/lib/utils";
 
 const MyTreehouse = () => {
   return (
@@ -6,9 +8,10 @@ const MyTreehouse = () => {
       <div className="flex-shrink-0">
         <Image
           className="h-auto w-auto"
-          src="/mytreehouse-text-loader.svg"
+          loader={imageKitLoader}
+          src="mytreehouse/mytreehouse-text-loader.svg"
           width={280}
-          height={60}
+          height={120}
           alt="mytreehouse-text-loader"
         />
       </div>

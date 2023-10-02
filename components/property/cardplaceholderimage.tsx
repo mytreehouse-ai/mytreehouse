@@ -2,18 +2,17 @@
 import Image from "next/image";
 import { imageKitLoader } from "@/lib/utils";
 
-const HeroImageBanner = () => {
+const CardPlaceholderImage = () => {
   return (
     <Image
-      className="brightness-50 lg:rounded-2xl"
+      src="mytreehouse/property-card-placeholder.jpg"
       loader={imageKitLoader}
-      src="mytreehouse/main-homepage-banner.jpg"
-      alt="home_page_main_banner"
       sizes="(max-width: 768px) 100vw, 700px"
       priority={true}
       fill={true}
+      alt="property_placeholder_image"
     />
   );
 };
 
-export default HeroImageBanner;
+export default CardPlaceholderImage;

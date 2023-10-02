@@ -18,7 +18,6 @@ import { useEffect, useReducer } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useQuery } from "@tanstack/react-query";
 import { ISelect } from "@/interface/select";
-import { cities } from "@/static_data/cities";
 
 interface comboboxProps {
   onCityChange?: (val: string) => void;

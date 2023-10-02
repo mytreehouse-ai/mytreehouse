@@ -2,13 +2,13 @@
 import Image from "next/image";
 import { imageKitLoader } from "@/lib/utils";
 
-const HeroImageBanner = () => {
+const BgImage = () => {
   return (
     <Image
-      className="brightness-50 lg:rounded-2xl"
+      className="absolute brightness-50"
       loader={imageKitLoader}
-      src="mytreehouse/main-homepage-banner.jpg"
-      alt="home_page_main_banner"
+      src="mytreehouse/property-valuation-bg.jpg"
+      alt="propery_valuation_bg"
       sizes="(max-width: 768px) 100vw, 700px"
       priority={true}
       fill={true}
@@ -16,4 +16,4 @@ const HeroImageBanner = () => {
   );
 };
 
-export default HeroImageBanner;
+export default BgImage;

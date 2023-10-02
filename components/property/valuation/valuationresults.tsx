@@ -1,19 +1,20 @@
 "use client";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import ValuationStepper from "@/hooks/useStepperStore";
 import useValuationFormStore from "@/hooks/useValuationFormStore";
+import SuccessResultImage from "./successresultimage";
 
 const ValuationResults: React.FC = () => {
   const { setCurrentStepIndex } = ValuationStepper();
-  const { personalDetailValues, propertyDetailValues } = useValuationFormStore()
+  const { personalDetailValues, propertyDetailValues } =
+    useValuationFormStore();
 
-  console.log("RESULTS", personalDetailValues, propertyDetailValues)
+  console.log("RESULTS", personalDetailValues, propertyDetailValues);
 
   return (
     <>
       <div className="relative mx-auto h-48 w-48 md:h-72 md:w-72">
-        <Image src="/valuation-success-image.svg" fill alt="Oops, we're lost" />
+        <SuccessResultImage />
       </div>
       <div>
         <h1 className="w-full text-center text-base text-neutral-800">

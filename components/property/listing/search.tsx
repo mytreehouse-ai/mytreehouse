@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { BsFilter } from "react-icons-all-files/bs/BsFilter";
 import { BsMap } from "react-icons-all-files/bs/BsMap";
-import { createSearchParams } from "@/lib/utils";
+import { createSearchParams, formatToPhp } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Dialog,
@@ -380,13 +380,13 @@ const PropertyFilters = ({
                             <Slider
                               defaultValue={[value ?? 0]}
                               onValueChange={(values) => onChange(values[0])}
-                              min={0}
-                              max={9999999}
+                              min={1}
+                              max={999_999_999}
                               step={1}
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>{value}</p>
+                            <p>{formatToPhp(value || 0)}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -395,7 +395,6 @@ const PropertyFilters = ({
                 )}
               />
             </div>
-
             <DialogFooter>
               <Button type="reset" variant="outline" onClick={onClearFilters}>
                 Clear
