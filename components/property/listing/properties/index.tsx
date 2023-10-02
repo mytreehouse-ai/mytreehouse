@@ -12,8 +12,13 @@ const Properties: React.FC = () => {
     text_search: searchParams.has("text_search")
       ? String(searchParams.get("text_search"))
       : undefined,
-
+    bedroom_count: searchParams.has("bedroom_count") ? Number(searchParams.get("bedroom_count")) : undefined,
+    bathroom_count: searchParams.has("bathroom_count") ? Number(searchParams.get("bathroom_count")) : undefined,
+    sqm_min: searchParams.has("sqm_min") ? Number(searchParams.get("sqm_min")) : undefined,
+    sqm_max: searchParams.has("sqm_max") ? Number(searchParams.get("sqm_max")) : undefined,
+    max_price: searchParams.has("max_price") ? Number(searchParams.get("max_price")) : undefined,
   });
+
 
   if (isLoading) return <PropertyCardSkeletonLoader />;
 

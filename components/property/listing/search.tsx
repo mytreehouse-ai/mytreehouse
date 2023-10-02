@@ -173,8 +173,8 @@ const PropertyFilters = ({
         ? String(searchParams.get("sqm_max"))
         : "",
       max_price: searchParams.has("max_price")
-        ? (parseInt(searchParams.get("max_price") || "") || 0)
-        : 0,
+        ? (parseInt(searchParams.get("max_price") || ""))
+        : undefined,
     },
   });
 
