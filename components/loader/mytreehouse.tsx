@@ -8,7 +8,7 @@ const MyTreehouse = () => {
       <div className="flex-shrink-0">
         <Image
           className="h-auto w-auto"
-          loader={imageKitLoader}
+          loader={(i) => imageKitLoader({ src: i.src, width: i.width })}
           src="mytreehouse/mytreehouse-text-loader.svg"
           width={280}
           height={120}
