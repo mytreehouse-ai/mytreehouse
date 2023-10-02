@@ -171,9 +171,9 @@ const PropertyFilters = ({
       maximumSqm: searchParams.has("maximumSqm")
         ? String(searchParams.get("maximumSqm"))
         : "",
-      // maximumPrice: searchParams.has("maximumPrice")
-      //   ? (searchParams.get("maximumPrice") as string)
-      //   : "",
+      maximumPrice: searchParams.has("maximumPrice")
+        ? (parseInt(searchParams.get("maximumPrice") || "") || 0)
+        : 0,
     },
   });
 
@@ -376,58 +376,42 @@ const PropertyFilters = ({
                 )}
               />
             </div>
+            <div className="space-y-4">
+              <label
+                htmlFor="maximumPrice"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Maximum price
+              </label>
+              <FormField
+                control={additionalFiltersForm.control}
+                name="maximumPrice"
+                render={({ field: { value, onChange } }) => (
 
-            <FormField
-              control={additionalFiltersForm.control}
-              name="maximumPrice"
-              render={({ field: { value, onChange } }) => (
-                <FormItem>
-                  <FormControl>
-                    <Slider
-                      // id="maximumPrice"
-                      // defaultValue={priceValue}
-                      // onValueChange={(e) => {
-                      //   void onChange()
-                      //   setPriceValue([...e])
-                      // }}
-                      defaultValue={[value ?? 0]}
-                      onValueChange={(values) => onChange(values[0])}
-                      min={0}
-                      max={9999999}
-                      step={1}
-                    />
-                    {/* <div className="space-y-4">
-                      <label
-                        htmlFor="offers"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Maximum price
-                      </label>
+                  <FormItem>
+                    <FormControl>
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Slider
-                              id="maximumPrice"
-                              defaultValue={priceValue}
-                              onValueChange={(e) => {
-                                void onChange()
-                                setPriceValue([...e])
-                              }}
+                              defaultValue={[value ?? 0]}
+                              onValueChange={(values) => onChange(values[0])}
                               min={0}
                               max={9999999}
                               step={1}
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>{priceValue}</p>
+                            <p>{value}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    </div> */}
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+            </div>
 
             <DialogFooter>
               <Button type="reset" variant="outline" onClick={onClearFilters}>
