@@ -15,16 +15,7 @@ import { BsFilter } from "react-icons-all-files/bs/BsFilter";
 import { BsMap } from "react-icons-all-files/bs/BsMap";
 import { createSearchParams, formatToPhp } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { useState } from "react";
-import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectItem,
@@ -43,6 +34,7 @@ import { CityCombobox } from "@/components/ui/citycombobox";
 import { propertyTypes } from "@/static_data/property-types";
 import { listingTypes } from "@/static_data/listing-types";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@radix-ui/react-collapsible";
+import { classNames } from "@/lib/classNames";
 
 const SearchSchema = z.object({
   text_search: z.string(),
@@ -111,19 +103,19 @@ export function Search() {
       </Form>
       <CollapsibleTrigger asChild>
       <Button
-        className="py-6 text-sm"
+        className={classNames(collapsibleOpen ? "text-emerald-600": "text-neutral-800", "py-6 text-sm")}
         // onClick={() => setFilterOpen(true)}
         variant="ghost"
         size="sm"
       >
-        Filters <BsFilter className="ml-1 h-6 w-6" />
+        {collapsibleOpen ? 'Hide filters' : 'Filters'}  <BsFilter className="ml-1 h-6 w-6" />
       </Button>
     </CollapsibleTrigger>
       <Button className="py-6 text-sm" variant="secondary" size="sm">
         Map <BsMap className="ml-1 h-6 w-6" />
       </Button>
     </div>
-      <CollapsibleContent className="w-full">
+      <CollapsibleContent className="w-full mt-8">
           <PropertyFilters />
       </CollapsibleContent>
 </Collapsible>
