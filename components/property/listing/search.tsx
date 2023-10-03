@@ -40,6 +40,7 @@ const SearchSchema = z.object({
   text_search: z.string(),
 });
 
+
 export function Search() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -116,16 +117,17 @@ export function Search() {
       </Button>
     </div>
       <CollapsibleContent className="w-full mt-8">
-          <PropertyFilters />
+          <PropertyFilters closeCollapsible={(() => setCollapsibleOpen(!collapsibleOpen))} />
       </CollapsibleContent>
 </Collapsible>
   );
 }
 
+interface PropertyFiltersProps{
+  closeCollapsible: ()=>void
+}
 
-
-const PropertyFilters = () => {
-  const [priceValue, setPriceValue] = useState<number[]>([999999]);
+const PropertyFilters = ({closeCollapsible}:PropertyFiltersProps) => {
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -176,7 +178,6 @@ const PropertyFilters = () => {
     router.replace(window.location.pathname, {
       scroll: false,
     });
-    console.log(additionalFiltersForm.getValues());
   };
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
@@ -190,7 +191,7 @@ const PropertyFilters = () => {
         },
       );
     }
-
+    void closeCollapsible()
   };
 
   return (
