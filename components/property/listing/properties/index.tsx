@@ -27,8 +27,8 @@ const Properties: React.FC = () => {
     max_price: searchParams.has("max_price")
       ? Number(searchParams.get("max_price"))
       : undefined,
-    city: searchParams.has("city")
-      ? String(searchParams.get("city"))
+    city: searchParams.has("location")
+      ? String(searchParams.get("location"))
       : undefined,
     property_type: searchParams.has("property_type")
       ? String(searchParams.get("property_type"))
