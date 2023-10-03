@@ -386,7 +386,7 @@ const PropertyFilters = ({
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>{formatToPhp(value || 0)}</p>
+                            <p>{formatToPhp(value)}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
