@@ -132,6 +132,8 @@ const PropertyFilters = ({closeCollapsible}:PropertyFiltersProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  console.log('test')
+
   const filterSchema = z.object({
     location: z.string().optional(),
     listing_type: z.string().optional(),
