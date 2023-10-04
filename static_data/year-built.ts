@@ -32,14 +32,6 @@ export const yearBuilt = [
     label: "2007",
   },
   {
-    value: "2007",
-    label: "2007",
-  },
-  {
-    value: "2008",
-    label: "2008",
-  },
-  {
     value: "2008",
     label: "2008",
   },
