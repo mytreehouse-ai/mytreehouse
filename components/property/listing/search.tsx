@@ -372,7 +372,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                               <Slider
                                 defaultValue={[value ?? 0]}
                                 onValueChange={(values) => onChange(values[0])}
-                                min={1}
+                                min={0}
                                 max={999_999_999}
                                 step={1}
                               />
