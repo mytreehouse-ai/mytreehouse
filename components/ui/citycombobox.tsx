@@ -18,6 +18,7 @@ import { useEffect, useReducer } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useQuery } from "@tanstack/react-query";
 import { ISelect } from "@/interface/select";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 
 interface comboboxProps {
   onCityChange?: (val: string) => void;
@@ -94,7 +95,10 @@ export const CityCombobox: React.FC<comboboxProps> = ({ onCityChange }) => {
           variant="outline"
           role="combobox"
           aria-expanded={state.open}
-          className="w-full justify-between font-normal"
+          className={cn(
+            "w-full justify-between",
+            !state.value && "text-muted-foreground",
+          )}
         >
           {state.value && data
             ? data.find((ct) => ct.value === state.value)?.label || PLACEHOLDER
@@ -102,14 +106,14 @@ export const CityCombobox: React.FC<comboboxProps> = ({ onCityChange }) => {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
+      <PopoverContent className="w-full p-0">
         <Command shouldFilter={false}>
           <CommandInput
             value={state.search}
             onValueChange={(search) =>
               dispatch({ type: "SET_SEARCH", payload: search })
             }
-            className="placeholder:text-muted-foreground"
+            className="h-9"
             placeholder={PLACEHOLDER}
           />
           {!isFetching && <CommandEmpty>No item found.</CommandEmpty>}
