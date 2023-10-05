@@ -21,21 +21,28 @@ import { z } from "zod";
 import ValuationStepper from "@/hooks/useStepperStore";
 import { propertyValuationFormSchema } from ".";
 import useValuationFormStore from "@/hooks/useValuationFormStore";
+import { propertyTypes } from "@/static_data/property-types";
+import { CityCombobox } from "@/components/ui/citycombobox";
+import { yearBuilt } from "@/static_data/year-built";
+import { listingDuration } from "@/static_data/listing-duration";
+import { listingTypes } from "@/static_data/listing-types";
 
 const PropertyDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
-  const { propertyDetailValues, setPropertyDetailValues } = useValuationFormStore()
+  const { propertyDetailValues, setPropertyDetailValues } =
+    useValuationFormStore();
 
   const form = useForm<z.infer<typeof propertyValuationFormSchema>>({
     resolver: zodResolver(propertyValuationFormSchema),
-    values: propertyDetailValues
+    values: propertyDetailValues,
   });
 
   function onSubmit(values: z.infer<typeof propertyValuationFormSchema>) {
-    setPropertyDetailValues(values)
+    setPropertyDetailValues(values);
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(+1);
     }
+    console.log("property details", values);
   }
 
   return (
@@ -61,9 +68,11 @@ const PropertyDetails: React.FC = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  {propertyTypes.map((pt) => (
+                    <SelectItem key={pt.value} value={pt.value}>
+                      {pt.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </FormItem>
@@ -76,9 +85,10 @@ const PropertyDetails: React.FC = () => {
             <FormItem>
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Input placeholder="Address"
+                <Input
+                  placeholder="Address"
                   {...field}
-                  value={field.value ?? ''}
+                  value={field.value ?? ""}
                 />
               </FormControl>
             </FormItem>
@@ -88,20 +98,24 @@ const PropertyDetails: React.FC = () => {
           control={form.control}
           name="location"
           render={({ field }) => (
+            // <FormItem>
+            //   <FormLabel>City</FormLabel>
+            //   <Select onValueChange={field.onChange} defaultValue={field.value}>
+            //     <FormControl>
+            //       <SelectTrigger>
+            //         <SelectValue placeholder="Select a city" />
+            //       </SelectTrigger>
+            //     </FormControl>
+            //     <SelectContent>
+            //       <SelectItem value="m@example.com">m@example.com</SelectItem>
+            //       <SelectItem value="m@google.com">m@google.com</SelectItem>
+            //       <SelectItem value="m@support.com">m@support.com</SelectItem>
+            //     </SelectContent>
+            //   </Select>
+            // </FormItem>
             <FormItem>
-              <FormLabel>City</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a city" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormLabel>Location</FormLabel>
+              <CityCombobox onCityChange={field.onChange} />
             </FormItem>
           )}
         />
@@ -114,9 +128,12 @@ const PropertyDetails: React.FC = () => {
               <FormItem className="w-full">
                 <FormLabel>Sqm</FormLabel>
                 <FormControl>
-                  <Input placeholder="Sqm" type="number"
+                  <Input
+                    placeholder="Sqm"
+                    type="number"
+                    min="1"
                     {...field}
-                    value={field.value ?? ''}
+                    value={field.value ?? ""}
                   />
                 </FormControl>
               </FormItem>
@@ -138,15 +155,41 @@ const PropertyDetails: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    {yearBuilt.map((data) => (
+                      <SelectItem key={data.value} value={data.value}>
+                        {data.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormItem>
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="listingType"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Transaction Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Looking to?" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {listingTypes.map((data) => (
+                    <SelectItem key={data.value} value={data.value}>
+                      {data.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -161,9 +204,11 @@ const PropertyDetails: React.FC = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  {listingDuration.map((data) => (
+                    <SelectItem key={data.value} value={data.value}>
+                      {data.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </FormItem>

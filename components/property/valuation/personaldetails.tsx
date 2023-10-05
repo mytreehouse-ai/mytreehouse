@@ -18,14 +18,15 @@ import useValuationFormStore from "@/hooks/useValuationFormStore";
 
 const PersonalDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
-  const { propertyDetailValues, setPersonalDetailValues } = useValuationFormStore();
+  const { propertyDetailValues, setPersonalDetailValues } =
+    useValuationFormStore();
 
   const form = useForm<z.infer<typeof personalDetailsFormSchema>>({
     resolver: zodResolver(personalDetailsFormSchema),
   });
 
   const onSubmit = (values: z.infer<typeof personalDetailsFormSchema>) => {
-    setPersonalDetailValues(values)
+    setPersonalDetailValues(values);
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
@@ -47,35 +48,39 @@ const PersonalDetails: React.FC = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-4 space-y-6"
       >
-        <div className="md:flex md:gap-x-6">
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Type your Last name" {...field}
-                    value={field.value ?? ''}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Type your First name" {...field}
-                    value={field.value ?? ''} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="firstName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>First Name</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Type your First name here"
+                  {...field}
+                  value={field.value ?? ""}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Last Name</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Type your Last name here"
+                  {...field}
+                  value={field.value ?? ""}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -84,7 +89,11 @@ const PersonalDetails: React.FC = () => {
             <FormItem>
               <FormLabel>Phone number</FormLabel>
               <FormControl>
-                <Input placeholder="Type your phone number here" {...field} value={field.value ?? ''} />
+                <Input
+                  placeholder="Type your phone number here"
+                  {...field}
+                  value={field.value ?? ""}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -96,7 +105,11 @@ const PersonalDetails: React.FC = () => {
             <FormItem>
               <FormLabel>Email Address</FormLabel>
               <FormControl>
-                <Input placeholder="Type your email address here" {...field} value={field.value ?? ''} />
+                <Input
+                  placeholder="Type your email address here"
+                  {...field}
+                  value={field.value ?? ""}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -124,15 +137,19 @@ const PersonalDetails: React.FC = () => {
           </label>
         </div>
 
-        <div className="flex space-x-2" >
-          <Button className="w-full" type="button" variant="outline" onClick={goBack}>
+        <div className="flex space-x-2">
+          <Button
+            className="w-full"
+            type="button"
+            variant="outline"
+            onClick={goBack}
+          >
             Previous
           </Button>
           <Button className="w-full" type="submit">
             Next
           </Button>
         </div>
-
       </form>
     </Form>
   );

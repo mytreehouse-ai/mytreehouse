@@ -3,7 +3,6 @@ import { Badge } from "../ui/badge";
 import { Property } from "@/interface/property";
 import Link from "next/link";
 import { formatToPhp } from "@/lib/utils";
-import CardPlaceholderImage from "./cardplaceholderimage";
 
 interface cardProps {
   property: Property;
@@ -22,7 +21,13 @@ const Card: React.FC<cardProps> = ({ property }) => {
             fill={true}
           />
         ) : (
-          <CardPlaceholderImage />
+          <Image
+            src="/property-card-placeholder.jpg"
+            alt="property_placeholder_image"
+            sizes="66vw(min-width: 1000px) 100vw, 700px"
+            priority={true}
+            fill={true}
+          />
         )}
         <div className="absolute inset-0 my-2 ml-2 space-x-2">
           <Badge variant="secondary">{property.listing_type_name}</Badge>
