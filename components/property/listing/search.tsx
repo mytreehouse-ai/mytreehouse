@@ -33,7 +33,7 @@ import {
 import { CityCombobox } from "@/components/ui/citycombobox";
 import { propertyTypes } from "@/static_data/property-types";
 import { listingTypes } from "@/static_data/listing-types";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@radix-ui/react-collapsible";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { classNames } from "@/lib/classNames";
 
 const SearchSchema = z.object({
