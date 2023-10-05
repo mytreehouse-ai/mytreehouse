@@ -401,9 +401,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   );
 };
 
-//DO NOT DELETE, FOR REFERENCE
-//DO NOT DELETE, FOR REFERENCE
-//DO NOT DELETE, FOR REFERENCE
+//TODO: DO NOT DELETE, FOR REFERENCE
 
 // interface PropertyFiltersProps {
 //   filterOpen: boolean;
