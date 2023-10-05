@@ -16,7 +16,7 @@ async function getProperties(
 
   const response = await fetch(url);
 
-  if (!response.ok) throw new Error("Error while querying properties.");
+  if (!response.ok) throw new Error("Error while querying properties");
 
   return await response.json();
 }
