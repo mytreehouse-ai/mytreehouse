@@ -24,7 +24,6 @@ import useValuationFormStore from "@/hooks/useValuationFormStore";
 import { propertyTypes } from "@/static_data/property-types";
 import { yearBuilt } from "@/static_data/year-built";
 import { listingDuration } from "@/static_data/listing-duration";
-import { listingTypes } from "@/static_data/listing-types";
 import { CityCombobox } from "@/components/ui/citycombobox";
 
 const PropertyDetails: React.FC = () => {
@@ -37,12 +36,12 @@ const PropertyDetails: React.FC = () => {
     values: propertyDetailValues,
   });
 
-  function onSubmit(values: z.infer<typeof propertyValuationFormSchema>) {
+  const onSubmit = (values: z.infer<typeof propertyValuationFormSchema>) => {
     setPropertyDetailValues(values);
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(+1);
     }
-  }
+  };
 
   return (
     <Form {...form}>
