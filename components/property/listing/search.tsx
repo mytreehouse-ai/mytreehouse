@@ -143,16 +143,18 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const filterSchema = z.object({
-    location: z.string().optional(),
-    listing_type: z.string().optional(),
-    property_type: z.string().optional(),
-    bedroom_count: z.string().optional(),
-    bathroom_count: z.string().optional(),
-    sqm_min: z.string().optional(),
-    sqm_max: z.string().optional(),
-    max_price: z.number().optional(),
-  });
+  const filterSchema = z
+    .object({
+      location: z.string(),
+      listing_type: z.string(),
+      property_type: z.string(),
+      bedroom_count: z.string(),
+      bathroom_count: z.string(),
+      sqm_min: z.string(),
+      sqm_max: z.string(),
+      max_price: z.string(),
+    })
+    .partial();
 
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
@@ -185,7 +187,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
         ? String(searchParams.get("sqm_max"))
         : "",
       max_price: searchParams.has("max_price")
-        ? parseInt(searchParams.get("max_price") || "")
+        ? String(searchParams.get("max_price"))
         : undefined,
     },
   });
@@ -392,7 +394,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Slider
-                                defaultValue={[value ?? 0]}
+                                defaultValue={[Number(value) ?? 0]}
                                 onValueChange={(values) => onChange(values[0])}
                                 min={0}
                                 max={999_999_999}
@@ -400,7 +402,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                               />
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>{formatToPhp(value)}</p>
+                              <p>{formatToPhp(Number(value))}</p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
