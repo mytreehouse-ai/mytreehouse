@@ -154,29 +154,6 @@ const PropertyDetails: React.FC = () => {
         </div>
         <FormField
           control={form.control}
-          name="listingType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Transaction Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Looking to?" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {listingTypes.map((data) => (
-                    <SelectItem key={data.value} value={data.value}>
-                      {data.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="whenAreyouLookingToSell"
           render={({ field }) => (
             <FormItem>
