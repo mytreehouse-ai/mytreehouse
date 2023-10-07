@@ -59,6 +59,7 @@ export function Search() {
   });
 
   const onSubmit = (data: z.infer<typeof SearchSchema>) => {
+
     const searchParams = createSearchParams(data);
 
     if (searchParams && searchParams.size) {
@@ -156,9 +157,12 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
     })
     .partial();
 
+
+
+
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
-    defaultValues: {
+    values: {
       location: searchParams.has("location")
         ? cities.find(
             (ct) => ct.urlValue === String(searchParams.get("location")),
@@ -192,6 +196,17 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
     },
   });
 
+  const { watch } = additionalFiltersForm
+
+  const watchPropertyType =  watch(['property_type'])
+
+  const VACANT_LOT_KEY = '238aa2f4-d1aa-4af7-8afe-9413b24cf3ae'
+
+  const WAREHOUSE_KEY = '166968a2-1c59-412c-8a50-4a75f61e56bc'
+
+  const shouldShowFields =
+  watchPropertyType[0] !== VACANT_LOT_KEY && watchPropertyType[0] !== WAREHOUSE_KEY;
+  
   const onClearFilters = () => {
     additionalFiltersForm.reset();
     router.replace(window.location.pathname, {
@@ -200,6 +215,8 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   };
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
+        console.log('DATA',value)
+
     if (value?.location) {
       value.location = cities.find((ct) => ct.value === value.location)
         ?.urlValue;
@@ -305,7 +322,9 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
               />
             </div>
             <div className="mx-auto flex w-5/6 flex-row items-start justify-center gap-x-2">
-              <FormField
+             {shouldShowFields && (
+       <>
+            <FormField
                 control={additionalFiltersForm.control}
                 name="bedroom_count"
                 render={({ field }) => (
@@ -339,6 +358,11 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                   </FormItem>
                 )}
               />
+             </> 
+             )
+      
+             }
+       
               <FormField
                 control={additionalFiltersForm.control}
                 name="sqm_min"
