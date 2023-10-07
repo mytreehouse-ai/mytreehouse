@@ -38,6 +38,7 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
+import { cities } from "@/static_data/cities";
 
 const SearchSchema = z.object({
   text_search: z.string(),
@@ -142,8 +143,6 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  console.log("test");
-
   const filterSchema = z.object({
     location: z.string().optional(),
     listing_type: z.string().optional(),
@@ -159,13 +158,19 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
     resolver: zodResolver(filterSchema),
     defaultValues: {
       location: searchParams.has("location")
-        ? String(searchParams.get("location"))
+        ? cities.find(
+            (ct) => ct.urlValue === String(searchParams.get("location")),
+          )?.value
         : "",
       listing_type: searchParams.has("listing_type")
-        ? String(searchParams.get("listing_type"))
+        ? listingTypes.find(
+            (lt) => lt.urlValue === String(searchParams.get("listing_type")),
+          )?.value
         : "",
       property_type: searchParams.has("property_type")
-        ? String(searchParams.get("property_type"))
+        ? propertyTypes.find(
+            (pt) => pt.urlValue === String(searchParams.get("property_type")),
+          )?.value
         : "",
       bedroom_count: searchParams.has("bedroom_count")
         ? String(searchParams.get("bedroom_count"))
@@ -193,6 +198,23 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   };
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
+    if (value?.location) {
+      value.location = cities.find((ct) => ct.value === value.location)
+        ?.urlValue;
+    }
+
+    if (value?.listing_type) {
+      value.listing_type = listingTypes.find(
+        (lt) => lt.value === value.listing_type,
+      )?.urlValue;
+    }
+
+    if (value?.property_type) {
+      value.property_type = propertyTypes.find(
+        (pt) => pt.value === value.property_type,
+      )?.urlValue;
+    }
+
     const filterSearchParams = createSearchParams(value);
 
     if (filterSearchParams && filterSearchParams.size) {
