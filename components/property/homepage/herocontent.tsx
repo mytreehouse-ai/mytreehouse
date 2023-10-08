@@ -45,15 +45,12 @@ const HeroContent: React.FC = () => {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data)
     const propertyTypeUrlValue = getPropertyTypeUrlValue(data.propertyType);
 
     const cityUrlValue = getCityUrlValue(data.location);
 
-    console.log(propertyTypeUrlValue)
-
     router.push(
-      `/property-listings?listing_type=${data.listingType}&property_type=${propertyTypeUrlValue}&location=${cityUrlValue}`,
+      `/property-listings/${propertyTypeUrlValue}/${cityUrlValue}/${data.listingType}`,
     );
   }
 
