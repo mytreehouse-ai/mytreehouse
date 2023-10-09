@@ -22,6 +22,7 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 
 interface comboboxProps {
   onCityChange?: (val: string) => void;
+  cityValue?: string;
 }
 
 type Action =
@@ -72,8 +73,15 @@ async function getCities(data: { city: string }): Promise<ISelect[]> {
 
 const PLACEHOLDER = "Property city";
 
-export const CityCombobox: React.FC<comboboxProps> = ({ onCityChange }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export const CityCombobox: React.FC<comboboxProps> = ({
+  onCityChange,
+  cityValue,
+}) => {
+  //const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    value: cityValue || "",
+  });
   const debouncedSearchTerm = useDebounce(state.search, 300);
 
   const { isLoading, data, isFetching } = useQuery({

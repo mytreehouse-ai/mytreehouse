@@ -19,7 +19,6 @@ export const propertyValuationFormSchema = z.object({
   location: z.string().nonempty(),
   sqm: z.preprocess((val) => Number(val), z.number().positive()),
   yearBuilt: z.string().nonempty(),
-  listingType: z.string().nonempty(),
   whenAreyouLookingToSell: z.string().nonempty(),
 });
 

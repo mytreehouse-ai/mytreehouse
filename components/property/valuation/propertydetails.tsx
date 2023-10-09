@@ -48,8 +48,9 @@ const PropertyDetails: React.FC = () => {
       <h2 className="w-full text-lg font-bold text-neutral-800">
         Tell us about your property
       </h2>
+
       <form
-        name="test"
+        name="propertyDetailsForm"
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-4 space-y-4"
       >
@@ -100,7 +101,10 @@ const PropertyDetails: React.FC = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Location</FormLabel>
-              <CityCombobox onCityChange={field.onChange} />
+              <CityCombobox
+                onCityChange={field.onChange}
+                cityValue={field.value}
+              />
             </FormItem>
           )}
         />
