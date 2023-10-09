@@ -44,7 +44,7 @@ const PersonalDetails: React.FC = () => {
         Tell us more about the seller
       </h2>
       <form
-        name="test"
+        name="personalDetailsForm"
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-4 space-y-6"
       >
