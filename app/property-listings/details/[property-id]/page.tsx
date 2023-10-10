@@ -1,3 +1,5 @@
+
+
 import { Property } from "@/interface/property";
 import { env } from "@/lib/env.mjs";
 import Image from "next/image";
@@ -38,7 +40,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
   const data: Property = await response.json();
 
   return (
-    <main className="flex flex-col space-y-4 mb-10">
+    <main className="flex flex-col space-y-4 mb-10 lg:px-36">
       <div className="flex gap-x-2">
         <Image
           className="rounded-md"
@@ -82,6 +84,8 @@ const page: React.FC<pageProps> = async ({ params }) => {
       <div>
             <PropertyDetailsAccordion description={data.description}/>
       </div>
+      <div className="flex flex-col space-y-6 lg:flex-row">
+
       <div>
           <h2 className="font-semibold"> Property details</h2>
           <section className="grid grid-cols-2 gap-6">
@@ -127,6 +131,8 @@ const page: React.FC<pageProps> = async ({ params }) => {
           </section>
       </div>
       <ContactLessor />
+      </div>
+
       {/* <Link href="/property-listings">Go back to listings</Link> */}
     </main>
   );
@@ -136,9 +142,9 @@ export default page;
 
 const PropertyDetailsAccordion: React.FC<{ description: string }> = ({ description }) => {
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion type="single" collapsible className="w-full" >
       <AccordionItem value="description">
-        <AccordionTrigger>Property description</AccordionTrigger>
+        <AccordionTrigger className="text-emerald-700 font-bold">Click to know about the property</AccordionTrigger>
         <AccordionContent>
          <p>{description}</p>
         </AccordionContent>
@@ -149,7 +155,7 @@ const PropertyDetailsAccordion: React.FC<{ description: string }> = ({ descripti
 
 const ContactLessor = () => {
   return (
-  <Card>
+  <Card className="lg:w-1/2">
   <CardHeader>
     <CardTitle className="text-emerald-600">Contact us now!</CardTitle>
     <CardDescription>Know more about this property</CardDescription>
