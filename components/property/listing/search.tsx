@@ -74,12 +74,12 @@ export function Search() {
       open={collapsibleOpen}
       onOpenChange={setCollapsibleOpen}
     >
-      <div className="flex w-full items-center justify-center gap-x-4">
+      <div className="flex flex-col items-center justify-center sm:flex-row sm:gap-x-4">
         <Form {...form}>
           <form
             name="property_search"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="relative w-1/3 space-y-8 "
+            className="relative w-full space-y-8 sm:w-1/3"
           >
             <FormField
               control={form.control}
@@ -87,14 +87,12 @@ export function Search() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    {/* Add this div with a relative position */}
                     <div className="relative rounded-lg border">
                       <Input
                         className="py-6 placeholder:text-base"
                         placeholder="Search property"
                         {...field}
                       />
-                      {/* Position your button absolutely within the parent div */}
                       <Button
                         type="submit"
                         className="absolute right-0 top-1/2 mr-1 flex -translate-y-1/2 transform items-center px-3 text-base"
@@ -108,23 +106,24 @@ export function Search() {
             />
           </form>
         </Form>
-        <CollapsibleTrigger asChild>
-          <Button
-            className={cn(
-              collapsibleOpen ? "text-emerald-600" : "text-neutral-800",
-              "py-6 text-sm",
-            )}
-            // onClick={() => setFilterOpen(true)}
-            variant="ghost"
-            size="sm"
-          >
-            More Filters
-            <BsFilter className="ml-1 h-6 w-6" />
+        <div className="mt-4 flex sm:mt-0">
+          <CollapsibleTrigger asChild>
+            <Button
+              className={cn(
+                collapsibleOpen ? "text-emerald-600" : "text-neutral-800",
+                "py-6 text-sm",
+              )}
+              variant="ghost"
+              size="sm"
+            >
+              More Filters
+              <BsFilter className="ml-1 h-6 w-6" />
+            </Button>
+          </CollapsibleTrigger>
+          <Button className="py-6 text-sm" variant="secondary" size="sm">
+            Map <BsMap className="ml-1 h-6 w-6" />
           </Button>
-        </CollapsibleTrigger>
-        <Button className="py-6 text-sm" variant="secondary" size="sm">
-          Map <BsMap className="ml-1 h-6 w-6" />
-        </Button>
+        </div>
       </div>
       <CollapsibleContent className="mt-8 w-full">
         <PropertyFilters
