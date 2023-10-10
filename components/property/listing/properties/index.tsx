@@ -4,6 +4,9 @@ import PropertyCardSkeletonLoader from "./propertycardskeletonloader";
 import { useSearchParams } from "next/navigation";
 import Grid from "../../grid";
 import Card from "../../card";
+import { listingTypes } from "@/static_data/listing-types";
+import { cities } from "@/static_data/cities";
+import { propertyTypes } from "@/static_data/property-types";
 
 const Properties: React.FC = () => {
   const searchParams = useSearchParams();
@@ -28,13 +31,19 @@ const Properties: React.FC = () => {
       ? Number(searchParams.get("max_price"))
       : undefined,
     city: searchParams.has("location")
-      ? String(searchParams.get("location"))
+      ? cities.find(
+          (ct) => ct.urlValue === String(searchParams.get("location")),
+        )?.value
       : undefined,
     property_type: searchParams.has("property_type")
-      ? String(searchParams.get("property_type"))
+      ? propertyTypes.find(
+          (pt) => pt.urlValue === String(searchParams.get("property_type")),
+        )?.value
       : undefined,
     listing_type: searchParams.has("listing_type")
-      ? String(searchParams.get("listing_type"))
+      ? listingTypes.find(
+          (lt) => lt.urlValue === String(searchParams.get("listing_type")),
+        )?.value
       : undefined,
   });
 

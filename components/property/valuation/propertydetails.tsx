@@ -24,7 +24,6 @@ import useValuationFormStore from "@/hooks/useValuationFormStore";
 import { propertyTypes } from "@/static_data/property-types";
 import { yearBuilt } from "@/static_data/year-built";
 import { listingDuration } from "@/static_data/listing-duration";
-import { listingTypes } from "@/static_data/listing-types";
 import { CityCombobox } from "@/components/ui/citycombobox";
 
 const PropertyDetails: React.FC = () => {
@@ -37,20 +36,21 @@ const PropertyDetails: React.FC = () => {
     values: propertyDetailValues,
   });
 
-  function onSubmit(values: z.infer<typeof propertyValuationFormSchema>) {
+  const onSubmit = (values: z.infer<typeof propertyValuationFormSchema>) => {
     setPropertyDetailValues(values);
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(+1);
     }
-  }
+  };
 
   return (
     <Form {...form}>
       <h2 className="w-full text-lg font-bold text-neutral-800">
         Tell us about your property
       </h2>
+
       <form
-        name="test"
+        name="propertyDetailsForm"
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-4 space-y-4"
       >
@@ -101,7 +101,10 @@ const PropertyDetails: React.FC = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Location</FormLabel>
-              <CityCombobox onCityChange={field.onChange} />
+              <CityCombobox
+                onCityChange={field.onChange}
+                cityValue={field.value}
+              />
             </FormItem>
           )}
         />
@@ -152,29 +155,6 @@ const PropertyDetails: React.FC = () => {
             )}
           />
         </div>
-        <FormField
-          control={form.control}
-          name="listingType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Transaction Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Looking to?" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {listingTypes.map((data) => (
-                    <SelectItem key={data.value} value={data.value}>
-                      {data.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="whenAreyouLookingToSell"
