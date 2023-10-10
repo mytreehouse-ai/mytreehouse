@@ -1,3 +1,5 @@
+
+
 import { Property } from "@/interface/property";
 import { env } from "@/lib/env.mjs";
 import Image from "next/image";
@@ -11,7 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Grid, Replace, Building2, ClipboardList, Link as LinkIcon } from "lucide-react";
+import { Grid, Replace, Building2, ClipboardList, Link as LinkIcon, Bed, Bath, CarFront, BoxSelect } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -38,7 +40,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
   const data: Property = await response.json();
 
   return (
-    <main className="flex flex-col space-y-4 mb-10">
+    <main className="flex flex-col space-y-4 mb-10 lg:px-36">
       <div className="flex gap-x-2">
         <Image
           className="rounded-md"
@@ -82,8 +84,10 @@ const page: React.FC<pageProps> = async ({ params }) => {
       <div>
             <PropertyDetailsAccordion description={data.description}/>
       </div>
+      <div className="flex flex-col space-y-6 lg:flex-row">
+
       <div>
-          <h2 className="font-semibold"> Property details</h2>
+          <h2 className="font-semibold mb-2">Property details</h2>
           <section className="grid grid-cols-2 gap-6">
           <div>
               <div className="inline-flex gap-x-1 items-center">
@@ -93,13 +97,64 @@ const page: React.FC<pageProps> = async ({ params }) => {
               <p className="text-sm font-semibold"> {data.floor_area} sqm</p>       
           </div>
 
-            <div>
+      {data.property_type_name !== 'Vacant Lot' && (
+        <div>
+              <div className="inline-flex gap-x-1 items-center">
+                <BoxSelect className="h-4 w-4 text-gray-500"/>
+                <span className=" text-sm text-gray-500">Lot area</span>
+              </div>
+              <p className="text-sm font-semibold"> {data.lot_area} sqm</p>       
+          </div>
+
+      )}
+        
+        {
+            data.property_type_name !== 'Vacant Lot' && (
+                 <div>
+              <div className="inline-flex gap-x-1 items-center">
+                <Bed className="h-4 w-4 text-gray-500"/>
+                <span className=" text-sm text-gray-500">Bedroom</span>
+              </div>
+              <p className="text-sm font-semibold"> {data.bedroom} bedroom/s</p>       
+          </div>
+            )
+        }
+         
+         {
+          data.property_type_name !== 'Vacant Lot' && (
+                 <div>
+              <div className="inline-flex gap-x-1 items-center">
+                <Bath className="h-4 w-4 text-gray-500"/>
+                <span className=" text-sm text-gray-500">Bathroom</span>
+              </div>
+              <p className="text-sm font-semibold"> {data.bathroom} bathroom/s</p>       
+          </div>
+          )
+         }
+
+            {
+              data.property_type_name !== 'Vacant Lot' && (
+           <div>
               <div className="inline-flex gap-x-1 items-center">
                 <Replace className="h-4 w-4 text-gray-500"/>
                 <span className=" text-sm text-gray-500">Turn over status</span>
               </div>
               <p className="text-sm font-semibold"> {data.turnover_status_name}</p>       
             </div>
+              )
+            }    
+       
+            {
+            data.property_type_name !== 'Vacant Lot' && (
+                   <div>
+              <div className="inline-flex gap-x-1 items-center">
+                <CarFront className="h-4 w-4 text-gray-500"/>
+                <span className=" text-sm text-gray-500">Parking lot</span>
+              </div>
+              <p className="text-sm font-semibold"> {data.parking_lot} parking lot/s</p>       
+            </div>
+            )
+            }
 
             <div>
               <div className="inline-flex gap-x-1 items-center">
@@ -127,6 +182,8 @@ const page: React.FC<pageProps> = async ({ params }) => {
           </section>
       </div>
       <ContactLessor />
+      </div>
+
       {/* <Link href="/property-listings">Go back to listings</Link> */}
     </main>
   );
@@ -136,9 +193,9 @@ export default page;
 
 const PropertyDetailsAccordion: React.FC<{ description: string }> = ({ description }) => {
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion type="single" collapsible className="w-full" >
       <AccordionItem value="description">
-        <AccordionTrigger>Property description</AccordionTrigger>
+        <AccordionTrigger className="text-emerald-700 font-bold">Click to know about the property</AccordionTrigger>
         <AccordionContent>
          <p>{description}</p>
         </AccordionContent>
@@ -149,7 +206,7 @@ const PropertyDetailsAccordion: React.FC<{ description: string }> = ({ descripti
 
 const ContactLessor = () => {
   return (
-  <Card>
+  <Card className="lg:w-1/2">
   <CardHeader>
     <CardTitle className="text-emerald-600">Contact us now!</CardTitle>
     <CardDescription>Know more about this property</CardDescription>
