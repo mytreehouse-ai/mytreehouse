@@ -97,7 +97,8 @@ const page: React.FC<pageProps> = async ({ params }) => {
               <p className="text-sm font-semibold"> {data.floor_area} sqm</p>       
           </div>
 
-            <div>
+      {data.property_type_name !== 'Vacant Lot' && (
+        <div>
               <div className="inline-flex gap-x-1 items-center">
                 <BoxSelect className="h-4 w-4 text-gray-500"/>
                 <span className=" text-sm text-gray-500">Lot area</span>
@@ -105,21 +106,31 @@ const page: React.FC<pageProps> = async ({ params }) => {
               <p className="text-sm font-semibold"> {data.lot_area} sqm</p>       
           </div>
 
-            <div>
+      )}
+        
+        {
+            data.property_type_name !== 'Vacant Lot' && (
+                 <div>
               <div className="inline-flex gap-x-1 items-center">
                 <Bed className="h-4 w-4 text-gray-500"/>
                 <span className=" text-sm text-gray-500">Bedroom</span>
               </div>
               <p className="text-sm font-semibold"> {data.bedroom} bedroom/s</p>       
           </div>
-
-              <div>
+            )
+        }
+         
+         {
+          data.property_type_name !== 'Vacant Lot' && (
+                 <div>
               <div className="inline-flex gap-x-1 items-center">
                 <Bath className="h-4 w-4 text-gray-500"/>
                 <span className=" text-sm text-gray-500">Bathroom</span>
               </div>
               <p className="text-sm font-semibold"> {data.bathroom} bathroom/s</p>       
           </div>
+          )
+         }
 
             {
               data.property_type_name !== 'Vacant Lot' && (
@@ -132,17 +143,19 @@ const page: React.FC<pageProps> = async ({ params }) => {
             </div>
               )
             }    
-
-            <div>
+       
+            {
+            data.property_type_name !== 'Vacant Lot' && (
+                   <div>
               <div className="inline-flex gap-x-1 items-center">
                 <CarFront className="h-4 w-4 text-gray-500"/>
                 <span className=" text-sm text-gray-500">Parking lot</span>
               </div>
               <p className="text-sm font-semibold"> {data.parking_lot} parking lot/s</p>       
             </div>
+            )
+            }
 
-          
-            
             <div>
               <div className="inline-flex gap-x-1 items-center">
                 <Building2 className="h-4 w-4 text-gray-500"/>
