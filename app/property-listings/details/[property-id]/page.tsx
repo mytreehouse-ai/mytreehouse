@@ -13,7 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Grid, Replace, Building2, ClipboardList, Link as LinkIcon } from "lucide-react";
+import { Grid, Replace, Building2, ClipboardList, Link as LinkIcon, Bed, Bath, CarFront, BoxSelect } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -87,7 +87,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
       <div className="flex flex-col space-y-6 lg:flex-row">
 
       <div>
-          <h2 className="font-semibold"> Property details</h2>
+          <h2 className="font-semibold mb-2">Property details</h2>
           <section className="grid grid-cols-2 gap-6">
           <div>
               <div className="inline-flex gap-x-1 items-center">
@@ -99,12 +99,50 @@ const page: React.FC<pageProps> = async ({ params }) => {
 
             <div>
               <div className="inline-flex gap-x-1 items-center">
+                <BoxSelect className="h-4 w-4 text-gray-500"/>
+                <span className=" text-sm text-gray-500">Lot area</span>
+              </div>
+              <p className="text-sm font-semibold"> {data.lot_area} sqm</p>       
+          </div>
+
+            <div>
+              <div className="inline-flex gap-x-1 items-center">
+                <Bed className="h-4 w-4 text-gray-500"/>
+                <span className=" text-sm text-gray-500">Bedroom</span>
+              </div>
+              <p className="text-sm font-semibold"> {data.bedroom} bedroom/s</p>       
+          </div>
+
+              <div>
+              <div className="inline-flex gap-x-1 items-center">
+                <Bath className="h-4 w-4 text-gray-500"/>
+                <span className=" text-sm text-gray-500">Bathroom</span>
+              </div>
+              <p className="text-sm font-semibold"> {data.bathroom} bathroom/s</p>       
+          </div>
+
+            {
+              data.property_type_name !== 'Vacant Lot' && (
+           <div>
+              <div className="inline-flex gap-x-1 items-center">
                 <Replace className="h-4 w-4 text-gray-500"/>
                 <span className=" text-sm text-gray-500">Turn over status</span>
               </div>
               <p className="text-sm font-semibold"> {data.turnover_status_name}</p>       
             </div>
+              )
+            }    
 
+            <div>
+              <div className="inline-flex gap-x-1 items-center">
+                <CarFront className="h-4 w-4 text-gray-500"/>
+                <span className=" text-sm text-gray-500">Parking lot</span>
+              </div>
+              <p className="text-sm font-semibold"> {data.parking_lot} parking lot/s</p>       
+            </div>
+
+          
+            
             <div>
               <div className="inline-flex gap-x-1 items-center">
                 <Building2 className="h-4 w-4 text-gray-500"/>
