@@ -12,7 +12,7 @@ interface cardProps {
 const Card: React.FC<cardProps> = ({ property }) => {
   return (
     <div className="group relative space-y-2.5">
-      <div className="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-lg bg-gray-200 shadow-sm group-hover:opacity-75 lg:h-80">
+      <div className="aspect-h-1 aspect-w-1 lg:aspect-none relative h-80 w-full overflow-hidden rounded-lg bg-gray-200 shadow-sm group-hover:opacity-75">
         {property.images.length ? (
           <Image
             src={property.images[0]}
