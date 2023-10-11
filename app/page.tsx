@@ -27,7 +27,7 @@ export default async function Home() {
 
   return (
     <main className="h-screen">
-      <Navbar shadowMd />
+      <Navbar />
       <div className="relative h-full lg:mx-8 lg:mt-[5.7rem]">
         <HeroContent />
         <HeroImageBanner />
