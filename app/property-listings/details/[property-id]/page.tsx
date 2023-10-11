@@ -152,7 +152,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
         </div>
         {/* <Link href="/property-listings">Go back to listings</Link> */}
       </main>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <pre className="w-1/2">{JSON.stringify(data, null, 2)}</pre>
     </>
   );
 };
