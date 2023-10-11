@@ -10,10 +10,10 @@ const InsertPropertySchema = z.object({
   listing_type_id: z.string().uuid(),
   property_status_id: z.string().uuid(),
   turnover_status_id: z.string().uuid(),
-  current_price: z.preprocess(
-    (input) => (input ? parseFloat(input as string) : 0),
-    z.number(),
-  ),
+  current_price: z.preprocess((input) => {
+    const floatVal = parseFloat(input as string);
+    return isNaN(floatVal) ? 0 : floatVal;
+  }, z.number()),
   floor_area: z.number().nullable(),
   lot_area: z.number().nullable(),
   sqm: z.number().nullable(),
@@ -31,14 +31,14 @@ const InsertPropertySchema = z.object({
   amenities: z.array(z.string()).nullable(),
   images: z.array(z.string().url()).nullable(),
   description: z.string().nonempty().nullable(),
-  longitude: z.preprocess(
-    (input) => (input ? parseFloat(input as string) : 0),
-    z.number(),
-  ),
-  latitude: z.preprocess(
-    (input) => (input ? parseFloat(input as string) : 0),
-    z.number(),
-  ),
+  longitude: z.preprocess((input) => {
+    const floatVal = parseFloat(input as string);
+    return isNaN(floatVal) ? 0 : floatVal;
+  }, z.number()),
+  latitude: z.preprocess((input) => {
+    const floatVal = parseFloat(input as string);
+    return isNaN(floatVal) ? 0 : floatVal;
+  }, z.number()),
   lease_end: z.string().datetime().nullable(),
   created_at: z.string().datetime(),
 });

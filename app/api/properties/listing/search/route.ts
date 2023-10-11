@@ -171,7 +171,6 @@ export async function GET(req: Request) {
     return new Response(
       JSON.stringify({
         message: error.message,
-        inserted: 0,
       }),
       {
         status: 500,

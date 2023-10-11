@@ -1,10 +1,5 @@
-import { Property } from "@/interface/property";
-import { env } from "@/lib/env.mjs";
-import Image from "next/image";
 import Link from "next/link";
 import { MapPin } from "lucide-react";
-import { formatToPhp } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
 import {
   Accordion,
   AccordionContent,
@@ -29,6 +24,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { env } from "@/lib/env.mjs";
+import { formatToPhp } from "@/lib/utils";
+import { Property } from "@/interface/property";
+import { Separator } from "@/components/ui/separator";
 import PropertyContactCard from "@/components/property/contact/propertyContactCard";
 import PropertyImagesPlaceholder from "@/components/property/listing/properties/details/propertyimagesplaceholder";
 
