@@ -22,15 +22,15 @@ const InsertPropertySchema = z.object({
   parking_lot: z.number().nullable(),
   is_corner_lot: z.boolean().default(false),
   studio_type: z.boolean().default(false),
-  building_name: z.string().nonempty().nullable(),
+  building_name: z.string().nullable(),
   year_built: z.number().nullable(),
   city_id: z.string().nonempty(),
-  address: z.string().nonempty().nullable(),
+  address: z.string().nullable(),
   is_active: z.boolean().default(true),
   is_cbd: z.boolean().default(false),
   amenities: z.array(z.string()).nullable(),
   images: z.array(z.string().url()).nullable(),
-  description: z.string().nonempty().nullable(),
+  description: z.string().nullable(),
   longitude: z.preprocess((input) => {
     const floatVal = parseFloat(input as string);
     return isNaN(floatVal) ? 0 : floatVal;
