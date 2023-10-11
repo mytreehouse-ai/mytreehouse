@@ -30,6 +30,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import PropertyContactCard from "@/components/property/contact/propertyContactCard";
+import PropertyImagesPlaceholder from "@/components/property/listing/properties/details/propertyimagesplaceholder";
 
 interface pageProps {
   params: {
@@ -47,35 +48,8 @@ const page: React.FC<pageProps> = async ({ params }) => {
   const data: Property = await response.json();
 
   return (
-    <main className="mb-10 flex flex-col space-y-4 lg:px-36">
-      <div className="flex gap-x-2">
-        <div className="relative h-96 w-full">
-          <Image
-            className="rounded-md object-cover"
-            src={data.images[0]}
-            alt="home_page_main_banner"
-            sizes="(max-width: 768px) 100vw, 700px"
-            fill={true}
-            priority={true}
-          />
-        </div>
-        {data.images.length >= 3 && (
-          <div className="relative grid grid-cols-2 gap-2">
-            {data.images.slice(1, 4).map((image) => (
-              <Image
-                key={image}
-                src={image}
-                className="h-[250px] rounded-md"
-                alt="home_page_main_banner"
-                width={350}
-                height={250}
-                sizes="(max-width: 768px) 100vw, 350px"
-                priority={true}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+<main className="mb-10 flex flex-col gap-y-4 lg:px-36">
+      <PropertyImagesPlaceholder images={data.images}/>
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold lg:w-full">
           {data.listing_title}
@@ -88,10 +62,14 @@ const page: React.FC<pageProps> = async ({ params }) => {
           {formatToPhp(data.current_price)}
         </p>
       </div>
-      <Separator />
+
+
+
       <div>
+                   <Separator />
         <PropertyDetailsAccordion description={data.description} />
       </div>
+
       <div className="flex flex-col space-y-6 lg:flex-row">
         <div>
           <h2 className="mb-2 font-semibold">Property details</h2>
@@ -229,7 +207,7 @@ const PropertyDetailsAccordion: React.FC<{ description: string }> = ({
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="description">
         <AccordionTrigger className="font-bold text-emerald-700">
-          Click to know about the property
+          Click to know more about the property
         </AccordionTrigger>
         <AccordionContent>
           <p>{description}</p>
