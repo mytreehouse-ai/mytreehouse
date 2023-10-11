@@ -23,7 +23,7 @@ const InsertPropertySchema = z.object({
   is_corner_lot: z.boolean().default(false),
   studio_type: z.boolean().default(false),
   building_name: z.string().nonempty().nullable(),
-  year_built: z.number().positive().nullable(),
+  year_built: z.number().nullable(),
   city_id: z.string().nonempty(),
   address: z.string().nonempty(),
   is_active: z.boolean().default(true),

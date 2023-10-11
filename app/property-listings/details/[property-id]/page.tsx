@@ -26,11 +26,11 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import PropertyContactCard from "@/components/property/contact/propertyContactCard";
+
 interface pageProps {
   params: {
     "property-id": string;
@@ -39,7 +39,9 @@ interface pageProps {
 
 const page: React.FC<pageProps> = async ({ params }) => {
   const response = await fetch(
-    `${env.NESTJS_BASE_API_URL}/api/property-listing/search/${params["property-id"]}`,
+    `${env.NEXT_PUBLIC_NODE_ENV === "development" ? "http" : "https"}://${
+      env.NEXT_PUBLIC_VERCEL_URL
+    }/api/properties/listing/search/${params["property-id"]}`,
   );
 
   if (!response.ok) throw new Error("Property not found");
@@ -54,8 +56,8 @@ const page: React.FC<pageProps> = async ({ params }) => {
             className="rounded-md object-cover"
             src={data.images[0]}
             alt="home_page_main_banner"
-            fill
             sizes="(max-width: 768px) 100vw, 700px"
+            fill={true}
             priority={true}
           />
         </div>

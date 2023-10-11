@@ -164,8 +164,6 @@ export async function GET(req: Request) {
           }
   `.replace(/\n\s*\n/g, "\n");
 
-    console.log(query);
-
     const properties = await sql.query(query);
 
     return new Response(JSON.stringify(properties.rows));
