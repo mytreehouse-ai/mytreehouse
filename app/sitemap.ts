@@ -5,14 +5,14 @@ export default async function sitemap() {
     `https://mytreehouse.vercel.app/api/properties/listing/search`,
   );
 
-  const allPropertyListings = (await res.json()) as Property[];
+  const allPropertyListings: Property[] = await res.json();
 
   const propertyListings = allPropertyListings.map((propertyListing) => ({
     url: `https://mytreehouse.vercel.app/property-listings/details/${propertyListing.property_id}`,
     lastModified: new Date().toISOString(),
   }));
 
-  const routes = ["/", "/property-valuation", "/contact-us"].map((route) => ({
+  const routes = ["/property-valuation", "/contact-us"].map((route) => ({
     url: `https://mytreehouse.vercel.app${route}`,
     lastModified: new Date().toISOString(),
   }));

@@ -9,8 +9,8 @@ dependencies:
     specifier: ^3.3.1
     version: 3.3.1(react-hook-form@7.46.2)
   '@propelauth/nextjs':
-    specifier: ^0.0.101
-    version: 0.0.101(next@13.5.4)(react@18.2.0)
+    specifier: ^0.0.104
+    version: 0.0.104(next@13.5.4)(react@18.2.0)
   '@radix-ui/react-accordion':
     specifier: ^1.1.2
     version: 1.1.2(@types/react-dom@18.2.8)(@types/react@18.2.23)(react-dom@18.2.0)(react@18.2.0)
@@ -552,8 +552,8 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
-  /@propelauth/nextjs@0.0.101(next@13.5.4)(react@18.2.0):
-    resolution: {integrity: sha512-VukgQZa9++YLnWchR4sl8wWlSF1AvWPdGs0UQjC4H3sd4bavf0dDFhAb0Qcbk0M7ONtVle2sntg41nJcUj/BrQ==}
+  /@propelauth/nextjs@0.0.104(next@13.5.4)(react@18.2.0):
+    resolution: {integrity: sha512-yZ5ZWqydspHpl4Xl+EU4PBbuDPM/qwb1gtezogIvoDKUwkyte2eAjEwtojb9s0mVisVEJ/33wtI6mTJQS/nGdw==}
     peerDependencies:
       next: ^13.1.0
       react: ^18.2.0
