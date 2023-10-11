@@ -97,7 +97,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
                 <Grid className="h-4 w-4 text-gray-500" />
                 <span className="text-sm text-gray-500 ">Floor area</span>
               </div>
-              <p className="text-sm font-semibold"> {data.floor_area} sqm</p>
+              <p className="text-sm font-semibold">{data.floor_area} sqm</p>
             </div>
 
             <div>
@@ -140,9 +140,9 @@ const page: React.FC<pageProps> = async ({ params }) => {
             </div>
           </section>
         </div>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
         <ContactLessor />
       </div>
-
       {/* <Link href="/property-listings">Go back to listings</Link> */}
     </main>
   );
