@@ -47,7 +47,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
   const data: Property = await response.json();
 
   return (
-    <main className="mb-10 flex flex-col space-y-4 lg:px-36">
+    <main className="mb-10 flex flex-col gap-y-4 lg:px-36">
       <div className="flex gap-x-2">
         <div className="relative h-96 w-full">
           <Image
@@ -88,10 +88,14 @@ const page: React.FC<pageProps> = async ({ params }) => {
           {formatToPhp(data.current_price)}
         </p>
       </div>
-      <Separator />
+
+
+
       <div>
+                   <Separator />
         <PropertyDetailsAccordion description={data.description} />
       </div>
+
       <div className="flex flex-col space-y-6 lg:flex-row">
         <div>
           <h2 className="mb-2 font-semibold">Property details</h2>
@@ -229,7 +233,7 @@ const PropertyDetailsAccordion: React.FC<{ description: string }> = ({
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="description">
         <AccordionTrigger className="font-bold text-emerald-700">
-          Click to know about the property
+          Click to know more about the property
         </AccordionTrigger>
         <AccordionContent>
           <p>{description}</p>
