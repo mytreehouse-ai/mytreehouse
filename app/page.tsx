@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Card from "@/components/property/card";
 import Grid from "@/components/property/grid";
 import Footer from "@/components/layouts/footer";
@@ -5,13 +6,12 @@ import HeroContent from "@/components/property/homepage/herocontent";
 import HeroImageBanner from "@/components/property/homepage/heroimagebanner";
 import Navbar from "@/components/layouts/navbar";
 import { Property } from "@/interface/property";
-import { env } from "@/lib/env.mjs";
-import Link from "next/link";
 import { FetchApiError } from "@/lib/exceptions";
+import { env } from "@/lib/env.mjs";
 
 export default async function Home() {
   const topFourProperties = await fetch(
-    `${env.NESTJS_BASE_API_URL}/api/property-listing/search?page_limit=4`,
+    `${env.NEXT_PUBLIC_BASEAPI_URL}/api/properties/listing/search?page_limit=4`,
     {
       next: {
         revalidate: 350,

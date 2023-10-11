@@ -26,12 +26,12 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import PropertyContactCard from "@/components/property/contact/propertyContactCard";
 import PropertyImagesPlaceholder from "@/components/property/listing/properties/details/propertyimagesplaceholder";
+
 interface pageProps {
   params: {
     "property-id": string;
@@ -40,7 +40,7 @@ interface pageProps {
 
 const page: React.FC<pageProps> = async ({ params }) => {
   const response = await fetch(
-    `${env.NESTJS_BASE_API_URL}/api/property-listing/search/${params["property-id"]}`,
+    `${env.NEXT_PUBLIC_BASEAPI_URL}/api/properties/listing/search/${params["property-id"]}`,
   );
 
   if (!response.ok) throw new Error("Property not found");
@@ -48,7 +48,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
   const data: Property = await response.json();
 
   return (
-    <main className="mb-10 flex flex-col gap-y-4 lg:px-36">
+<main className="mb-10 flex flex-col gap-y-4 lg:px-36">
       <PropertyImagesPlaceholder images={data.images}/>
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold lg:w-full">
