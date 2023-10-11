@@ -11,24 +11,15 @@ import { env } from "@/lib/env.mjs";
 
 export default async function Home() {
   const topFourProperties = await fetch(
-    `${env.NESTJS_BASE_API_URL}/api/property-listing/search?page_limit=4`,
+    `${env.NEXT_PUBLIC_NODE_ENV === "development" ? "http" : "https"}://${
+      env.NEXT_PUBLIC_VERCEL_URL
+    }/api/properties/listing/search?page_limit=4`,
     {
       next: {
         revalidate: 350,
       },
     },
   );
-
-  // const topFourProperties = await fetch(
-  //   `${env.NEXT_PUBLIC_NODE_ENV === "development" ? "http" : "https"}://${
-  //     env.NEXT_PUBLIC_VERCEL_URL
-  //   }/api/properties/listing/search?page_limit=4`,
-  //   {
-  //     next: {
-  //       revalidate: 350,
-  //     },
-  //   },
-  // );
 
   if (!topFourProperties.ok) {
     throw new FetchApiError("Error fetching top 4 properties");
