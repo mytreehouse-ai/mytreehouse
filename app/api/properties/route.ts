@@ -61,12 +61,7 @@ export async function POST(req: Request) {
     }
 
     const images = parsed.data.images ?? [];
-    const imagesArrayStr = images.length ? `'{${images.join(",")}}'` : `'{}'`;
-
     const amenities = parsed.data.amenities ?? [];
-    const amenitiesArrayStr = amenities.length
-      ? `'{${amenities.join(",")}}'`
-      : `'{}'`;
 
     const insert = await sql`insert into properties (
        property_id,
