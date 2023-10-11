@@ -4,36 +4,37 @@ import { UNKNOWN_CITY } from "@/lib/constant";
 import { PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
+  try {
+    const { searchParams } = new URL(req.url);
 
-  const UNTAGGED_TRANSACTION_ID: string | null = await kv.get(
-    "UNTAGGED_TRANSACTION_ID",
-  );
+    const UNTAGGED_TRANSACTION_ID: string | null = await kv.get(
+      "UNTAGGED_TRANSACTION_ID",
+    );
 
-  if (!UNTAGGED_TRANSACTION_ID) {
-    return new Response(
-      JSON.stringify({
-        message: "Config UNTAGGED_TRANSACTION_ID is empty in redis kv",
-      }),
-      {
+    if (!UNTAGGED_TRANSACTION_ID) {
+      return new Response(
+        JSON.stringify({
+          message: "Config UNTAGGED_TRANSACTION_ID is empty in redis kv",
+        }),
+        {
+          status: 400,
+          statusText: "Bad request",
+        },
+      );
+    }
+
+    const queryParams = PropertyListingSearchSchema.safeParse(
+      Object.fromEntries(searchParams),
+    );
+
+    if (queryParams.success === false) {
+      return new Response(queryParams.error.message, {
         status: 400,
         statusText: "Bad request",
-      },
-    );
-  }
+      });
+    }
 
-  const query = PropertyListingSearchSchema.safeParse(
-    Object.fromEntries(searchParams),
-  );
-
-  if (query.success === false) {
-    return new Response(query.error.message, {
-      status: 400,
-      statusText: "Bad request",
-    });
-  }
-
-  const properties = await sql`
+    const query = `
           select
             p.property_id,
             p.listing_title,
@@ -64,11 +65,11 @@ export async function GET(req: Request) {
             p.lease_end,
             p.created_at
             ${
-              query.data?.text_search
-                ? void sql`
-            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')), plainto_tsquery(${query.data.text_search})) as rank
+              queryParams.data?.text_search
+                ? `
+            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')), plainto_tsquery('${queryParams.data.text_search}')) as rank
             `
-                : void sql``
+                : ``
             }
           from properties p
           inner join property_types pt on pt.property_type_id = p.property_type_id
@@ -78,90 +79,106 @@ export async function GET(req: Request) {
           where p.images is not null and
           p.longitude is not null and
           p.latitude is not null and
-          p.property_status_id != ${UNTAGGED_TRANSACTION_ID} and
-          p.city_id != ${UNKNOWN_CITY} and
+          p.property_status_id != '${UNTAGGED_TRANSACTION_ID}' and
+          p.city_id != '${UNKNOWN_CITY}' and
           p.current_price is distinct from 'NaN'::numeric
           ${
-            query.data?.text_search
-              ? void sql`
-          and to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')) @@ plainto_tsquery(${query.data.text_search})
+            queryParams.data?.text_search
+              ? `
+          and to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')) @@ plainto_tsquery('${queryParams.data.text_search}')
           `
-              : void sql``
+              : ``
           }
           ${
-            query.data?.property_type
-              ? void sql`
-          and p.property_type_id = ${query.data.property_type}
+            queryParams.data?.property_type
+              ? `
+          and p.property_type_id = '${queryParams.data.property_type}'
           `
-              : void sql``
+              : ``
           }
           ${
-            query.data?.listing_type
-              ? void sql`
-          and p.listing_type_id = ${query.data.listing_type}
+            queryParams.data?.listing_type
+              ? `
+          and p.listing_type_id = '${queryParams.data.listing_type}'
           `
-              : void sql``
+              : ``
           }
           ${
-            query.data?.turnover_status
-              ? void sql`
-          and p.turnover_status_id = ${query.data.turnover_status}
+            queryParams.data?.turnover_status
+              ? `
+          and p.turnover_status_id = '${queryParams.data.turnover_status}'
           `
-              : void sql``
+              : ``
           }
           ${
-            query.data?.bedroom_count
-              ? void sql`
-            and p.bedroom = ${query.data.bedroom_count}
+            queryParams.data?.bedroom_count
+              ? `
+            and p.bedroom = ${queryParams.data.bedroom_count}
             `
-              : void sql``
+              : ``
           }
           ${
-            query.data?.bathroom_count
-              ? void sql`
-          and p.bathroom = ${query.data.bathroom_count}
+            queryParams.data?.bathroom_count
+              ? `
+          and p.bathroom = ${queryParams.data.bathroom_count}
           `
-              : void sql``
+              : ``
           }
           ${
-            query.data?.studio_type
-              ? void sql`
-          and p.studio_type = ${query.data.studio_type}
+            queryParams.data?.studio_type
+              ? `
+          and p.studio_type = ${queryParams.data.studio_type}
           `
-              : void sql``
+              : ``
           }
           ${
-            query.data?.is_cbd
-              ? void sql`
-          and p.is_cbd = ${query.data.is_cbd}
+            queryParams.data?.is_cbd
+              ? `
+          and p.is_cbd = ${queryParams.data.is_cbd}
           `
-              : void sql``
+              : ``
           }
           ${
-            query.data?.city
-              ? void sql`
-          and p.city_id = ${query.data.city}
+            queryParams.data?.city
+              ? `
+          and p.city_id = '${queryParams.data.city}'
           `
-              : void sql``
+              : ``
           }
           ${
-            query.data?.sqm
-              ? void sql`
-          and p.sqm = ${query.data.sqm}
+            queryParams.data?.sqm
+              ? `
+          and p.sqm = ${queryParams.data.sqm}
           `
-              : void sql``
+              : ``
           }
           ${
-            query.data?.sqm_min && query.data?.sqm_max
-              ? void sql`
-          and p.sqm between ${query.data.sqm_min} and ${query.data.sqm_max}
+            queryParams.data?.sqm_min && queryParams.data?.sqm_max
+              ? `
+          and p.sqm between ${queryParams.data.sqm_min} and ${queryParams.data.sqm_max}
           `
-              : void sql``
+              : ``
           }
           order by p.created_at desc limit ${
-            query.data?.page_limit ? query.data.page_limit : 100
+            queryParams.data?.page_limit ? queryParams.data.page_limit : 100
           }
-  `;
+  `.replace(/\n\s*\n/g, "\n");
 
-  return new Response(JSON.stringify(properties));
+    console.log(query);
+
+    const properties = await sql.query(query);
+
+    return new Response(JSON.stringify(properties.rows));
+  } catch (error: any) {
+    return new Response(
+      JSON.stringify({
+        message: error.message,
+        inserted: 0,
+      }),
+      {
+        status: 500,
+        statusText: "Internal Server Error",
+      },
+    );
+  }
 }

@@ -1,4 +1,4 @@
-import sql from "@/server/db";
+import { sql } from "@vercel/postgres";
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
@@ -11,24 +11,26 @@ const schema = z
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
-  const query = schema.safeParse(Object.fromEntries(searchParams));
+  const queryParams = schema.safeParse(Object.fromEntries(searchParams));
 
-  if (query.success === false) {
-    return new Response(query.error.message, {
+  if (queryParams.success === false) {
+    return new Response(queryParams.error.message, {
       status: 400,
       statusText: "Bad request",
     });
   }
 
-  const cities = await sql`
+  const query = `
     select ct.city_id as value, ct.name as label, ct.url_value from cities ct
     ${
-      query?.data?.city
-        ? sql`where ct.name ilike  ${"%" + query.data.city + "%"}`
-        : sql``
-    }
+      queryParams?.data?.city
+        ? `where ct.name ilike '%${queryParams.data.city}%'`
+        : ``
+    } 
     limit 20
-  `;
+  `.replace(/\n\s*\n/g, "\n");
 
-  return new Response(JSON.stringify(cities));
+  const cities = await sql.query(query);
+
+  return new Response(JSON.stringify(cities.rows));
 }

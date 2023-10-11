@@ -12,7 +12,7 @@ export default async function sitemap() {
     lastModified: new Date().toISOString(),
   }));
 
-  const routes = ["/property-valuation", "/contact-us"].map((route) => ({
+  const routes = ["/", "/property-valuation", "/contact-us"].map((route) => ({
     url: `https://mytreehouse.vercel.app${route}`,
     lastModified: new Date().toISOString(),
   }));
