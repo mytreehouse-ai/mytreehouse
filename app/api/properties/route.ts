@@ -25,7 +25,7 @@ const InsertPropertySchema = z.object({
   building_name: z.string().nonempty().nullable(),
   year_built: z.number().nullable(),
   city_id: z.string().nonempty(),
-  address: z.string().nonempty(),
+  address: z.string().nonempty().nullable(),
   is_active: z.boolean().default(true),
   is_cbd: z.boolean().default(false),
   amenities: z.array(z.string()).nullable(),
