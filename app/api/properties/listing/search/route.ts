@@ -1,7 +1,7 @@
 import { kv } from "@vercel/kv";
+import { sql } from "@vercel/postgres";
 import { UNKNOWN_CITY } from "@/lib/constant";
 import { PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
-import { sql } from "@vercel/postgres";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
