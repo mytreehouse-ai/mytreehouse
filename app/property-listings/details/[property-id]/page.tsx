@@ -48,8 +48,8 @@ const page: React.FC<pageProps> = async ({ params }) => {
   const data: Property = await response.json();
 
   return (
-<main className="mb-10 flex flex-col gap-y-4 lg:px-36">
-      <PropertyImagesPlaceholder images={data.images}/>
+    <main className="mb-10 flex flex-col gap-y-4 lg:px-36">
+      <PropertyImagesPlaceholder images={data.images} />
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold lg:w-full">
           {data.listing_title}
@@ -63,10 +63,8 @@ const page: React.FC<pageProps> = async ({ params }) => {
         </p>
       </div>
 
-
-
       <div>
-                   <Separator />
+        <Separator />
         <PropertyDetailsAccordion description={data.description} />
       </div>
 
