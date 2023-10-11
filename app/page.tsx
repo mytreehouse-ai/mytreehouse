@@ -11,9 +11,7 @@ import { env } from "@/lib/env.mjs";
 
 export default async function Home() {
   const topFourProperties = await fetch(
-    `${env.NEXT_PUBLIC_NODE_ENV === "development" ? "http" : "https"}://${
-      env.NEXT_PUBLIC_VERCEL_URL
-    }/api/properties/listing/search?page_limit=4`,
+    `${env.NEXT_PUBLIC_BASEAPI_URL}/api/properties/listing/search?page_limit=4`,
     {
       next: {
         revalidate: 350,

@@ -39,9 +39,7 @@ interface pageProps {
 
 const page: React.FC<pageProps> = async ({ params }) => {
   const response = await fetch(
-    `${env.NEXT_PUBLIC_NODE_ENV === "development" ? "http" : "https"}://${
-      env.NEXT_PUBLIC_VERCEL_URL
-    }/api/properties/listing/search/${params["property-id"]}`,
+    `${env.NEXT_PUBLIC_BASEAPI_URL}/api/properties/listing/search/${params["property-id"]}`,
   );
 
   if (!response.ok) throw new Error("Property not found");
