@@ -26,6 +26,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import PropertyContactCard from "@/components/property/contact/propertyContactCard";
+import { FetchApiError } from "@/lib/exceptions";
 
 interface pageProps {
   params: {
@@ -38,12 +39,12 @@ const page: React.FC<pageProps> = async ({ params }) => {
     `${env.NESTJS_BASE_API_URL}/api/property-listing/search/${params["property-id"]}`,
   );
 
-  if (!response.ok) throw new Error("Property not found");
+  if (!response.ok) throw new FetchApiError("Property not found.");
 
   const data: Property = await response.json();
 
   return (
-    <main className="flex flex-col mb-10 space-y-4">
+    <main className="mb-10 flex flex-col space-y-4">
       <div className="flex gap-x-2">
         <Image
           className="rounded-md"
@@ -75,8 +76,8 @@ const page: React.FC<pageProps> = async ({ params }) => {
         <h1 className="text-2xl font-semibold lg:w-full">
           {data.listing_title}
         </h1>
-        <address className="inline-flex not-italic font-semibold text-gray-800 gap-x-1 ">
-          <MapPin className="w-6 h-6" />
+        <address className="inline-flex gap-x-1 font-semibold not-italic text-gray-800 ">
+          <MapPin className="h-6 w-6" />
           {data.address}
         </address>
         <p className="text-2xl font-semibold">
@@ -93,7 +94,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
           <section className="grid grid-cols-2 gap-6">
             <div>
               <div className="inline-flex items-center gap-x-1">
-                <Grid className="w-4 h-4 text-gray-500" />
+                <Grid className="h-4 w-4 text-gray-500" />
                 <span className="text-sm text-gray-500 ">Floor area</span>
               </div>
               <p className="text-sm font-semibold"> {data.floor_area} sqm</p>
@@ -101,7 +102,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
 
             <div>
               <div className="inline-flex items-center gap-x-1">
-                <Replace className="w-4 h-4 text-gray-500" />
+                <Replace className="h-4 w-4 text-gray-500" />
                 <span className="text-sm text-gray-500 ">Turn over status</span>
               </div>
               <p className="text-sm font-semibold">
@@ -111,7 +112,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
 
             <div>
               <div className="inline-flex items-center gap-x-1">
-                <Building2 className="w-4 h-4 text-gray-500" />
+                <Building2 className="h-4 w-4 text-gray-500" />
                 <span className="text-sm text-gray-500 ">Property type</span>
               </div>
               <p className="text-sm font-semibold">{data.property_type_name}</p>
@@ -119,7 +120,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
 
             <div>
               <div className="inline-flex items-center gap-x-1">
-                <ClipboardList className="w-4 h-4 text-gray-500" />
+                <ClipboardList className="h-4 w-4 text-gray-500" />
                 <span className="text-sm text-gray-500 ">Listing type</span>
               </div>
               <p className="text-sm font-semibold"> {data.listing_type_name}</p>
@@ -127,7 +128,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
 
             <div className="col-span-2">
               <div className="inline-flex items-center gap-x-1">
-                <LinkIcon className="w-4 h-4 text-gray-500" />
+                <LinkIcon className="h-4 w-4 text-gray-500" />
                 <span className="text-sm text-gray-500 ">Listing URL</span>
               </div>
               <Link
