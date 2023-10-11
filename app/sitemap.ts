@@ -1,7 +1,7 @@
 import { Property } from "@/interface/property";
 
 export default async function sitemap() {
-  const res = await fetch(`/api/property-listing/search`);
+  const res = await fetch(`/api/properties/listing/search`);
 
   const allPropertyListings = (await res.json()) as Property[];
 
