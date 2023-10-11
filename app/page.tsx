@@ -7,13 +7,21 @@ import Navbar from "@/components/layouts/navbar";
 import { Property } from "@/interface/property";
 import { env } from "@/lib/env.mjs";
 import Link from "next/link";
+import { FetchApiError } from "@/lib/exceptions";
 
 export default async function Home() {
   const topFourProperties = await fetch(
     `${env.NESTJS_BASE_API_URL}/api/property-listing/search?page_limit=4`,
+    {
+      next: {
+        revalidate: 350,
+      },
+    },
   );
 
-  if (!topFourProperties.ok) throw new Error("Error loading top 4 properties");
+  if (!topFourProperties.ok) {
+    throw new FetchApiError("Error fetching top 4 properties");
+  }
 
   const data: Property[] = await topFourProperties.json();
 
