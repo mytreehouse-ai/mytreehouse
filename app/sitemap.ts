@@ -1,10 +1,7 @@
 import { Property } from "@/interface/property";
-import { env } from "@/lib/env.mjs";
 
 export default async function sitemap() {
-  const res = await fetch(
-    `${env.NESTJS_BASE_API_URL}/api/property-listing/search`,
-  );
+  const res = await fetch(`/api/property-listing/search`);
 
   const allPropertyListings = (await res.json()) as Property[];
 
