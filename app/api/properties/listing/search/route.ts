@@ -1,7 +1,7 @@
 import { kv } from "@vercel/kv";
 import { UNKNOWN_CITY } from "@/lib/constant";
 import { PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
-import sql from "@/server/db";
+import { sql } from "@vercel/postgres";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -65,10 +65,10 @@ export async function GET(req: Request) {
             p.created_at
             ${
               query.data?.text_search
-                ? sql`
+                ? void sql`
             ,ts_rank(to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')), plainto_tsquery(${query.data.text_search})) as rank
             `
-                : sql``
+                : void sql``
             }
           from properties p
           inner join property_types pt on pt.property_type_id = p.property_type_id
@@ -83,80 +83,80 @@ export async function GET(req: Request) {
           p.current_price is distinct from 'NaN'::numeric
           ${
             query.data?.text_search
-              ? sql`
+              ? void sql`
           and to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')) @@ plainto_tsquery(${query.data.text_search})
           `
-              : sql``
+              : void sql``
           }
           ${
             query.data?.property_type
-              ? sql`
+              ? void sql`
           and p.property_type_id = ${query.data.property_type}
           `
-              : sql``
+              : void sql``
           }
           ${
             query.data?.listing_type
-              ? sql`
+              ? void sql`
           and p.listing_type_id = ${query.data.listing_type}
           `
-              : sql``
+              : void sql``
           }
           ${
             query.data?.turnover_status
-              ? sql`
+              ? void sql`
           and p.turnover_status_id = ${query.data.turnover_status}
           `
-              : sql``
+              : void sql``
           }
           ${
             query.data?.bedroom_count
-              ? sql`
+              ? void sql`
             and p.bedroom = ${query.data.bedroom_count}
             `
-              : sql``
+              : void sql``
           }
           ${
             query.data?.bathroom_count
-              ? sql`
+              ? void sql`
           and p.bathroom = ${query.data.bathroom_count}
           `
-              : sql``
+              : void sql``
           }
           ${
             query.data?.studio_type
-              ? sql`
+              ? void sql`
           and p.studio_type = ${query.data.studio_type}
           `
-              : sql``
+              : void sql``
           }
           ${
             query.data?.is_cbd
-              ? sql`
+              ? void sql`
           and p.is_cbd = ${query.data.is_cbd}
           `
-              : sql``
+              : void sql``
           }
           ${
             query.data?.city
-              ? sql`
+              ? void sql`
           and p.city_id = ${query.data.city}
           `
-              : sql``
+              : void sql``
           }
           ${
             query.data?.sqm
-              ? sql`
+              ? void sql`
           and p.sqm = ${query.data.sqm}
           `
-              : sql``
+              : void sql``
           }
           ${
             query.data?.sqm_min && query.data?.sqm_max
-              ? sql`
+              ? void sql`
           and p.sqm between ${query.data.sqm_min} and ${query.data.sqm_max}
           `
-              : sql``
+              : void sql``
           }
           order by p.created_at desc limit ${
             query.data?.page_limit ? query.data.page_limit : 100
