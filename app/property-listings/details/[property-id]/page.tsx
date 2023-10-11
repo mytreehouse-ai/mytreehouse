@@ -105,7 +105,6 @@ const page: React.FC<pageProps> = async ({ params }) => {
                 <span className="text-sm text-gray-500 ">Turn over status</span>
               </div>
               <p className="text-sm font-semibold">
-                {" "}
                 {data.turnover_status_name}
               </p>
             </div>
@@ -115,10 +114,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
                 <Building2 className="w-4 h-4 text-gray-500" />
                 <span className="text-sm text-gray-500 ">Property type</span>
               </div>
-              <p className="text-sm font-semibold">
-                {" "}
-                {data.property_type_name}
-              </p>
+              <p className="text-sm font-semibold">{data.property_type_name}</p>
             </div>
 
             <div>

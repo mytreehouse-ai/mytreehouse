@@ -111,7 +111,7 @@ export const CityCombobox: React.FC<comboboxProps> = ({
           {state.value && data
             ? data.find((ct) => ct.value === state.value)?.label || PLACEHOLDER
             : PLACEHOLDER}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
@@ -125,7 +125,7 @@ export const CityCombobox: React.FC<comboboxProps> = ({
             placeholder={PLACEHOLDER}
           />
           {!isFetching && <CommandEmpty>No item found.</CommandEmpty>}
-          <CommandGroup className="min-h-10 max-h-40 overflow-y-auto">
+          <CommandGroup className="overflow-y-auto min-h-10 max-h-40">
             {data?.map((ct) => (
               <CommandItem
                 key={ct.value}
@@ -143,7 +143,7 @@ export const CityCombobox: React.FC<comboboxProps> = ({
                 {ct.label}
               </CommandItem>
             ))}
-            {isLoading && <p className="p-2 text-center text-xs">Loading...</p>}
+            {isLoading && <p className="p-2 text-xs text-center">Loading...</p>}
           </CommandGroup>
         </Command>
       </PopoverContent>
