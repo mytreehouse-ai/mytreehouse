@@ -10,18 +10,23 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Grid, Replace, Building2, ClipboardList, Link as LinkIcon } from "lucide-react";
+} from "@/components/ui/accordion";
+import {
+  Grid,
+  Replace,
+  Building2,
+  ClipboardList,
+  Link as LinkIcon,
+} from "lucide-react";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/card";
 import PropertyContactCard from "@/components/property/contact/propertyContactCard";
+
 interface pageProps {
   params: {
     "property-id": string;
@@ -38,7 +43,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
   const data: Property = await response.json();
 
   return (
-    <main className="flex flex-col space-y-4 mb-10">
+    <main className="flex flex-col mb-10 space-y-4">
       <div className="flex gap-x-2">
         <Image
           className="rounded-md"
@@ -67,66 +72,76 @@ const page: React.FC<pageProps> = async ({ params }) => {
         )}
       </div>
       <div className="space-y-2">
-         <h1 className="text-2xl font-semibold  lg:w-full">
-            {data.listing_title}
-          </h1>
-          <address className="inline-flex gap-x-1 font-semibold text-gray-800 not-italic ">
-            <MapPin className="h-6 w-6"/>
-            {data.address}
-          </address>
-          <p className="text-2xl font-semibold">
-            {formatToPhp(data.current_price)}
-          </p>
+        <h1 className="text-2xl font-semibold lg:w-full">
+          {data.listing_title}
+        </h1>
+        <address className="inline-flex not-italic font-semibold text-gray-800 gap-x-1 ">
+          <MapPin className="w-6 h-6" />
+          {data.address}
+        </address>
+        <p className="text-2xl font-semibold">
+          {formatToPhp(data.current_price)}
+        </p>
       </div>
       <Separator />
       <div>
-            <PropertyDetailsAccordion description={data.description}/>
+        <PropertyDetailsAccordion description={data.description} />
       </div>
-      <div>
+      <div className="flex flex-col space-y-6 lg:flex-row">
+        <div>
           <h2 className="font-semibold"> Property details</h2>
           <section className="grid grid-cols-2 gap-6">
-          <div>
-              <div className="inline-flex gap-x-1 items-center">
-                <Grid className="h-4 w-4 text-gray-500"/>
-                <span className=" text-sm text-gray-500">Floor area</span>
-              </div>
-              <p className="text-sm font-semibold"> {data.floor_area} sqm</p>       
-          </div>
-
             <div>
-              <div className="inline-flex gap-x-1 items-center">
-                <Replace className="h-4 w-4 text-gray-500"/>
-                <span className=" text-sm text-gray-500">Turn over status</span>
+              <div className="inline-flex items-center gap-x-1">
+                <Grid className="w-4 h-4 text-gray-500" />
+                <span className="text-sm text-gray-500 ">Floor area</span>
               </div>
-              <p className="text-sm font-semibold"> {data.turnover_status_name}</p>       
+              <p className="text-sm font-semibold"> {data.floor_area} sqm</p>
             </div>
 
             <div>
-              <div className="inline-flex gap-x-1 items-center">
-                <Building2 className="h-4 w-4 text-gray-500"/>
-                <span className=" text-sm text-gray-500">Property type</span>
+              <div className="inline-flex items-center gap-x-1">
+                <Replace className="w-4 h-4 text-gray-500" />
+                <span className="text-sm text-gray-500 ">Turn over status</span>
               </div>
-              <p className="text-sm font-semibold"> {data.property_type_name}</p>       
+              <p className="text-sm font-semibold">
+                {data.turnover_status_name}
+              </p>
             </div>
 
-              <div>
-              <div className="inline-flex gap-x-1 items-center">
-                <ClipboardList className="h-4 w-4 text-gray-500"/>
-                <span className=" text-sm text-gray-500">Listing type</span>
+            <div>
+              <div className="inline-flex items-center gap-x-1">
+                <Building2 className="w-4 h-4 text-gray-500" />
+                <span className="text-sm text-gray-500 ">Property type</span>
               </div>
-              <p className="text-sm font-semibold"> {data.listing_type_name}</p>       
+              <p className="text-sm font-semibold">{data.property_type_name}</p>
             </div>
 
-              <div className="col-span-2">
-              <div className="inline-flex gap-x-1 items-center">
-                <LinkIcon className="h-4 w-4 text-gray-500"/>
-                <span className=" text-sm text-gray-500">Listing URL</span>
+            <div>
+              <div className="inline-flex items-center gap-x-1">
+                <ClipboardList className="w-4 h-4 text-gray-500" />
+                <span className="text-sm text-gray-500 ">Listing type</span>
               </div>
-              <Link href={data.listing_url} className="text-sm font-semibold flex underline">{data.listing_url}</Link>       
+              <p className="text-sm font-semibold"> {data.listing_type_name}</p>
+            </div>
+
+            <div className="col-span-2">
+              <div className="inline-flex items-center gap-x-1">
+                <LinkIcon className="w-4 h-4 text-gray-500" />
+                <span className="text-sm text-gray-500 ">Listing URL</span>
+              </div>
+              <Link
+                href={data.listing_url}
+                className="flex text-sm font-semibold underline"
+              >
+                {data.listing_url}
+              </Link>
             </div>
           </section>
+        </div>
+        <ContactLessor />
       </div>
-      <ContactLessor />
+
       {/* <Link href="/property-listings">Go back to listings</Link> */}
     </main>
   );
@@ -134,30 +149,33 @@ const page: React.FC<pageProps> = async ({ params }) => {
 
 export default page;
 
-const PropertyDetailsAccordion: React.FC<{ description: string }> = ({ description }) => {
+const PropertyDetailsAccordion: React.FC<{ description: string }> = ({
+  description,
+}) => {
   return (
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="description">
-        <AccordionTrigger>Property description</AccordionTrigger>
+        <AccordionTrigger className="font-bold text-emerald-700">
+          Click to know about the property
+        </AccordionTrigger>
         <AccordionContent>
-         <p>{description}</p>
+          <p>{description}</p>
         </AccordionContent>
       </AccordionItem>
     </Accordion>
-  )
-}
+  );
+};
 
 const ContactLessor = () => {
   return (
-  <Card>
-  <CardHeader>
-    <CardTitle className="text-emerald-600">Contact us now!</CardTitle>
-    <CardDescription>Know more about this property</CardDescription>
-  </CardHeader>
-  <CardContent>
-    <PropertyContactCard />
-  </CardContent>
-
-</Card>
-  )
-}
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-emerald-600">Contact us now!</CardTitle>
+        <CardDescription>Know more about this property</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <PropertyContactCard />
+      </CardContent>
+    </Card>
+  );
+};
