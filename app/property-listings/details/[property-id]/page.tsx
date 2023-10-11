@@ -31,6 +31,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import PropertyContactCard from "@/components/property/contact/propertyContactCard";
+import PropertyImagesPlaceholder from "@/components/property/listing/properties/details/propertyimagesplaceholder";
 interface pageProps {
   params: {
     "property-id": string;
@@ -48,34 +49,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
 
   return (
     <main className="mb-10 flex flex-col gap-y-4 lg:px-36">
-      <div className="flex gap-x-2">
-        <div className="relative h-96 w-full">
-          <Image
-            className="rounded-md object-cover"
-            src={data.images[0]}
-            alt="home_page_main_banner"
-            fill
-            sizes="(max-width: 768px) 100vw, 700px"
-            priority={true}
-          />
-        </div>
-        {data.images.length >= 3 && (
-          <div className="relative grid grid-cols-2 gap-2">
-            {data.images.slice(1, 4).map((image) => (
-              <Image
-                key={image}
-                src={image}
-                className="h-[250px] rounded-md"
-                alt="home_page_main_banner"
-                width={350}
-                height={250}
-                sizes="(max-width: 768px) 100vw, 350px"
-                priority={true}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      <PropertyImagesPlaceholder images={data.images}/>
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold lg:w-full">
           {data.listing_title}
