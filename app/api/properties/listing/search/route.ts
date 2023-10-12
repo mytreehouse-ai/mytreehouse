@@ -67,7 +67,10 @@ export async function GET(req: Request) {
             ${
               queryParams.data?.text_search
                 ? `
-            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')), plainto_tsquery('${queryParams.data.text_search}')) as rank
+            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || lt.name || ' ' || pt.name || ' ' || coalesce(p.address, '') || ' ' || ct.name || ' ' || coalesce(p.description, '')), to_tsquery('english', '${queryParams.data.text_search.replace(
+              /\s+/g,
+              " | ",
+            )}')) as rank
             `
                 : ``
             }
@@ -77,6 +80,7 @@ export async function GET(req: Request) {
           inner join turnover_status ts on ts.turnover_status_id = p.turnover_status_id
           inner join cities ct on ct.city_id = p.city_id
           where p.images is not null and
+          p.images != '[]' and
           p.longitude is not null and
           p.latitude is not null and
           p.property_status_id != '${UNTAGGED_TRANSACTION_ID}' and
@@ -85,7 +89,10 @@ export async function GET(req: Request) {
           ${
             queryParams.data?.text_search
               ? `
-          and to_tsvector('english', p.listing_title || ' ' || coalesce(p.description, '')) @@ plainto_tsquery('${queryParams.data.text_search}')
+          and to_tsvector('english', p.listing_title || ' ' || lt.name || ' ' || pt.name || ' ' || coalesce(p.address, '') || ' ' || ct.name || ' ' || coalesce(p.description, '')) @@ to_tsquery('english', '${queryParams.data.text_search.replace(
+            /\s+/g,
+            " | ",
+          )}')
           `
               : ``
           }
@@ -159,7 +166,10 @@ export async function GET(req: Request) {
           `
               : ``
           }
-          order by p.created_at desc limit ${
+          order by ${
+            queryParams.data?.text_search ? "rank" : "p.created_at"
+          } desc 
+          limit ${
             queryParams.data?.page_limit ? queryParams.data.page_limit : 100
           }
   `.replace(/\n\s*\n/g, "\n");
