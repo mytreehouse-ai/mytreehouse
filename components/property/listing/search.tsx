@@ -106,7 +106,7 @@ export function Search() {
             />
           </form>
         </Form>
-        <div className="mt-4 flex sm:mt-0">
+        <div className="mt-4 flex sm:mt-0 space-x-2">
           <CollapsibleTrigger asChild>
             <Button
               className={cn(
