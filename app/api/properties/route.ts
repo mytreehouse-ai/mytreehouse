@@ -4,7 +4,7 @@ import { z } from "zod";
 // TODO: Add description and proper schema error message
 const InsertPropertySchema = z.object({
   property_id: z.string().uuid(),
-  listing_title: z.string().nonempty(),
+  listing_title: z.string().nullable(),
   listing_url: z.string().url(),
   property_type_id: z.string().uuid(),
   listing_type_id: z.string().uuid(),
