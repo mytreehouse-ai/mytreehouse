@@ -30,11 +30,11 @@ const PersonalDetails: React.FC = () => {
     values: personalDetailValues
   });
 
-  const onSubmit = (values: z.infer<typeof personalDetailsFormSchema>) => {
-   
-    if (currentStepIndex < steps.length - 1) {
-      setCurrentStepIndex(currentStepIndex + 1);
-    }
+  const onSubmit = () => {
+    // if (currentStepIndex < steps.length - 1) {
+    //   setCurrentStepIndex(currentStepIndex + 1);
+    // }
+    console.log(form.getValues())
   };
 
   const goBack = () => {
@@ -154,16 +154,28 @@ const PersonalDetails: React.FC = () => {
           )}
         />
 
-        <div className="flex space-x-2">
-          <Checkbox id="termsAndConditions" />
-          <label
-            htmlFor="termsAndConditions"
+          <FormField
+          control={form.control}
+          name="termsAndConditions"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+               <div className="flex space-x-2">
+                  <Checkbox 
+                  checked={field.value} 
+                  onCheckedChange={(e) => field.onChange(e)}
+                  />
+                    <label
             className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             Using this valuation tool, I agree to mytree.house terms and
             conditions
           </label>
-        </div>
+              </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         <div className="flex space-x-2">
           <Checkbox id="offers" />
