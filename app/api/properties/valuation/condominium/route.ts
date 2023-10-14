@@ -211,7 +211,6 @@ export async function GET(req: NextRequest) {
           forRent: scrappedTransaction.average_property_price_for_rent,
         },
         appraisalValue: {
-          condominiumRemainingUsefulLife,
           withClosedTransactionForSale:
             appraisalValueWithClosedTransactionForSale,
           withoutClosedTransactionForSale:

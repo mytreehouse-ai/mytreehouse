@@ -8,7 +8,6 @@ export interface Valuation {
     forRent: string;
   };
   appraisalValue: {
-    condominiumRemainingUsefulLife: number;
     withClosedTransactionForSale: number;
     withoutClosedTransactionForSale: number;
     withClosedTransactionForRent: number;
