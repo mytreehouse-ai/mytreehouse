@@ -3,53 +3,24 @@ import { Button } from "@/components/ui/button";
 import ValuationStepper from "@/hooks/useStepperStore";
 import useValuationFormStore from "@/hooks/useValuationFormStore";
 import SuccessResultImage from "./successresultimage";
-import { propertyTypes } from "@/static_data/property-types";
-import { useQuery } from "@tanstack/react-query";
-import { createSearchParams } from "@/lib/utils";
-import { Valuation } from "@/interface/valuation";
+import { useGetValuationResultHook } from "@/hooks/useGetValuationResultHook";
 
 const ValuationResults: React.FC = () => {
   const { setCurrentStepIndex } = ValuationStepper();
 
-  const { personalDetailValues, propertyDetailValues } =
+  const { propertyDetailValues } =
     useValuationFormStore();
 
-  // TODO: Duplicate in personal details page maybe convert this into a hook?
-  const { data } = useQuery({
-    queryKey: [
-      "valuation",
-      JSON.stringify({
-        sqm: propertyDetailValues.sqm,
-        year_built: propertyDetailValues.yearBuilt,
-        city_id: propertyDetailValues.location,
-      }),
-    ],
-    queryFn: async () => {
-      const propertyType = propertyTypes.find(
-        (pt) => pt.value === propertyDetailValues.propertyType,
-      )?.urlValue as string;
+    const {data: valuationData} = useGetValuationResultHook({
+      propertyDetailValues: {
+      sqm: propertyDetailValues.sqm,
+      yearBuilt: parseInt(propertyDetailValues.yearBuilt),
+      location: propertyDetailValues.location,
+      propertyType: propertyDetailValues.propertyType,
+      } 
+    });
 
-      const searchParams = createSearchParams({
-        sqm: propertyDetailValues.sqm,
-        year_built: propertyDetailValues.yearBuilt,
-        city_id: propertyDetailValues.location,
-      });
-
-      let url = `/api/properties/valuation/${propertyType}`;
-
-      if (searchParams?.size) {
-        url = url + "?" + searchParams.toString();
-      }
-
-      const response = await fetch(url);
-
-      return (await response.json()) as Valuation;
-    },
-  });
-
-  console.log("RESULTS", personalDetailValues, propertyDetailValues);
-
-  console.log(data);
+  console.log('VALUATION HOOK RESULT',valuationData);
 
   return (
     <>

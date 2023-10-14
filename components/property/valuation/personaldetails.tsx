@@ -15,65 +15,46 @@ import ValuationStepper from "@/hooks/useStepperStore";
 import { personalDetailsFormSchema } from ".";
 import { Checkbox } from "@/components/ui/checkbox";
 import useValuationFormStore from "@/hooks/useValuationFormStore";
-import { useQuery } from "@tanstack/react-query";
-import { propertyTypes } from "@/static_data/property-types";
-import { createSearchParams } from "@/lib/utils";
-import { Valuation } from "@/interface/valuation";
+import { useGetValuationResultHook } from "@/hooks/useGetValuationResultHook";
 
 const PersonalDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
-  const { propertyDetailValues, setPersonalDetailValues } =
+  const {  personalDetailValues, propertyDetailValues,setPersonalDetailValues } =
     useValuationFormStore();
+
+    const {valuationQueryClient,valuationQueryFunction} = useGetValuationResultHook({
+    propertyDetailValues: {
+      sqm: propertyDetailValues.sqm,
+      yearBuilt: parseInt(propertyDetailValues.yearBuilt),
+      location: propertyDetailValues.location,
+      propertyType: propertyDetailValues.propertyType,
+      } 
+    })
 
   const form = useForm<z.infer<typeof personalDetailsFormSchema>>({
     resolver: zodResolver(personalDetailsFormSchema),
+    values: personalDetailValues
   });
 
-  const onSubmit = (values: z.infer<typeof personalDetailsFormSchema>) => {
-    setPersonalDetailValues(values);
+  const onSubmit = () => {
+   
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
+    // AM I DOING THE RIGHT PREFETCHING HERE?, IF NOT, REFACTOR
+    valuationQueryClient.prefetchQuery({
+      queryKey: ['valuation'],
+      queryFn: valuationQueryFunction
+    })
   };
 
   const goBack = () => {
+    const formValues = form.getValues();
+     setPersonalDetailValues(formValues);
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
     }
   };
-
-  // TODO: Prefetch query to avoid loading on the next step
-  useQuery({
-    queryKey: [
-      "valuation",
-      JSON.stringify({
-        sqm: propertyDetailValues.sqm,
-        year_built: propertyDetailValues.yearBuilt,
-        city_id: propertyDetailValues.location,
-      }),
-    ],
-    queryFn: async () => {
-      const propertyType = propertyTypes.find(
-        (pt) => pt.value === propertyDetailValues.propertyType,
-      )?.urlValue as string;
-
-      const searchParams = createSearchParams({
-        sqm: propertyDetailValues.sqm,
-        year_built: propertyDetailValues.yearBuilt,
-        city_id: propertyDetailValues.location,
-      });
-
-      let url = `/api/properties/valuation/${propertyType}`;
-
-      if (searchParams?.size) {
-        url = url + "?" + searchParams.toString();
-      }
-
-      const response = await fetch(url);
-
-      return (await response.json()) as Valuation;
-    },
-  });
 
   return (
     <Form {...form}>
@@ -126,6 +107,8 @@ const PersonalDetails: React.FC = () => {
               <FormLabel>Phone number</FormLabel>
               <FormControl>
                 <Input
+                  type="number"
+                  className="remove-arrow"
                   placeholder="Type your phone number here"
                   {...field}
                   value={field.value ?? ""}
@@ -151,16 +134,28 @@ const PersonalDetails: React.FC = () => {
           )}
         />
 
-        <div className="flex space-x-2">
-          <Checkbox id="termsAndConditions" />
-          <label
-            htmlFor="termsAndConditions"
+          <FormField
+          control={form.control}
+          name="termsAndConditions"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+               <div className="flex space-x-2">
+                  <Checkbox 
+                  checked={field.value} 
+                  onCheckedChange={(e) => field.onChange(e)}
+                  />
+                    <label
             className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             Using this valuation tool, I agree to mytree.house terms and
             conditions
           </label>
-        </div>
+              </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         <div className="flex space-x-2">
           <Checkbox id="offers" />

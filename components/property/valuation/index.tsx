@@ -27,7 +27,7 @@ export const personalDetailsFormSchema = z.object({
   firstName: z.string().nonempty(),
   phoneNumber: z.string().nonempty(),
   emailAddress: z.string().email().nonempty(),
-  termsAndConditions: z.boolean().optional(),
+  termsAndConditions: z.boolean().refine((val) => val === true),
   offers: z.boolean().optional(),
 });
 
