@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 
 export async function GET() {
@@ -43,7 +42,7 @@ export async function GET() {
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
-    return NextResponse.json({ ok: true });
+    return new Response("Ok");
   } catch (error: any) {
     return new Response(
       JSON.stringify({
