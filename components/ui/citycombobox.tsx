@@ -97,6 +97,7 @@ export const CityCombobox: React.FC<comboboxProps> = ({
     <Popover
       open={state.open}
       onOpenChange={(open) => dispatch({ type: "SET_OPEN", payload: open })}
+    
     >
       <PopoverTrigger asChild>
         <Button
@@ -114,7 +115,7 @@ export const CityCombobox: React.FC<comboboxProps> = ({
           <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
+      <PopoverContent style={{width: '300px', maxWidth: '300px'}} className="w-full p-0">
         <Command shouldFilter={false}>
           <CommandInput
             value={state.search}
