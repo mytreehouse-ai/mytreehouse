@@ -50,7 +50,8 @@ const Properties: React.FC = () => {
   if (isLoading) return <PropertyCardSkeletonLoader />;
 
   return (
-    <div className="mx-5 mb-10 mt-40">
+    // <div className="mx-5 mb-10 mt-40 sm:mt-60">
+    <div className="mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 xl:mt-40">
       <Grid>
         {data?.map((pt) => <Card key={pt.property_id} property={pt} />)}
       </Grid>
