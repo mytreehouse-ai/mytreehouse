@@ -5,7 +5,7 @@ import { imageKitLoader } from "@/lib/utils";
 const HeroImageBanner = () => {
   return (
     <Image
-      className="brightness-75 lg:rounded-2xl"
+      className="brightness-50 lg:rounded-2xl"
       loader={imageKitLoader}
       src="mytreehouse/image_10_by_dalle3.png"
       alt="home_page_main_banner"

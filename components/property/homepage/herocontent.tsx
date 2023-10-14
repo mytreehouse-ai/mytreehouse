@@ -57,12 +57,14 @@ const HeroContent: React.FC = () => {
   return (
     <div className="absolute inset-0 z-10 flex w-full flex-col items-center justify-center gap-y-10 px-4 lg:flex-row lg:justify-between lg:px-10 xl:px-14">
       <div className="flex w-full flex-col justify-center">
-        <p className="text-xl font-semibold tracking-wide text-white sm:text-3xl md:text-4xl xl:text-5xl">
+        <p className="text-2xl font-semibold tracking-wide text-white md:text-5xl">
           Your Competitive Edge
         </p>
-        <p className="text-xl font-semibold tracking-wide text-white sm:text-3xl md:text-4xl xl:text-5xl">
+        <p className="text-2xl font-semibold tracking-wide text-white md:text-5xl">
           in today&apos;s{" "}
-          <span className="text-emerald-600">Real Estate Market.</span>
+          <span className="bg-gradient-to-r from-emerald-300 to-emerald-600 bg-clip-text font-bold text-transparent">
+            Real Estate Market.
+          </span>
         </p>
       </div>
       <div className="flex w-full flex-col justify-center">

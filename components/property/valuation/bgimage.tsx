@@ -5,7 +5,7 @@ import { imageKitLoader } from "@/lib/utils";
 const BgImage = () => {
   return (
     <Image
-      className="absolute brightness-75"
+      className="absolute brightness-50"
       loader={imageKitLoader}
       src="mytreehouse/image_7_by_dalle3.png"
       alt="propery_valuation_bg"
