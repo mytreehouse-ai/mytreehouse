@@ -187,15 +187,17 @@ export async function GET() {
           forSale: scrappedTransaction.average_property_price_for_sale,
           forRent: scrappedTransaction.average_property_price_for_rent,
         },
-        condominiumRemainingUsefulLife,
-        appraisalValueWithClosedTransactionForSale:
-          appraisalValueWithClosedTransactionForSale,
-        appraisalValueWithoutClosedTransactionForSale:
-          appraisalValueWithoutClosedTransactionForSale,
-        appraisalValueWithClosedTransactionForRent:
-          appraisalValueWithClosedTransactionForRent,
-        appraisalValueWithoutClosedTransactionForRent:
-          appraisalValueWithoutClosedTransactionForRent,
+        appraisalValue: {
+          condominiumRemainingUsefulLife,
+          withClosedTransactionForSale:
+            appraisalValueWithClosedTransactionForSale,
+          withoutClosedTransactionForSale:
+            appraisalValueWithoutClosedTransactionForSale,
+          withClosedTransactionForRent:
+            appraisalValueWithClosedTransactionForRent,
+          withoutClosedTransactionForRent:
+            appraisalValueWithoutClosedTransactionForRent,
+        },
         phpFormat: {
           withClosedTransaction: {
             forSale: {
