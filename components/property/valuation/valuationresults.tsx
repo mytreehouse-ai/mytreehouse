@@ -3,13 +3,56 @@ import { Button } from "@/components/ui/button";
 import ValuationStepper from "@/hooks/useStepperStore";
 import useValuationFormStore from "@/hooks/useValuationFormStore";
 import SuccessResultImage from "./successresultimage";
+import { propertyTypes } from "@/static_data/property-types";
+import { useQuery } from "@tanstack/react-query";
+import { createSearchParams } from "@/lib/utils";
 
 const ValuationResults: React.FC = () => {
   const { setCurrentStepIndex } = ValuationStepper();
+
   const { personalDetailValues, propertyDetailValues } =
     useValuationFormStore();
 
+  const { isLoading, data } = useQuery({
+    queryKey: [
+      "valuation",
+      JSON.stringify({
+        sqm: propertyDetailValues.sqm,
+        year_built: propertyDetailValues.yearBuilt,
+        city_id: propertyDetailValues.location,
+      }),
+    ],
+    queryFn: async () => {
+      const propertyType = propertyTypes.find(
+        (pt) => pt.value === propertyDetailValues.propertyType,
+      )?.urlValue as string;
+
+      const searchParams = createSearchParams({
+        sqm: propertyDetailValues.sqm,
+        year_built: propertyDetailValues.yearBuilt,
+        city_id: propertyDetailValues.location,
+      });
+
+      let url = `/api/properties/valuation/${propertyType}`;
+
+      if (searchParams?.size) {
+        url = url + "?" + searchParams.toString();
+      }
+
+      const response = await fetch(url);
+
+      return await response.json();
+    },
+  });
+
   console.log("RESULTS", personalDetailValues, propertyDetailValues);
+
+  console.log(data);
+
+  // TODO: Improve UI when query is loading...
+  if (isLoading) {
+    return <div>Is loading</div>;
+  }
 
   return (
     <>

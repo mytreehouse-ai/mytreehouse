@@ -5,14 +5,8 @@ import { fetchVercelEdgeConfig } from "@/lib/edge-config";
 import { z } from "zod";
 
 const CondominiumValuationSchema = z.object({
-  sqm: z.preprocess(
-    (input) => parseInt(String(input), 10),
-    z.number().positive(),
-  ),
-  year_built: z.preprocess(
-    (input) => parseInt(String(input), 10),
-    z.number().positive(),
-  ),
+  sqm: z.preprocess((input) => Number(input), z.number().positive()),
+  year_built: z.preprocess((input) => Number(input), z.number().positive()),
   city_id: z.string().uuid(),
 });
 

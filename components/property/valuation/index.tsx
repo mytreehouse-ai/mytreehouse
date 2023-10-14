@@ -16,7 +16,7 @@ const componentsMap = {
 export const propertyValuationFormSchema = z.object({
   propertyType: z.string().nonempty(),
   address: z.string().nonempty(),
-  location: z.string().nonempty(),
+  location: z.string().uuid(),
   sqm: z.preprocess((val) => Number(val), z.number().positive()),
   yearBuilt: z.string().nonempty(),
   whenAreyouLookingToSell: z.string().nonempty(),
