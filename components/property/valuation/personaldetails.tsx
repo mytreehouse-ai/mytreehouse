@@ -31,6 +31,7 @@ const PersonalDetails: React.FC = () => {
   });
 
   const onSubmit = () => {
+   
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
@@ -44,7 +45,7 @@ const PersonalDetails: React.FC = () => {
     }
   };
 
-  // TODO: Prefetch query to avoid loading on the next step
+  
   useQuery({
     queryKey: [
       "valuation",

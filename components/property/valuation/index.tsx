@@ -25,7 +25,7 @@ export const propertyValuationFormSchema = z.object({
 export const personalDetailsFormSchema = z.object({
   lastName: z.string().nonempty(),
   firstName: z.string().nonempty(),
-  phoneNumber: z.number(),
+  phoneNumber: z.string().nonempty(),
   emailAddress: z.string().email().nonempty(),
   termsAndConditions: z.boolean().refine((val) => val === true),
   offers: z.boolean().optional(),
