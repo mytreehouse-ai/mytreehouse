@@ -1,9 +1,30 @@
+import { NextRequest } from "next/server";
 import { sql } from "@vercel/postgres";
 import { formatToPhp } from "@/lib/utils";
 import { fetchVercelEdgeConfig } from "@/lib/edge-config";
+import { z } from "zod";
 
-export async function GET() {
+const CondominiumValuationSchema = z.object({
+  sqm: z.number().positive(),
+  city_id: z.string().uuid(),
+  year_built: z.number().positive(),
+});
+
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url);
+
+    const parsedQueryData = CondominiumValuationSchema.safeParse(
+      Object.fromEntries(searchParams),
+    );
+
+    if (parsedQueryData.success === false) {
+      return new Response(parsedQueryData.error.message, {
+        status: 400,
+        statusText: "Bad request",
+      });
+    }
+
     const {
       CONDOMINIUM_PROPERTY_TYPE_ID,
       CONDOMINIUM_LIFE_SPAN_IN_NUMBER_YEARS,
@@ -14,9 +35,7 @@ export async function GET() {
       UNTAGGED_TRANSACTION_ID,
     } = await fetchVercelEdgeConfig();
 
-    const sqm = 234;
-    const city_id = "9574d79e-f8bd-4d07-b19a-00d3a5b96202";
-    const year_built = 2022;
+    const { sqm, city_id, year_built } = parsedQueryData.data;
 
     const closedTransaction = {
       average_property_price_for_sale: 0,
