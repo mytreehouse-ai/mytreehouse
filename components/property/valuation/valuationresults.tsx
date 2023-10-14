@@ -6,6 +6,7 @@ import SuccessResultImage from "./successresultimage";
 import { propertyTypes } from "@/static_data/property-types";
 import { useQuery } from "@tanstack/react-query";
 import { createSearchParams } from "@/lib/utils";
+import { Valuation } from "@/interface/valuation";
 
 const ValuationResults: React.FC = () => {
   const { setCurrentStepIndex } = ValuationStepper();
@@ -41,7 +42,7 @@ const ValuationResults: React.FC = () => {
 
       const response = await fetch(url);
 
-      return await response.json();
+      return (await response.json()) as Valuation;
     },
   });
 
