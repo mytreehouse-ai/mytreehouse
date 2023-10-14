@@ -8,7 +8,7 @@ import { useGetValuationResultHook } from "@/hooks/useGetValuationResultHook";
 const ValuationResults: React.FC = () => {
   const { setCurrentStepIndex } = ValuationStepper();
 
-  const { personalDetailValues, propertyDetailValues } =
+  const { propertyDetailValues } =
     useValuationFormStore();
 
     const {data: valuationData} = useGetValuationResultHook({
