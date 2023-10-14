@@ -10,39 +10,36 @@ interface PropertyDetailValues {
   propertyType: string;
 }
 
-interface UseGetValuationResultHookProps {
-    propertyDetailValues: PropertyDetailValues;
-}
+const propertyValuation = async (data: PropertyDetailValues) => {
+  const { sqm, yearBuilt, location, propertyType } = data;
 
-export const useGetValuationResultHook =  ({propertyDetailValues}:UseGetValuationResultHookProps) => {
-  const { sqm, yearBuilt, location, propertyType } = propertyDetailValues;
+  const propertyTypeUrlValue = propertyTypes.find(
+    (pt) => pt.value === propertyType,
+  )?.urlValue;
 
-  const valuationQueryClient = useQueryClient();
+  const searchParams = createSearchParams({
+    sqm,
+    year_built: yearBuilt,
+    city_id: location,
+  });
 
-  const valuationQueryFunction = async () => {
-  const propertyTypeUrlValue = propertyTypes.find((pt) => pt.value === propertyType)?.urlValue;
+  let url = `/api/properties/valuation/${propertyTypeUrlValue}`;
 
-      const searchParams = createSearchParams({
-        sqm,
-        year_built: yearBuilt,
-        city_id: location,
-      });
-
-      let url = `/api/properties/valuation/${propertyTypeUrlValue}`;
-
-      if (searchParams?.size) {
-        url = url + "?" + searchParams.toString();
-      }
-
-      const response = await fetch(url);
-
-      return (await response.json()) as Valuation;
-    
+  if (searchParams?.size) {
+    url = url + "?" + searchParams.toString();
   }
 
-// TODO: Prefetch query to avoid loading on the next step
-   const { data, isLoading, isError, error } = 
- useQuery<Valuation>({
+  const response = await fetch(url);
+
+  return (await response.json()) as Valuation;
+};
+
+export const useGetValuationResultHook = (
+  propertyDetailValues: PropertyDetailValues,
+) => {
+  const { sqm, yearBuilt, location, propertyType } = propertyDetailValues;
+
+  const { data, isLoading, isError, error } = useQuery<Valuation>({
     queryKey: [
       "valuation",
       JSON.stringify({
@@ -51,9 +48,19 @@ export const useGetValuationResultHook =  ({propertyDetailValues}:UseGetValuatio
         city_id: location,
       }),
     ],
-    queryFn: valuationQueryFunction
-    
+    queryFn: () =>
+      propertyValuation({
+        sqm,
+        yearBuilt,
+        location,
+        propertyType,
+      }),
   });
 
-  return { data, isLoading, isError, error, valuationQueryClient,valuationQueryFunction };
-}
+  return {
+    data,
+    isLoading,
+    isError,
+    error,
+  };
+};

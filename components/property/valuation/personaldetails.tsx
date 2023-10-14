@@ -19,38 +19,33 @@ import { useGetValuationResultHook } from "@/hooks/useGetValuationResultHook";
 
 const PersonalDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
-  const {  personalDetailValues, propertyDetailValues,setPersonalDetailValues } =
-    useValuationFormStore();
+  const {
+    personalDetailValues,
+    propertyDetailValues,
+    setPersonalDetailValues,
+  } = useValuationFormStore();
 
-    const {valuationQueryClient,valuationQueryFunction} = useGetValuationResultHook({
-    propertyDetailValues: {
-      sqm: propertyDetailValues.sqm,
-      yearBuilt: parseInt(propertyDetailValues.yearBuilt),
-      location: propertyDetailValues.location,
-      propertyType: propertyDetailValues.propertyType,
-      } 
-    })
+  useGetValuationResultHook({
+    sqm: propertyDetailValues.sqm,
+    yearBuilt: parseInt(propertyDetailValues.yearBuilt),
+    location: propertyDetailValues.location,
+    propertyType: propertyDetailValues.propertyType,
+  });
 
   const form = useForm<z.infer<typeof personalDetailsFormSchema>>({
     resolver: zodResolver(personalDetailsFormSchema),
-    values: personalDetailValues
+    values: personalDetailValues,
   });
 
   const onSubmit = () => {
-   
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
-    // AM I DOING THE RIGHT PREFETCHING HERE?, IF NOT, REFACTOR
-    valuationQueryClient.prefetchQuery({
-      queryKey: ['valuation'],
-      queryFn: valuationQueryFunction
-    })
   };
 
   const goBack = () => {
     const formValues = form.getValues();
-     setPersonalDetailValues(formValues);
+    setPersonalDetailValues(formValues);
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
     }
@@ -134,24 +129,22 @@ const PersonalDetails: React.FC = () => {
           )}
         />
 
-          <FormField
+        <FormField
           control={form.control}
           name="termsAndConditions"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-               <div className="flex space-x-2">
-                  <Checkbox 
-                  checked={field.value} 
-                  onCheckedChange={(e) => field.onChange(e)}
+                <div className="flex space-x-2">
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={(e) => field.onChange(e)}
                   />
-                    <label
-            className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Using this valuation tool, I agree to mytree.house terms and
-            conditions
-          </label>
-              </div>
+                  <label className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Using this valuation tool, I agree to mytree.house terms and
+                    conditions
+                  </label>
+                </div>
               </FormControl>
             </FormItem>
           )}

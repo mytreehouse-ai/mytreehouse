@@ -8,19 +8,16 @@ import { useGetValuationResultHook } from "@/hooks/useGetValuationResultHook";
 const ValuationResults: React.FC = () => {
   const { setCurrentStepIndex } = ValuationStepper();
 
-  const { propertyDetailValues } =
-    useValuationFormStore();
+  const { propertyDetailValues } = useValuationFormStore();
 
-    const {data: valuationData} = useGetValuationResultHook({
-      propertyDetailValues: {
-      sqm: propertyDetailValues.sqm,
-      yearBuilt: parseInt(propertyDetailValues.yearBuilt),
-      location: propertyDetailValues.location,
-      propertyType: propertyDetailValues.propertyType,
-      } 
-    });
+  const { data: valuationData } = useGetValuationResultHook({
+    sqm: propertyDetailValues.sqm,
+    yearBuilt: parseInt(propertyDetailValues.yearBuilt),
+    location: propertyDetailValues.location,
+    propertyType: propertyDetailValues.propertyType,
+  });
 
-  console.log('VALUATION HOOK RESULT',valuationData);
+  console.log("VALUATION HOOK RESULT", valuationData);
 
   return (
     <>
