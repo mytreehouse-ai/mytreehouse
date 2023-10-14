@@ -31,10 +31,9 @@ const PersonalDetails: React.FC = () => {
   });
 
   const onSubmit = () => {
-    // if (currentStepIndex < steps.length - 1) {
-    //   setCurrentStepIndex(currentStepIndex + 1);
-    // }
-    console.log(form.getValues())
+    if (currentStepIndex < steps.length - 1) {
+      setCurrentStepIndex(currentStepIndex + 1);
+    }
   };
 
   const goBack = () => {
@@ -129,6 +128,8 @@ const PersonalDetails: React.FC = () => {
               <FormLabel>Phone number</FormLabel>
               <FormControl>
                 <Input
+                  type="number"
+                  className="remove-arrow"
                   placeholder="Type your phone number here"
                   {...field}
                   value={field.value ?? ""}
