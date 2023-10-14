@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { z } from "zod";
 
@@ -10,16 +11,17 @@ export async function GET(
   _req: Request,
   { params }: { params: { slug: string } },
 ) {
-  const parsed = await PropertySlugSchema.safeParseAsync(params);
+  try {
+    const parsed = await PropertySlugSchema.safeParseAsync(params);
 
-  if (parsed.success === false) {
-    return new Response(parsed.error.message, {
-      status: 400,
-      statusText: "Bad request",
-    });
-  }
+    if (parsed.success === false) {
+      return new Response(parsed.error.message, {
+        status: 400,
+        statusText: "Bad request",
+      });
+    }
 
-  const query = `
+    const query = `
         select
           p.property_id,
           p.listing_title,
@@ -57,9 +59,13 @@ export async function GET(
         where p.property_id = '${parsed.data.slug}'
   `.replace(/\n\s*\n/g, "\n");
 
-  const property = await sql.query(query);
+    const property = await sql.query(query);
 
-  return new Response(
-    JSON.stringify(property.rows.length ? property.rows[0] : "{}"),
-  );
+    return NextResponse.json(property.rows);
+  } catch (error: any) {
+    return NextResponse.json(
+      { message: "Neon database internal server error" },
+      { status: 500 },
+    );
+  }
 }

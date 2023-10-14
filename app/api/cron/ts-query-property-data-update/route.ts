@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 
 export async function GET() {
@@ -42,16 +43,11 @@ export async function GET() {
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
-    return new Response("Ok");
+    return NextResponse.json({ message: "Ok" });
   } catch (error: any) {
-    return new Response(
-      JSON.stringify({
-        message: error.message,
-      }),
-      {
-        status: 500,
-        statusText: "Internal Server Error",
-      },
+    return NextResponse.json(
+      { message: "Neon Database Internal Server Error" },
+      { status: 500 },
     );
   }
 }

@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { formatToPhp } from "@/lib/utils";
 import { fetchVercelEdgeConfig } from "@/lib/edge-config";
@@ -200,70 +200,67 @@ export async function GET(req: NextRequest) {
 
     await sql.query("commit");
 
-    return new Response(
-      JSON.stringify({
-        closedTransaction: {
-          forSale: closedTransaction.average_property_price_for_sale,
-          forRent: closedTransaction.average_property_price_for_rent,
-        },
-        scrappedTransaction: {
-          forSale: scrappedTransaction.average_property_price_for_sale,
-          forRent: scrappedTransaction.average_property_price_for_rent,
-        },
-        appraisalValue: {
-          withClosedTransactionForSale:
-            appraisalValueWithClosedTransactionForSale,
-          withoutClosedTransactionForSale:
-            appraisalValueWithoutClosedTransactionForSale,
-          withClosedTransactionForRent:
-            appraisalValueWithClosedTransactionForRent,
-          withoutClosedTransactionForRent:
-            appraisalValueWithoutClosedTransactionForRent,
-        },
-        phpFormat: {
-          withClosedTransaction: {
-            forSale: {
-              pricePerSqm: formatToPhp(pricePerSqmInClosedTransactionForSale),
-              appraisalValue: formatToPhp(
-                appraisalValueWithClosedTransactionForSale,
-              ),
-            },
-            forRent: {
-              pricePerSqm: formatToPhp(pricePerSqmInClosedTransactionForRent),
-              appraisalValue: formatToPhp(
-                appraisalValueWithClosedTransactionForRent,
-              ),
-            },
+    return NextResponse.json({
+      closedTransaction: {
+        forSale: closedTransaction.average_property_price_for_sale,
+        forRent: closedTransaction.average_property_price_for_rent,
+      },
+      scrappedTransaction: {
+        forSale: scrappedTransaction.average_property_price_for_sale,
+        forRent: scrappedTransaction.average_property_price_for_rent,
+      },
+      appraisalValue: {
+        withClosedTransactionForSale:
+          appraisalValueWithClosedTransactionForSale,
+        withoutClosedTransactionForSale:
+          appraisalValueWithoutClosedTransactionForSale,
+        withClosedTransactionForRent:
+          appraisalValueWithClosedTransactionForRent,
+        withoutClosedTransactionForRent:
+          appraisalValueWithoutClosedTransactionForRent,
+      },
+      phpFormat: {
+        withClosedTransaction: {
+          forSale: {
+            pricePerSqm: formatToPhp(pricePerSqmInClosedTransactionForSale),
+            appraisalValue: formatToPhp(
+              appraisalValueWithClosedTransactionForSale,
+            ),
           },
-          withoutClosedTransaction: {
-            forSale: {
-              pricePerSqm: formatToPhp(pricePerSqmInScrapedTransactionForSale),
-              appraisalValue: formatToPhp(
-                appraisalValueWithoutClosedTransactionForSale,
-              ),
-            },
-            forRent: {
-              pricePerSqm: formatToPhp(pricePerSqmInScrapedTransactionForRent),
-              appraisalValue: formatToPhp(
-                appraisalValueWithoutClosedTransactionForRent,
-              ),
-            },
+          forRent: {
+            pricePerSqm: formatToPhp(pricePerSqmInClosedTransactionForRent),
+            appraisalValue: formatToPhp(
+              appraisalValueWithClosedTransactionForRent,
+            ),
           },
         },
-        metadata: {
-          propertyType: "Condominium",
-          propertySize: sqm,
-          yearBuilt: year_built,
-          city: city.rowCount ? city.rows[0].name : null,
+        withoutClosedTransaction: {
+          forSale: {
+            pricePerSqm: formatToPhp(pricePerSqmInScrapedTransactionForSale),
+            appraisalValue: formatToPhp(
+              appraisalValueWithoutClosedTransactionForSale,
+            ),
+          },
+          forRent: {
+            pricePerSqm: formatToPhp(pricePerSqmInScrapedTransactionForRent),
+            appraisalValue: formatToPhp(
+              appraisalValueWithoutClosedTransactionForRent,
+            ),
+          },
         },
-      }),
-    );
+      },
+      metadata: {
+        propertyType: "Condominium",
+        propertySize: sqm,
+        yearBuilt: year_built,
+        city: city.rowCount ? city.rows[0].name : null,
+      },
+    });
   } catch (e) {
     await sql.query("rollback");
-
-    return new Response("Neon Database Internal Server Error", {
-      status: 500,
-      statusText: "Internal Server Error",
-    });
+    return NextResponse.json(
+      { message: "Neon database internal server error" },
+      { status: 500 },
+    );
   }
 }

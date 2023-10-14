@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { z } from "zod";
 
@@ -125,22 +126,14 @@ export async function POST(req: Request) {
       ${parsed.data.created_at}
     ) on conflict(property_id) do nothing`;
 
-    return new Response(
-      JSON.stringify({
-        message: "Ok",
-        inserted: insert.rowCount,
-      }),
-    );
+    return NextResponse.json({
+      message: "Ok",
+      inserted: insert.rowCount,
+    });
   } catch (error: any) {
-    return new Response(
-      JSON.stringify({
-        message: error.message,
-        inserted: 0,
-      }),
-      {
-        status: 500,
-        statusText: "Internal Server Error",
-      },
-    );
+    return new Response("Neon Database Internal Server Error", {
+      status: 500,
+      statusText: "Internal Server Error",
+    });
   }
 }

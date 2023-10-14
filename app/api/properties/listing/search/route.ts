@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { UNKNOWN_CITY } from "@/lib/constant";
 import { PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
@@ -162,16 +163,11 @@ export async function GET(req: Request) {
 
     const properties = await sql.query(query);
 
-    return new Response(JSON.stringify(properties.rows));
+    return NextResponse.json(properties.rows);
   } catch (error: any) {
-    return new Response(
-      JSON.stringify({
-        message: error.message,
-      }),
-      {
-        status: 500,
-        statusText: "Internal Server Error",
-      },
+    return NextResponse.json(
+      { message: "Neon database internal server error" },
+      { status: 500 },
     );
   }
 }
