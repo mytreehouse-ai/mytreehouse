@@ -1,122 +1,17 @@
-import { kv } from "@vercel/kv";
 import sql from "@/server/db";
 import { formatToPhp } from "@/lib/utils";
+import { fetchVercelEdgeConfig } from "@/lib/edge-config";
 
 export async function GET() {
-  const CONDOMINIUM_PROPERTY_TYPE_ID: number | null = await kv.get(
-    "CONDOMINIUM_PROPERTY_TYPE_ID",
-  );
-
-  if (!CONDOMINIUM_PROPERTY_TYPE_ID) {
-    return new Response(
-      JSON.stringify({
-        message: "Config CONDOMINIUM_PROPERTY_TYPE_ID is empty in redis kv",
-      }),
-      {
-        status: 400,
-        statusText: "Bad request",
-      },
-    );
-  }
-
-  const CONDOMINIUM_LIFE_SPAN_IN_NUMBER_YEARS: number | null = await kv.get(
-    "CONDOMINIUM_LIFE_SPAN_IN_NUMBER_YEARS",
-  );
-
-  if (!CONDOMINIUM_LIFE_SPAN_IN_NUMBER_YEARS) {
-    return new Response(
-      JSON.stringify({
-        message:
-          "Config CONDOMINIUM_LIFE_SPAN_IN_NUMBER_YEARS is empty in redis kv",
-      }),
-      {
-        status: 400,
-        statusText: "Bad request",
-      },
-    );
-  }
-
-  const FOR_SALE_LISTING_TYPE_ID: string | null = await kv.get(
-    "FOR_SALE_LISTING_TYPE_ID",
-  );
-
-  if (!FOR_SALE_LISTING_TYPE_ID) {
-    return new Response(
-      JSON.stringify({
-        message: "Config FOR_SALE_LISTING_TYPE_ID is empty in redis kv",
-      }),
-      {
-        status: 400,
-        statusText: "Bad request",
-      },
-    );
-  }
-
-  const FOR_RENT_LISTING_TYPE_ID: string | null = await kv.get(
-    "FOR_RENT_LISTING_TYPE_ID",
-  );
-
-  if (!FOR_RENT_LISTING_TYPE_ID) {
-    return new Response(
-      JSON.stringify({
-        message: "Config FOR_RENT_LISTING_TYPE_ID is empty in redis kv",
-      }),
-      {
-        status: 400,
-        statusText: "Bad request",
-      },
-    );
-  }
-
-  const CLOSED_TRANSACTION_ID: string | null = await kv.get(
-    "CLOSED_TRANSACTION_ID",
-  );
-
-  if (!CLOSED_TRANSACTION_ID) {
-    return new Response(
-      JSON.stringify({
-        message: "Config CLOSED_TRANSACTION_ID is empty in redis kv",
-      }),
-      {
-        status: 400,
-        statusText: "Bad request",
-      },
-    );
-  }
-
-  const SOLD_TRANSACTION_ID: string | null = await kv.get(
-    "SOLD_TRANSACTION_ID",
-  );
-
-  if (!SOLD_TRANSACTION_ID) {
-    return new Response(
-      JSON.stringify({
-        message: "Config SOLD_TRANSACTION_ID is empty in redis kv",
-      }),
-      {
-        status: 400,
-        statusText: "Bad request",
-      },
-    );
-  }
-
-  const UNTAGGED_TRANSACTION_ID: string | null = await kv.get(
-    "UNTAGGED_TRANSACTION_ID",
-  );
-
-  if (!UNTAGGED_TRANSACTION_ID) {
-    return new Response(
-      JSON.stringify({
-        message: "Config UNTAGGED_TRANSACTION_ID is empty in redis kv",
-      }),
-      {
-        status: 400,
-        statusText: "Bad request",
-      },
-    );
-  }
-
-  console.log(await kv.json.get("condominium_config"));
+  const {
+    CONDOMINIUM_PROPERTY_TYPE_ID,
+    CONDOMINIUM_LIFE_SPAN_IN_NUMBER_YEARS,
+    FOR_SALE_LISTING_TYPE_ID,
+    FOR_RENT_LISTING_TYPE_ID,
+    CLOSED_TRANSACTION_ID,
+    SOLD_TRANSACTION_ID,
+    UNTAGGED_TRANSACTION_ID,
+  } = await fetchVercelEdgeConfig();
 
   const sqm = 234;
   const city_id = "9574d79e-f8bd-4d07-b19a-00d3a5b96202";
