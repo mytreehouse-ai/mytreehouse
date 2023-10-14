@@ -14,6 +14,7 @@ const ValuationResults: React.FC = () => {
   const { personalDetailValues, propertyDetailValues } =
     useValuationFormStore();
 
+  // TODO: Duplicate in personal details page maybe convert this into a hook?
   const { data } = useQuery({
     queryKey: [
       "valuation",

@@ -18,6 +18,7 @@ import useValuationFormStore from "@/hooks/useValuationFormStore";
 import { useQuery } from "@tanstack/react-query";
 import { propertyTypes } from "@/static_data/property-types";
 import { createSearchParams } from "@/lib/utils";
+import { Valuation } from "@/interface/valuation";
 
 const PersonalDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
@@ -70,7 +71,7 @@ const PersonalDetails: React.FC = () => {
 
       const response = await fetch(url);
 
-      return await response.json();
+      return (await response.json()) as Valuation;
     },
   });
 
