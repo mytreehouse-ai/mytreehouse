@@ -13,7 +13,7 @@ const ValuationResults: React.FC = () => {
   const { personalDetailValues, propertyDetailValues } =
     useValuationFormStore();
 
-  const { isLoading, data } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       "valuation",
       JSON.stringify({
@@ -48,11 +48,6 @@ const ValuationResults: React.FC = () => {
   console.log("RESULTS", personalDetailValues, propertyDetailValues);
 
   console.log(data);
-
-  // TODO: Improve UI when query is loading...
-  if (isLoading) {
-    return <div>Is loading</div>;
-  }
 
   return (
     <>

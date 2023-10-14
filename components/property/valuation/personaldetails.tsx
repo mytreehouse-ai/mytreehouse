@@ -15,6 +15,9 @@ import ValuationStepper from "@/hooks/useStepperStore";
 import { personalDetailsFormSchema } from ".";
 import { Checkbox } from "@/components/ui/checkbox";
 import useValuationFormStore from "@/hooks/useValuationFormStore";
+import { useQuery } from "@tanstack/react-query";
+import { propertyTypes } from "@/static_data/property-types";
+import { createSearchParams } from "@/lib/utils";
 
 const PersonalDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
@@ -37,6 +40,39 @@ const PersonalDetails: React.FC = () => {
       setCurrentStepIndex(currentStepIndex - 1);
     }
   };
+
+  // TODO: Prefetch query to avoid loading on the next step
+  useQuery({
+    queryKey: [
+      "valuation",
+      JSON.stringify({
+        sqm: propertyDetailValues.sqm,
+        year_built: propertyDetailValues.yearBuilt,
+        city_id: propertyDetailValues.location,
+      }),
+    ],
+    queryFn: async () => {
+      const propertyType = propertyTypes.find(
+        (pt) => pt.value === propertyDetailValues.propertyType,
+      )?.urlValue as string;
+
+      const searchParams = createSearchParams({
+        sqm: propertyDetailValues.sqm,
+        year_built: propertyDetailValues.yearBuilt,
+        city_id: propertyDetailValues.location,
+      });
+
+      let url = `/api/properties/valuation/${propertyType}`;
+
+      if (searchParams?.size) {
+        url = url + "?" + searchParams.toString();
+      }
+
+      const response = await fetch(url);
+
+      return await response.json();
+    },
+  });
 
   return (
     <Form {...form}>
