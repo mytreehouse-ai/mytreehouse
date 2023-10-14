@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const selectPropertiesTextQuery = `
         select 
-          p.property_id
+          p.property_id,
           pt.name as property_type_name,
           lt.name as listing_type_name,
           ts.name as turnover_status_name,
@@ -40,7 +40,7 @@ export async function GET() {
         property.property_id,
       ]);
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     return NextResponse.json({ ok: true });

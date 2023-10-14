@@ -3,7 +3,7 @@ import { createSearchParams } from "@/lib/utils";
 import { PropertyListingSearchType } from "@/schema/propertyListingSearch.schema";
 import { useQuery } from "@tanstack/react-query";
 
-async function getProperties(
+async function getPropertiesApiQuery(
   query?: PropertyListingSearchType,
 ): Promise<Property[]> {
   const searchParams = createSearchParams(query || {});
@@ -24,7 +24,7 @@ async function getProperties(
 export const usePropertyListingHook = (query?: PropertyListingSearchType) => {
   const propertyQuery = useQuery({
     queryKey: ["properties", JSON.stringify(query)],
-    queryFn: () => getProperties(query),
+    queryFn: () => getPropertiesApiQuery(query),
   });
 
   return propertyQuery;

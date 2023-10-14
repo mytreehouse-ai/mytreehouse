@@ -10,7 +10,7 @@ interface PropertyDetailValues {
   propertyType: string;
 }
 
-const propertyValuation = async (data: PropertyDetailValues) => {
+const propertyValuationApiQuery = async (data: PropertyDetailValues) => {
   const { sqm, yearBuilt, location, propertyType } = data;
 
   const propertyTypeUrlValue = propertyTypes.find(
@@ -49,7 +49,7 @@ export const useGetValuationResultHook = (
       }),
     ],
     queryFn: () =>
-      propertyValuation({
+      propertyValuationApiQuery({
         sqm,
         yearBuilt,
         location,
