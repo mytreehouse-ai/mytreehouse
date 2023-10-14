@@ -23,8 +23,8 @@ export default function RootLayout({
         <body className={inter.className}>
           {children}
           <ReactQueryDevtools initialIsOpen={false} />
+          <Analytics />
         </body>
-        <Analytics />
       </html>
     </ReactQueryProvider>
   );
