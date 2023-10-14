@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/ts-query-property-data-update",
+      "schedule": "0 10 * * *"
+    }
+  ]
+}
