@@ -1,27 +1,13 @@
-import { kv } from "@vercel/kv";
 import { sql } from "@vercel/postgres";
 import { UNKNOWN_CITY } from "@/lib/constant";
 import { PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
+import { fetchVercelEdgeConfig } from "@/lib/edge-config";
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const UNTAGGED_TRANSACTION_ID: string | null = await kv.get(
-      "UNTAGGED_TRANSACTION_ID",
-    );
-
-    if (!UNTAGGED_TRANSACTION_ID) {
-      return new Response(
-        JSON.stringify({
-          message: "Config UNTAGGED_TRANSACTION_ID is empty in redis kv",
-        }),
-        {
-          status: 400,
-          statusText: "Bad request",
-        },
-      );
-    }
+    const { UNTAGGED_TRANSACTION_ID } = await fetchVercelEdgeConfig();
 
     const queryParams = PropertyListingSearchSchema.safeParse(
       Object.fromEntries(searchParams),
