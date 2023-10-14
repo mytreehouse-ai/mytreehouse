@@ -1,44 +1,40 @@
-export interface Valuation {
-  closedTransaction: {
-    forSale: number;
-    forRent: number;
+interface TransactionDetail {
+  forSale: number | string;
+  forRent: number | string;
+}
+
+interface AppraisalValueDetail {
+  withClosedTransaction: TransactionDetail;
+  withoutClosedTransaction: TransactionDetail;
+}
+
+interface PriceDetail {
+  pricePerSqm: string;
+  appraisalValue: string;
+}
+
+interface PhpFormatDetail {
+  withClosedTransaction: {
+    forSale: PriceDetail;
+    forRent: PriceDetail;
   };
-  scrappedTransaction: {
-    forSale: string;
-    forRent: string;
+  withoutClosedTransaction: {
+    forSale: PriceDetail;
+    forRent: PriceDetail;
   };
-  appraisalValue: {
-    withClosedTransactionForSale: number;
-    withoutClosedTransactionForSale: number;
-    withClosedTransactionForRent: number;
-    withoutClosedTransactionForRent: number;
-  };
-  phpFormat: {
-    withClosedTransaction: {
-      forSale: {
-        pricePerSqm: string;
-        appraisalValue: string;
-      };
-      forRent: {
-        pricePerSqm: string;
-        appraisalValue: string;
-      };
-    };
-    withoutClosedTransaction: {
-      forSale: {
-        pricePerSqm: string;
-        appraisalValue: string;
-      };
-      forRent: {
-        pricePerSqm: string;
-        appraisalValue: string;
-      };
-    };
-  };
-  metadata: {
-    propertyType: string;
-    propertySize: number;
-    yearBuilt: number;
-    city: string;
-  };
+}
+
+interface QueryDetail {
+  propertyType: string;
+  propertySize: number;
+  yearBuilt: number;
+  city: string;
+}
+
+export interface ValuationTransactionsData {
+  closedTransaction: TransactionDetail;
+  scrappedTransaction: TransactionDetail;
+  appraisalValue: AppraisalValueDetail;
+  phpFormat: PhpFormatDetail;
+  query: QueryDetail;
 }

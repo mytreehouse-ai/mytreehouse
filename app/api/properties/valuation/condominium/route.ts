@@ -210,14 +210,14 @@ export async function GET(req: NextRequest) {
         forRent: scrappedTransaction.average_property_price_for_rent,
       },
       appraisalValue: {
-        withClosedTransactionForSale:
-          appraisalValueWithClosedTransactionForSale,
-        withoutClosedTransactionForSale:
-          appraisalValueWithoutClosedTransactionForSale,
-        withClosedTransactionForRent:
-          appraisalValueWithClosedTransactionForRent,
-        withoutClosedTransactionForRent:
-          appraisalValueWithoutClosedTransactionForRent,
+        withClosedTransaction: {
+          forSale: appraisalValueWithClosedTransactionForSale,
+          forRent: appraisalValueWithClosedTransactionForRent,
+        },
+        withoutClosedTransaction: {
+          forSale: appraisalValueWithoutClosedTransactionForSale,
+          forRent: appraisalValueWithoutClosedTransactionForRent,
+        },
       },
       phpFormat: {
         withClosedTransaction: {
@@ -249,7 +249,7 @@ export async function GET(req: NextRequest) {
           },
         },
       },
-      metadata: {
+      query: {
         propertyType: "Condominium",
         propertySize: sqm,
         yearBuilt: year_built,

@@ -1,7 +1,7 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { createSearchParams } from "@/lib/utils";
 import { propertyTypes } from "@/static_data/property-types";
-import type { Valuation } from "@/interface/valuation";
+import type { ValuationTransactionsData } from "@/interface/valuation";
 
 interface PropertyDetailValues {
   sqm: number;
@@ -31,7 +31,7 @@ const propertyValuationApiQuery = async (data: PropertyDetailValues) => {
 
   const response = await fetch(url);
 
-  return (await response.json()) as Valuation;
+  return (await response.json()) as ValuationTransactionsData;
 };
 
 export const useGetValuationResultHook = (
@@ -39,7 +39,7 @@ export const useGetValuationResultHook = (
 ) => {
   const { sqm, yearBuilt, location, propertyType } = propertyDetailValues;
 
-  const { data, isLoading, isError, error } = useQuery<Valuation>({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: [
       "valuation",
       JSON.stringify({
