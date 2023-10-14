@@ -126,14 +126,27 @@ export async function POST(req: Request) {
       ${parsed.data.created_at}
     ) on conflict(property_id) do nothing`;
 
+    const hehe = await sql.query("", [
+      parsed.data.property_id,
+      parsed.data.listing_title,
+      parsed.data.listing_url,
+      parsed.data.property_type_id,
+      parsed.data.listing_type_id,
+      parsed.data.property_status_id,
+      parsed.data.turnover_status_id,
+      parsed.data.current_price,
+      parsed.data.floor_area,
+      parsed.data.lot_area,
+    ]);
+
     return NextResponse.json({
       message: "Ok",
       inserted: insert.rowCount,
     });
   } catch (error: any) {
-    return new Response("Neon Database Internal Server Error", {
-      status: 500,
-      statusText: "Internal Server Error",
-    });
+    return NextResponse.json(
+      { message: "Neon database internal server error" },
+      { status: 500 },
+    );
   }
 }
