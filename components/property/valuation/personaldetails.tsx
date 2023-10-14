@@ -15,11 +15,21 @@ import ValuationStepper from "@/hooks/useStepperStore";
 import { personalDetailsFormSchema } from ".";
 import { Checkbox } from "@/components/ui/checkbox";
 import useValuationFormStore from "@/hooks/useValuationFormStore";
+import { useGetValuationResultHook } from "@/hooks/useGetValuationResultHook";
 
 const PersonalDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
-  const { propertyDetailValues, personalDetailValues,setPersonalDetailValues } =
+  const {  personalDetailValues, propertyDetailValues,setPersonalDetailValues } =
     useValuationFormStore();
+
+    const {valuationQueryClient,valuationQueryFunction} = useGetValuationResultHook({
+    propertyDetailValues: {
+      sqm: propertyDetailValues.sqm,
+      yearBuilt: parseInt(propertyDetailValues.yearBuilt),
+      location: propertyDetailValues.location,
+      propertyType: propertyDetailValues.propertyType,
+      } 
+    })
 
   const form = useForm<z.infer<typeof personalDetailsFormSchema>>({
     resolver: zodResolver(personalDetailsFormSchema),
@@ -31,6 +41,11 @@ const PersonalDetails: React.FC = () => {
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
+    // AM I DOING THE RIGHT PREFETCHING HERE?, IF NOT, REFACTOR
+    valuationQueryClient.prefetchQuery({
+      queryKey: ['valuation'],
+      queryFn: valuationQueryFunction
+    })
   };
 
   const goBack = () => {

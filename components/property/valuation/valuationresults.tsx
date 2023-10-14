@@ -19,39 +19,6 @@ const ValuationResults: React.FC = () => {
       propertyType: propertyDetailValues.propertyType,
       } 
     });
-  // const { data } = useQuery({
-  //   queryKey: [
-  //     "valuation",
-  //     JSON.stringify({
-  //       sqm: propertyDetailValues.sqm,
-  //       year_built: propertyDetailValues.yearBuilt,
-  //       city_id: propertyDetailValues.location,
-  //     }),
-  //   ],
-  //   queryFn: async () => {
-  //     const propertyType = propertyTypes.find(
-  //       (pt) => pt.value === propertyDetailValues.propertyType,
-  //     )?.urlValue as string;
-
-  //     const searchParams = createSearchParams({
-  //       sqm: propertyDetailValues.sqm,
-  //       year_built: propertyDetailValues.yearBuilt,
-  //       city_id: propertyDetailValues.location,
-  //     });
-
-  //     let url = `/api/properties/valuation/${propertyType}`;
-
-  //     if (searchParams?.size) {
-  //       url = url + "?" + searchParams.toString();
-  //     }
-
-  //     const response = await fetch(url);
-
-  //     return (await response.json()) as Valuation;
-  //   },
-  // });
-
-  // console.log("RESULTS", personalDetailValues, propertyDetailValues);
 
   console.log('VALUATION HOOK RESULT',valuationData);
 
