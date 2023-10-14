@@ -22,21 +22,24 @@ import { Valuation } from "@/interface/valuation";
 
 const PersonalDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
-  const { propertyDetailValues, setPersonalDetailValues } =
+  const { propertyDetailValues, personalDetailValues,setPersonalDetailValues } =
     useValuationFormStore();
 
   const form = useForm<z.infer<typeof personalDetailsFormSchema>>({
     resolver: zodResolver(personalDetailsFormSchema),
+    values: personalDetailValues
   });
 
   const onSubmit = (values: z.infer<typeof personalDetailsFormSchema>) => {
-    setPersonalDetailValues(values);
+   
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
 
   const goBack = () => {
+    const formValues = form.getValues();
+     setPersonalDetailValues(formValues);
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
     }
