@@ -120,7 +120,7 @@ export function Search() {
               <BsFilter className="ml-1 h-6 w-6" />
             </Button>
           </CollapsibleTrigger>
-          <Button className="py-6 text-sm" variant="secondary" size="sm">
+          <Button className="py-6 text-sm" variant="ghost" size="sm">
             Map <BsMap className="ml-1 h-6 w-6" />
           </Button>
         </div>
