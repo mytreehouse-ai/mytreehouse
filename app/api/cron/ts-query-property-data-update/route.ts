@@ -10,7 +10,7 @@ export async function GET() {
           lt.name as listing_type_name,
           ts.name as turnover_status_name,
           ct.name as city_name
-        from properties as p
+        from properties p
         inner join property_types pt on pt.property_type_id = p.property_type_id
         inner join listing_types lt on lt.listing_type_id = p.listing_type_id
         inner join turnover_status ts on ts.turnover_status_id = p.turnover_status_id
