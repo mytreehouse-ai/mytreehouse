@@ -87,6 +87,10 @@ export async function GET(req: NextRequest) {
 
     await sql.query("begin");
 
+    const city = await sql.query("select name from cities where city_id = $1", [
+      city_id,
+    ]);
+
     const closedTransactionForSaleAverageQuery = await sql.query(
       closedTransactionAverageTextQuery,
       [
@@ -254,8 +258,10 @@ export async function GET(req: NextRequest) {
           },
         },
         metadata: {
-          sqm,
-          year_built,
+          propertyType: "Condominium",
+          propertySize: sqm,
+          yearBuilt: year_built,
+          city: city.rowCount ? city.rows[0].name : null,
         },
       }),
     );
