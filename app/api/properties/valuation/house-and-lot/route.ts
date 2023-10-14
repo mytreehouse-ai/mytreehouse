@@ -16,7 +16,7 @@ export async function GET() {
   } catch (e) {
     await sql.query("rollback");
 
-    return new Response("Query error", {
+    return new Response("Neon Database Internal Server Error", {
       status: 500,
       statusText: "Internal Server Error",
     });
