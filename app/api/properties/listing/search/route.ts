@@ -170,7 +170,7 @@ export async function GET(req: Request) {
             queryParams.data?.text_search ? "rank" : "p.created_at"
           } desc 
           limit ${
-            queryParams.data?.page_limit ? queryParams.data.page_limit : 100
+            queryParams.data?.page_limit ? queryParams.data.page_limit : 30
           }
   `.replace(/\n\s*\n/g, "\n");
 
