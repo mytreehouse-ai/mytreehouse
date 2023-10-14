@@ -7,7 +7,7 @@ const HeroImageBanner = () => {
     <Image
       className="brightness-75 lg:rounded-2xl"
       loader={imageKitLoader}
-      src="mytreehouse/main_banner_by_dalle3.png"
+      src="mytreehouse/image_2_by_dalle3.png"
       alt="home_page_main_banner"
       sizes="(max-width: 768px) 100vw, 700px"
       priority={true}
