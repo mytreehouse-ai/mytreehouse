@@ -25,8 +25,8 @@ const ValuationResults: React.FC = () => {
         <SuccessResultImage />
       </div>
       <div>
-        <h1 className="w-full text-center text-base text-neutral-800">
-          Your property results
+        <h1 className="w-full text-center text-base font-bold text-neutral-800">
+          Your property valuation result
         </h1>
       </div>
       <div className="mt-4 space-y-4">
