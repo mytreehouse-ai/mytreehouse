@@ -47,7 +47,7 @@ const ValuationResults: React.FC = () => {
       </div>
 
       <Button
-        className="mt-24 w-full"
+        className="mt-4 w-full"
         type="submit"
         variant="outline"
         onClick={() => {
