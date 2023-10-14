@@ -5,9 +5,15 @@ import { fetchVercelEdgeConfig } from "@/lib/edge-config";
 import { z } from "zod";
 
 const CondominiumValuationSchema = z.object({
-  sqm: z.number().positive(),
+  sqm: z.preprocess(
+    (input) => parseInt(String(input), 10),
+    z.number().positive(),
+  ),
+  year_built: z.preprocess(
+    (input) => parseInt(String(input), 10),
+    z.number().positive(),
+  ),
   city_id: z.string().uuid(),
-  year_built: z.number().positive(),
 });
 
 export async function GET(req: NextRequest) {
@@ -35,7 +41,7 @@ export async function GET(req: NextRequest) {
       UNTAGGED_TRANSACTION_ID,
     } = await fetchVercelEdgeConfig();
 
-    const { sqm, city_id, year_built } = parsedQueryData.data;
+    const { sqm, year_built, city_id } = parsedQueryData.data;
 
     const closedTransaction = {
       average_property_price_for_sale: 0,
