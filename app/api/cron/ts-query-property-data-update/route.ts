@@ -43,7 +43,11 @@ export async function GET() {
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
-    return NextResponse.json({ message: "Ok", timestamp: Date.now() });
+    return NextResponse.json({
+      message: "Ok",
+      updatedRecords: properties.rows.map((property) => property.property_id),
+      timestamp: Date.now(),
+    });
   } catch (error: any) {
     return NextResponse.json(
       { message: "Neon Database Internal Server Error" },
