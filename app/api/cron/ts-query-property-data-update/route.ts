@@ -1,5 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { sql } from "@vercel/postgres";
+
+export const revalidate = 60;
 
 export async function GET() {
   try {
