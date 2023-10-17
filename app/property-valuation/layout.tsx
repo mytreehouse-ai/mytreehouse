@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const layout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
-    <main className="z-50 flex h-screen flex-col justify-between">
+    <main className="z-50 flex h-full flex-col justify-between">
       <Navbar />
       {children}
       <Footer />
