@@ -40,7 +40,7 @@ const Valuation: React.FC = () => {
     ] || null;
 
   return (
-    <Card className="relative w-full overflow-y-auto rounded-t-3xl md:rounded-xl">
+    <Card className="relative w-full overflow-y-auto rounded-xl md:rounded-xl">
       <div className="sticky left-0 top-0 z-10 flex h-20 w-full items-center justify-center bg-white px-6">
         <Progress
           value={
