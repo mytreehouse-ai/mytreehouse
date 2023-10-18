@@ -39,6 +39,8 @@ import {
   CollapsibleContent,
 } from "@/components/ui/collapsible";
 import { cities } from "@/static_data/cities";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
 
 const SearchSchema = z.object({
   text_search: z.string(),
@@ -243,7 +245,8 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   };
 
   return (
-    <div className="mx-auto mt-6 w-full">
+    <ScrollArea className="mx-auto mt-6 w-full h-96 md:h-auto">
+    <div >
       <Form {...additionalFiltersForm}>
         <form
           name="additionalFilters"
@@ -433,15 +436,16 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                 />
               </div>
             </div>
-            <div className="mx-auto flex w-1/2 items-end justify-center gap-x-2 pt-4">
-              <Button type="reset" variant="outline" onClick={onClearFilters}>
+            <div className="mx-auto flex flex-col w-full md:flex-row md:w-1/2 items-end justify-center gap-x-2 pt-4 gap-y-2 md:gap-y-0">
+              <Button type="reset" variant="outline" onClick={onClearFilters} className="w-full md:w-fit">
                 Clear
               </Button>
-              <Button type="submit">Submit filters</Button>
+              <Button type="submit" className="w-full md:w-fit">Submit filters</Button>
             </div>
           </div>
         </form>
       </Form>
     </div>
+    </ScrollArea>
   );
 };
