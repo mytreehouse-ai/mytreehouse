@@ -70,7 +70,7 @@ export function Search() {
 
   return (
     <Collapsible
-      className="w-full"
+      className="w-full relative"
       open={collapsibleOpen}
       onOpenChange={setCollapsibleOpen}
     >
@@ -211,7 +211,6 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   };
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
-    console.log("DATA", value);
 
     if (value?.location) {
       value.location = cities.find((ct) => ct.value === value.location)
@@ -251,7 +250,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
           onSubmit={additionalFiltersForm.handleSubmit(onFilterFormSubmit)}
         >
           <div className="space-y-4">
-            <div className="mx-auto flex w-5/6 items-end justify-center gap-x-2">
+            <div className="mx-auto flex flex-col gap-y-4 md:gap-y-0 md:flex-row w-5/6 items-end justify-center gap-x-2">
               <FormField
                 control={additionalFiltersForm.control}
                 name="location"
@@ -317,7 +316,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                 )}
               />
             </div>
-            <div className="mx-auto flex w-5/6 flex-row items-start justify-center gap-x-2">
+            <div className="mx-auto flex flex-col gap-y-4 md:gap-y-0 md:flex-row w-5/6 items-start justify-center gap-x-2">
               {shouldShowFields && (
                 <>
                   <FormField
