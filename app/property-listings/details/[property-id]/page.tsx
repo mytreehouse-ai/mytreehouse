@@ -180,7 +180,8 @@ const page: React.FC<pageProps> = async ({ params }) => {
                 <span className="text-sm text-gray-500 ">Listing URL</span>
               </div>
               <Link
-                href={data.listing_url}
+                //href={data?.listing_url}
+                href="www.example.com"
                 className="flex text-sm font-semibold underline"
               >
                 {data.listing_url}
