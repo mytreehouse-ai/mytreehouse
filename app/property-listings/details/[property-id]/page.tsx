@@ -51,11 +51,11 @@ const page: React.FC<pageProps> = async ({ params }) => {
       <PropertyImagesPlaceholder images={data.images} />
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold lg:w-full">
-          {data.listing_title}
+          {data.listing_title ? data.listing_title : "N/A"}
         </h1>
         <address className="inline-flex gap-x-1 font-semibold not-italic text-gray-800 ">
           <MapPin className="h-6 w-6" />
-          {data.address}
+          {data.address ? data.address : "N/A"}
         </address>
         <p className="text-2xl font-semibold">
           {formatToPhp(data.current_price)}
@@ -68,125 +68,142 @@ const page: React.FC<pageProps> = async ({ params }) => {
       </div>
 
       <div className="flex flex-col space-y-6 lg:flex-row">
-        <div>
+        <div className="lg:flex-grow">
           <h2 className="mb-2 font-semibold">Property details</h2>
           <section className="grid grid-cols-2 gap-6">
-            {data.property_type_name === "Vacant Lot" && (
-              <div>
-                <div className="inline-flex items-center gap-x-1">
-                  <Grid className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-500 ">Lot Area</span>
+            {data.property_type_name &&
+              data.property_type_name === "Vacant Lot" && (
+                <div>
+                  <div className="inline-flex items-center gap-x-1">
+                    <Grid className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm text-gray-500 ">Lot Area</span>
+                  </div>
+                  <p className="text-sm font-semibold"> {data.sqm} sqm</p>
                 </div>
-                <p className="text-sm font-semibold"> {data.sqm} sqm</p>
-              </div>
-            )}
+              )}
 
-            {data.property_type_name !== "Vacant Lot" && (
-              <div>
-                <div className="inline-flex items-center gap-x-1">
-                  <Grid className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-500 ">Floor area</span>
+            {data.property_type_name &&
+              data.property_type_name !== "Vacant Lot" && (
+                <div>
+                  <div className="inline-flex items-center gap-x-1">
+                    <Grid className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm text-gray-500 ">Floor area</span>
+                  </div>
+                  <p className="text-sm font-semibold">
+                    {" "}
+                    {data.floor_area} sqm
+                  </p>
                 </div>
-                <p className="text-sm font-semibold"> {data.floor_area} sqm</p>
-              </div>
-            )}
+              )}
 
-            {data.property_type_name !== "Vacant Lot" && (
-              <div>
-                <div className="inline-flex items-center gap-x-1">
-                  <BoxSelect className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-500 ">Lot area</span>
+            {data.property_type_name &&
+              data.property_type_name !== "Vacant Lot" && (
+                <div>
+                  <div className="inline-flex items-center gap-x-1">
+                    <BoxSelect className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm text-gray-500 ">Lot area</span>
+                  </div>
+                  <p className="text-sm font-semibold"> {data.lot_area} sqm</p>
                 </div>
-                <p className="text-sm font-semibold"> {data.lot_area} sqm</p>
-              </div>
-            )}
+              )}
 
-            {data.property_type_name !== "Vacant Lot" && (
+            {data.property_type_name &&
+              data.property_type_name !== "Vacant Lot" && (
+                <div>
+                  <div className="inline-flex items-center gap-x-1">
+                    <Bed className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm text-gray-500 ">Bedroom</span>
+                  </div>
+                  <p className="text-sm font-semibold">
+                    {" "}
+                    {data.bedroom} bedroom/s
+                  </p>
+                </div>
+              )}
+
+            {data.property_type_name &&
+              data.property_type_name !== "Vacant Lot" && (
+                <div>
+                  <div className="inline-flex items-center gap-x-1">
+                    <Bath className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm text-gray-500 ">Bathroom</span>
+                  </div>
+                  <p className="text-sm font-semibold">
+                    {" "}
+                    {data.bathroom} bathroom/s
+                  </p>
+                </div>
+              )}
+
+            {data.property_type_name &&
+              data.property_type_name !== "Vacant Lot" && (
+                <div>
+                  <div className="inline-flex items-center gap-x-1">
+                    <Replace className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm text-gray-500 ">
+                      Turn over status
+                    </span>
+                  </div>
+                  <p className="text-sm font-semibold">
+                    {" "}
+                    {data.turnover_status_name}
+                  </p>
+                </div>
+              )}
+
+            {data.property_type_name &&
+              data.property_type_name !== "Vacant Lot" && (
+                <div>
+                  <div className="inline-flex items-center gap-x-1">
+                    <CarFront className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm text-gray-500 ">Parking lot</span>
+                  </div>
+                  <p className="text-sm font-semibold">
+                    {" "}
+                    {data.parking_lot} parking lot/s
+                  </p>
+                </div>
+              )}
+            {data.property_type_name && (
               <div>
                 <div className="inline-flex items-center gap-x-1">
-                  <Bed className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-500 ">Bedroom</span>
+                  <Building2 className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm text-gray-500 ">Property type</span>
                 </div>
                 <p className="text-sm font-semibold">
                   {" "}
-                  {data.bedroom} bedroom/s
+                  {data.property_type_name}
                 </p>
               </div>
             )}
 
-            {data.property_type_name !== "Vacant Lot" && (
+            {data.listing_type_name && (
               <div>
                 <div className="inline-flex items-center gap-x-1">
-                  <Bath className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-500 ">Bathroom</span>
+                  <ClipboardList className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm text-gray-500 ">Listing type</span>
                 </div>
                 <p className="text-sm font-semibold">
                   {" "}
-                  {data.bathroom} bathroom/s
+                  {data.listing_type_name}
                 </p>
               </div>
             )}
 
-            {data.property_type_name !== "Vacant Lot" && (
-              <div>
+            {data.listing_url && (
+              <div className="col-span-2">
                 <div className="inline-flex items-center gap-x-1">
-                  <Replace className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-500 ">
-                    Turn over status
-                  </span>
+                  <LinkIcon className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm text-gray-500 ">Listing URL</span>
                 </div>
-                <p className="text-sm font-semibold">
-                  {" "}
-                  {data.turnover_status_name}
-                </p>
+                <Link
+                  href={data.listing_url}
+                  className="flex text-sm font-semibold underline"
+                >
+                  {data.listing_url}
+                </Link>
               </div>
             )}
-
-            {data.property_type_name !== "Vacant Lot" && (
-              <div>
-                <div className="inline-flex items-center gap-x-1">
-                  <CarFront className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-500 ">Parking lot</span>
-                </div>
-                <p className="text-sm font-semibold">
-                  {" "}
-                  {data.parking_lot} parking lot/s
-                </p>
-              </div>
-            )}
-
-            <div>
-              <div className="inline-flex items-center gap-x-1">
-                <Building2 className="h-4 w-4 text-gray-500" />
-                <span className="text-sm text-gray-500 ">Property type</span>
-              </div>
-              <p className="text-sm font-semibold">
-                {" "}
-                {data.property_type_name}
-              </p>
-            </div>
-
-            <div>
-              <div className="inline-flex items-center gap-x-1">
-                <ClipboardList className="h-4 w-4 text-gray-500" />
-                <span className="text-sm text-gray-500 ">Listing type</span>
-              </div>
-              <p className="text-sm font-semibold"> {data.listing_type_name}</p>
-            </div>
-
-            <div className="col-span-2">
-              <div className="inline-flex items-center gap-x-1">
-                <LinkIcon className="h-4 w-4 text-gray-500" />
-                <span className="text-sm text-gray-500 ">Listing URL</span>
-              </div>
-              <Link
-                //href={data?.listing_url}
-                href="www.example.com"
-                className="flex text-sm font-semibold underline"
-              >
-                {data.listing_url}
-              </Link>
-            </div>
           </section>
         </div>
         <ContactLessor />
@@ -208,7 +225,7 @@ const PropertyDetailsAccordion: React.FC<{ description: string }> = ({
           Click to know more about the property
         </AccordionTrigger>
         <AccordionContent>
-          <p>{description}</p>
+          <p>{description ? description : "N/A"}</p>
         </AccordionContent>
       </AccordionItem>
     </Accordion>
