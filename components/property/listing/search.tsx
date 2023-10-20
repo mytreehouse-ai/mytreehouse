@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/collapsible";
 import { cities } from "@/static_data/cities";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { MultiSlider } from "@/components/ui/multislider";
 
 
 const SearchSchema = z.object({
@@ -153,7 +154,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
       bathroom_count: z.string(),
       sqm_min: z.string(),
       sqm_max: z.string(),
-      max_price: z.string(),
+      max_price: z.array(z.number()),
     })
     .partial();
 
@@ -188,7 +189,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
         ? String(searchParams.get("sqm_max"))
         : "",
       max_price: searchParams.has("max_price")
-        ? String(searchParams.get("max_price"))
+        ? String(searchParams.get("max_price")).split(",").map(Number)
         : undefined,
     },
   });
@@ -417,13 +418,24 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Slider
+                              {/* <Slider
                                 defaultValue={[Number(value) ?? 0]}
                                 onValueChange={(values) => onChange(values[0])}
                                 min={0}
                                 max={999_999_999}
                                 step={1}
-                              />
+                              /> */}
+                             < MultiSlider
+                                  // defaultValue={[0, 24]}
+                                  max={999_999_999}
+                                  min={0}
+                                  step={1}
+                                  value={[0, 999_999_999]}
+                                  minStepsBetweenThumbs={555_555_555}
+                                  onValueChange={(values) => onChange(values[0])}
+                                  formatLabel={(value) => `${formatToPhp(value)}`}
+                                  withoutLabel
+                             />
                             </TooltipTrigger>
                             <TooltipContent>
                               <p>{formatToPhp(Number(value))}</p>

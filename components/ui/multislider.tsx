@@ -12,6 +12,7 @@ type SliderProps = {
   formatLabel?: (value: number) => string;
   value?: number[] | readonly number[];
   onValueChange?: (values: number[]) => void;
+  withoutLabel: boolean
 };
 
 const MultiSlider = React.forwardRef(
@@ -24,6 +25,7 @@ const MultiSlider = React.forwardRef(
       formatLabel,
       value,
       onValueChange,
+      withoutLabel,
       ...props
     }: SliderProps,
     ref
@@ -57,7 +59,8 @@ const MultiSlider = React.forwardRef(
         </SliderPrimitive.Track>
         {localValues.map((value, index) => (
           <React.Fragment key={index}>
-            <div
+            {!withoutLabel && (
+                     <div
               className="absolute text-center"
               style={{
                 left: `calc(${((value - min) / (max - min)) * 100}% + 0px)`,
@@ -68,6 +71,8 @@ const MultiSlider = React.forwardRef(
                 {formatLabel ? formatLabel(value) : value}
               </span>
             </div>
+            )}
+       
             <SliderPrimitive.Thumb className="block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50" />
           </React.Fragment>
         ))}
