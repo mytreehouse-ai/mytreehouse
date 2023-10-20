@@ -110,7 +110,7 @@ const ContactCard = () => {
                 <FormItem className="w-full">
                   <FormLabel>Message</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Leave us a message" {...field} />
+                    <Textarea placeholder="Leave us a message" {...field} className="resize-none" />
                   </FormControl>
                 </FormItem>
               )}
