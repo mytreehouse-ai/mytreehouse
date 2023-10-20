@@ -1,8 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { sql } from "@vercel/postgres";
 
-export const revalidate = 60;
-
 export async function GET() {
   try {
     const selectPropertiesTextQuery = `
@@ -18,7 +16,7 @@ export async function GET() {
         inner join turnover_status ts on ts.turnover_status_id = p.turnover_status_id
         inner join cities ct on ct.city_id = p.city_id
         where p.ts_query_improve = false
-        limit 10
+        limit 50
       `;
 
     const properties = await sql.query(selectPropertiesTextQuery);
@@ -41,8 +39,6 @@ export async function GET() {
         property.city_name,
         property.property_id,
       ]);
-
-      await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     return NextResponse.json({
