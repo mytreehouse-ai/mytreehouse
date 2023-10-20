@@ -1,27 +1,14 @@
-import { kv } from "@vercel/kv";
+import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { UNKNOWN_CITY } from "@/lib/constant";
 import { PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
+import { fetchVercelEdgeConfig } from "@/lib/edge-config";
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const UNTAGGED_TRANSACTION_ID: string | null = await kv.get(
-      "UNTAGGED_TRANSACTION_ID",
-    );
-
-    if (!UNTAGGED_TRANSACTION_ID) {
-      return new Response(
-        JSON.stringify({
-          message: "Config UNTAGGED_TRANSACTION_ID is empty in redis kv",
-        }),
-        {
-          status: 400,
-          statusText: "Bad request",
-        },
-      );
-    }
+    const { UNTAGGED_TRANSACTION_ID } = await fetchVercelEdgeConfig();
 
     const queryParams = PropertyListingSearchSchema.safeParse(
       Object.fromEntries(searchParams),
@@ -170,22 +157,17 @@ export async function GET(req: Request) {
             queryParams.data?.text_search ? "rank" : "p.created_at"
           } desc 
           limit ${
-            queryParams.data?.page_limit ? queryParams.data.page_limit : 100
+            queryParams.data?.page_limit ? queryParams.data.page_limit : 30
           }
   `.replace(/\n\s*\n/g, "\n");
 
     const properties = await sql.query(query);
 
-    return new Response(JSON.stringify(properties.rows));
+    return NextResponse.json(properties.rows);
   } catch (error: any) {
-    return new Response(
-      JSON.stringify({
-        message: error.message,
-      }),
-      {
-        status: 500,
-        statusText: "Internal Server Error",
-      },
+    return NextResponse.json(
+      { message: "Neon database internal server error" },
+      { status: 500 },
     );
   }
 }

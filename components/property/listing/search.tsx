@@ -39,6 +39,8 @@ import {
   CollapsibleContent,
 } from "@/components/ui/collapsible";
 import { cities } from "@/static_data/cities";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
 
 const SearchSchema = z.object({
   text_search: z.string(),
@@ -70,7 +72,7 @@ export function Search() {
 
   return (
     <Collapsible
-      className="w-full"
+      className="w-full relative"
       open={collapsibleOpen}
       onOpenChange={setCollapsibleOpen}
     >
@@ -211,7 +213,6 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   };
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
-    console.log("DATA", value);
 
     if (value?.location) {
       value.location = cities.find((ct) => ct.value === value.location)
@@ -244,14 +245,15 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   };
 
   return (
-    <div className="mx-auto mt-6 w-full">
+    <ScrollArea className="mx-auto mt-6 w-full h-96 md:h-auto">
+    <div >
       <Form {...additionalFiltersForm}>
         <form
           name="additionalFilters"
           onSubmit={additionalFiltersForm.handleSubmit(onFilterFormSubmit)}
         >
           <div className="space-y-4">
-            <div className="mx-auto flex w-5/6 items-end justify-center gap-x-2">
+            <div className="mx-auto flex flex-col gap-y-4 md:gap-y-0 md:flex-row w-5/6 items-end justify-center gap-x-2">
               <FormField
                 control={additionalFiltersForm.control}
                 name="location"
@@ -317,7 +319,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                 )}
               />
             </div>
-            <div className="mx-auto flex w-5/6 flex-row items-start justify-center gap-x-2">
+            <div className="mx-auto flex flex-col gap-y-4 md:gap-y-0 md:flex-row w-5/6 items-start justify-center gap-x-2">
               {shouldShowFields && (
                 <>
                   <FormField
@@ -434,15 +436,16 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                 />
               </div>
             </div>
-            <div className="mx-auto flex w-1/2 items-end justify-center gap-x-2 pt-4">
-              <Button type="reset" variant="outline" onClick={onClearFilters}>
+            <div className="mx-auto flex flex-col w-full md:flex-row md:w-1/2 items-end justify-center gap-x-2 pt-4 gap-y-2 md:gap-y-0">
+              <Button type="reset" variant="outline" onClick={onClearFilters} className="w-full md:w-fit">
                 Clear
               </Button>
-              <Button type="submit">Submit filters</Button>
+              <Button type="submit" className="w-full md:w-fit">Submit filters</Button>
             </div>
           </div>
         </form>
       </Form>
     </div>
+    </ScrollArea>
   );
 };

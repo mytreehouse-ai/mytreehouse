@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { z } from "zod";
 
@@ -63,84 +64,50 @@ export async function POST(req: Request) {
     const images = parsed.data.images ?? [];
     const amenities = parsed.data.amenities ?? [];
 
-    const insert = await sql`insert into properties (
-       property_id,
-       listing_title,
-       listing_url,
-       property_type_id,
-       listing_type_id,
-       property_status_id,
-       turnover_status_id,
-       current_price,
-       floor_area,
-       lot_area,
-       sqm,
-       bedroom,
-       bathroom,
-       parking_lot,
-       is_corner_lot,
-       studio_type,
-       building_name,
-       year_built,
-       city_id,
-       address,
-       is_active,
-       is_cbd,
-       amenities,
-       images,
-       description,
-       longitude,
-       latitude,
-       lease_end,
-       created_at
-    ) values (
-      ${parsed.data.property_id},
-      ${parsed.data.listing_title},
-      ${parsed.data.listing_url},
-      ${parsed.data.property_type_id},
-      ${parsed.data.listing_type_id},
-      ${parsed.data.property_status_id},
-      ${parsed.data.turnover_status_id},
-      ${parsed.data.current_price},
-      ${parsed.data.floor_area},
-      ${parsed.data.lot_area},
-      ${parsed.data.sqm},
-      ${parsed.data.bedroom},
-      ${parsed.data.bathroom},
-      ${parsed.data.parking_lot},
-      ${parsed.data.is_corner_lot},
-      ${parsed.data.studio_type},
-      ${parsed.data.building_name},
-      ${parsed.data.year_built},
-      ${parsed.data.city_id},
-      ${parsed.data.address},
-      ${parsed.data.is_active},
-      ${parsed.data.is_cbd},
-      ${JSON.stringify(amenities)},
-      ${JSON.stringify(images)},
-      ${parsed.data.description},
-      ${parsed.data.longitude},
-      ${parsed.data.latitude},
-      ${parsed.data.lease_end},
-      ${parsed.data.created_at}
-    ) on conflict(property_id) do nothing`;
+    const insertPropertyTextQuery = `insert into properties (property_id, listing_title, listing_url, property_type_id, listing_type_id, property_status_id turnover_status_id, current_price, floor_area, lot_area, sqm, bedroom, bathroom, parking_lot, is_corner_lot, studio_type, building_name, year_built, city_id,
+    address, is_active, is_cbd, amenities, images, description, longitude, latitude, lease_end, created_at) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
+    $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29) on conflict(property_id) do nothing`;
 
-    return new Response(
-      JSON.stringify({
-        message: "Ok",
-        inserted: insert.rowCount,
-      }),
-    );
+    const insertPropertyQuery = await sql.query(insertPropertyTextQuery, [
+      parsed.data.property_id,
+      parsed.data.listing_title,
+      parsed.data.listing_url,
+      parsed.data.property_type_id,
+      parsed.data.listing_type_id,
+      parsed.data.property_status_id,
+      parsed.data.turnover_status_id,
+      parsed.data.current_price,
+      parsed.data.floor_area,
+      parsed.data.lot_area,
+      parsed.data.sqm,
+      parsed.data.bedroom,
+      parsed.data.bathroom,
+      parsed.data.parking_lot,
+      parsed.data.is_corner_lot,
+      parsed.data.studio_type,
+      parsed.data.building_name,
+      parsed.data.year_built,
+      parsed.data.city_id,
+      parsed.data.address,
+      parsed.data.is_active,
+      parsed.data.is_cbd,
+      JSON.stringify(amenities),
+      JSON.stringify(images),
+      parsed.data.description,
+      parsed.data.longitude,
+      parsed.data.latitude,
+      parsed.data.lease_end,
+      parsed.data.created_at,
+    ]);
+
+    return NextResponse.json({
+      message: "Ok",
+      inserted: insertPropertyQuery.rowCount,
+    });
   } catch (error: any) {
-    return new Response(
-      JSON.stringify({
-        message: error.message,
-        inserted: 0,
-      }),
-      {
-        status: 500,
-        statusText: "Internal Server Error",
-      },
+    return NextResponse.json(
+      { message: "Neon database internal server error" },
+      { status: 500 },
     );
   }
 }

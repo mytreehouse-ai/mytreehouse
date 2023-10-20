@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 
 export async function GET() {
@@ -12,11 +13,10 @@ export async function GET() {
 
     await sql.query("commit");
 
-    return new Response(JSON.stringify(foo.rows));
+    return NextResponse.json(foo.rows);
   } catch (e) {
     await sql.query("rollback");
-
-    return new Response("Query error", {
+    return new Response("Neon Database Internal Server Error", {
       status: 500,
       statusText: "Internal Server Error",
     });

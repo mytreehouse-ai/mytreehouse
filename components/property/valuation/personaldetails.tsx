@@ -15,24 +15,37 @@ import ValuationStepper from "@/hooks/useStepperStore";
 import { personalDetailsFormSchema } from ".";
 import { Checkbox } from "@/components/ui/checkbox";
 import useValuationFormStore from "@/hooks/useValuationFormStore";
+import { useGetValuationResultHook } from "@/hooks/useGetValuationResultHook";
 
 const PersonalDetails: React.FC = () => {
   const { currentStepIndex, setCurrentStepIndex, steps } = ValuationStepper();
-  const { propertyDetailValues, setPersonalDetailValues } =
-    useValuationFormStore();
+  const {
+    personalDetailValues,
+    propertyDetailValues,
+    setPersonalDetailValues,
+  } = useValuationFormStore();
+
+  useGetValuationResultHook({
+    sqm: propertyDetailValues.sqm,
+    yearBuilt: parseInt(propertyDetailValues.yearBuilt),
+    location: propertyDetailValues.location,
+    propertyType: propertyDetailValues.propertyType,
+  });
 
   const form = useForm<z.infer<typeof personalDetailsFormSchema>>({
     resolver: zodResolver(personalDetailsFormSchema),
+    values: personalDetailValues,
   });
 
-  const onSubmit = (values: z.infer<typeof personalDetailsFormSchema>) => {
-    setPersonalDetailValues(values);
+  const onSubmit = () => {
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
 
   const goBack = () => {
+    const formValues = form.getValues();
+    setPersonalDetailValues(formValues);
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
     }
@@ -89,6 +102,8 @@ const PersonalDetails: React.FC = () => {
               <FormLabel>Phone number</FormLabel>
               <FormControl>
                 <Input
+                  type="number"
+                  className="remove-arrow"
                   placeholder="Type your phone number here"
                   {...field}
                   value={field.value ?? ""}
@@ -114,16 +129,26 @@ const PersonalDetails: React.FC = () => {
           )}
         />
 
-        <div className="flex space-x-2">
-          <Checkbox id="termsAndConditions" />
-          <label
-            htmlFor="termsAndConditions"
-            className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Using this valuation tool, I agree to mytree.house terms and
-            conditions
-          </label>
-        </div>
+        <FormField
+          control={form.control}
+          name="termsAndConditions"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <div className="flex space-x-2">
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={(e) => field.onChange(e)}
+                  />
+                  <label className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Using this valuation tool, I agree to mytree.house terms and
+                    conditions
+                  </label>
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         <div className="flex space-x-2">
           <Checkbox id="offers" />

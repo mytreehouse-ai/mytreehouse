@@ -44,7 +44,7 @@ const ContactCard = () => {
   };
 
   return (
-    <Card className="relative w-full overflow-y-auto rounded-t-3xl md:rounded-xl">
+    <Card className="relative w-full overflow-y-auto rounded-xl md:rounded-xl">
       <CardContent>
         <Form {...form}>
           <form
@@ -110,7 +110,7 @@ const ContactCard = () => {
                 <FormItem className="w-full">
                   <FormLabel>Message</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Leave us a message" {...field} />
+                    <Textarea placeholder="Leave us a message" {...field} className="resize-none" />
                   </FormControl>
                 </FormItem>
               )}

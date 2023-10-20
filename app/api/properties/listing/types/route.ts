@@ -1,10 +1,18 @@
+import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 
 export async function GET() {
-  const query = `select lt.listing_type_id as value, 
+  try {
+    const query = `select lt.listing_type_id as value, 
             name as label, url_value from listing_types lt`;
 
-  const listing_types = await sql.query(query);
+    const listing_types = await sql.query(query);
 
-  return new Response(JSON.stringify(listing_types.rows));
+    return NextResponse.json(listing_types.rows);
+  } catch (error: any) {
+    return NextResponse.json(
+      { message: "Neon database internal server error" },
+      { status: 500 },
+    );
+  }
 }

@@ -28,7 +28,7 @@ import { env } from "@/lib/env.mjs";
 import { formatToPhp } from "@/lib/utils";
 import { Property } from "@/interface/property";
 import { Separator } from "@/components/ui/separator";
-import PropertyContactCard from "@/components/property/contact/propertyContactCard";
+import PropertyContactCard from "@/components/property/contact/propertycontactcard";
 import PropertyImagesPlaceholder from "@/components/property/listing/properties/details/propertyimagesplaceholder";
 
 interface pageProps {

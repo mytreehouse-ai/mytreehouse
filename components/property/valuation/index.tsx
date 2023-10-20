@@ -16,7 +16,7 @@ const componentsMap = {
 export const propertyValuationFormSchema = z.object({
   propertyType: z.string().nonempty(),
   address: z.string().nonempty(),
-  location: z.string().nonempty(),
+  location: z.string().uuid(),
   sqm: z.preprocess((val) => Number(val), z.number().positive()),
   yearBuilt: z.string().nonempty(),
   whenAreyouLookingToSell: z.string().nonempty(),
@@ -27,7 +27,7 @@ export const personalDetailsFormSchema = z.object({
   firstName: z.string().nonempty(),
   phoneNumber: z.string().nonempty(),
   emailAddress: z.string().email().nonempty(),
-  termsAndConditions: z.boolean().optional(),
+  termsAndConditions: z.boolean().refine((val) => val === true),
   offers: z.boolean().optional(),
 });
 
@@ -40,7 +40,7 @@ const Valuation: React.FC = () => {
     ] || null;
 
   return (
-    <Card className="relative w-full overflow-y-auto rounded-t-3xl md:rounded-xl">
+    <Card className="relative w-full overflow-y-auto rounded-xl md:rounded-xl">
       <div className="sticky left-0 top-0 z-10 flex h-20 w-full items-center justify-center bg-white px-6">
         <Progress
           value={
