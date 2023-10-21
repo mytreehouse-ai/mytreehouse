@@ -32,9 +32,9 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@sentry/nextjs": "^7.74.1",
     "@t3-oss/env-nextjs": "^0.7.1",
-    "@tanstack/react-query": "^4.35.3",
-    "@tanstack/react-query-devtools": "^4.36.1",
-    "@uidotdev/usehooks": "^2.3.1",
+    "@tanstack/react-query": "^5.0.0",
+    "@tanstack/react-query-devtools": "^5.0.1",
+    "@uidotdev/usehooks": "^2.4.0",
     "@vercel/analytics": "^1.0.2",
     "@vercel/edge-config": "^0.4.1",
     "@vercel/kv": "^0.2.3",
@@ -56,7 +56,7 @@
     "zustand": "^4.4.3"
   },
   "devDependencies": {
-    "@tanstack/eslint-plugin-query": "^4.34.1",
+    "@tanstack/eslint-plugin-query": "^5.0.0",
     "@types/node": "^20.6.2",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
