@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { BsFilter } from "react-icons-all-files/bs/BsFilter";
 import { BsMap } from "react-icons-all-files/bs/BsMap";
 import { cn, createSearchParams, formatToPhp } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   Select,
@@ -49,6 +49,7 @@ const SearchSchema = z.object({
 
 export function Search() {
   const searchParams = useSearchParams();
+  const pathName = usePathname()
   const router = useRouter();
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
 
@@ -60,6 +61,19 @@ export function Search() {
         : "",
     },
   });
+
+    const handleMapButtonClick = () => {
+    if(searchParams.has('map-view')) {
+      router.replace(pathName,{
+        scroll: false,
+      })
+    } else {
+    router.replace(pathName + `?map-view`,{
+      scroll: false,
+    })
+    }
+
+  };
 
   const onSubmit = (data: z.infer<typeof SearchSchema>) => {
   
@@ -124,7 +138,7 @@ export function Search() {
               <BsFilter className="ml-1 h-6 w-6" />
             </Button>
           </CollapsibleTrigger>
-          <Button className="py-6 text-sm" variant="ghost" size="sm">
+          <Button className="py-6 text-sm" variant="ghost" size="sm" onClick={handleMapButtonClick} >
             Map <BsMap className="ml-1 h-6 w-6" />
           </Button>
         </div>

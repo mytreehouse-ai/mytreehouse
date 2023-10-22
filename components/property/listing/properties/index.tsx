@@ -7,6 +7,8 @@ import Card from "../../card";
 import { listingTypes } from "@/static_data/listing-types";
 import { cities } from "@/static_data/cities";
 import { propertyTypes } from "@/static_data/property-types";
+import MapboxMultiPin from "@/components/map/MapboxMultiPin";
+import { cn } from "@/lib/utils";
 
 const Properties: React.FC = () => {
   const searchParams = useSearchParams();
@@ -50,10 +52,19 @@ const Properties: React.FC = () => {
   if (isLoading) return <PropertyCardSkeletonLoader />;
 
   return (
-    // <div className="mx-5 mb-10 mt-40 sm:mt-60">
-    <div className="mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 xl:mt-40">
+
+    <div className="relative mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 xl:mt-40">
       <Grid>
+        <div className={cn(searchParams.has("map-view") ?  "col-span-2 grid grid-cols-3 gap-6 h-screen overflow-y-auto" : "col-span-4 grid grid-cols-4 gap-x-6 overflow-y-auto gap-y-8")}>
         {data?.map((pt) => <Card key={pt.property_id} property={pt} />)}
+        </div>
+
+        {searchParams.has("map-view") && (
+            <div className="w-full h-screen col-span-2">
+              {data && <MapboxMultiPin propertyListings={data} />} 
+            </div>
+        ) }
+
       </Grid>
     </div>
   );
