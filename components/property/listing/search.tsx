@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { BsFilter } from "react-icons-all-files/bs/BsFilter";
 import { BsMap } from "react-icons-all-files/bs/BsMap";
 import { cn, createSearchParams, formatToPhp } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   Select,
@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/collapsible";
 import { cities } from "@/static_data/cities";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { MultiSlider } from "@/components/ui/multislider";
 
 
 const SearchSchema = z.object({
@@ -48,6 +49,7 @@ const SearchSchema = z.object({
 
 export function Search() {
   const searchParams = useSearchParams();
+  const pathName = usePathname()
   const router = useRouter();
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
 
@@ -60,7 +62,21 @@ export function Search() {
     },
   });
 
+    const handleMapButtonClick = () => {
+    if(searchParams.has('map-view')) {
+      router.replace(pathName,{
+        scroll: false,
+      })
+    } else {
+    router.replace(pathName + `?map-view`,{
+      scroll: false,
+    })
+    }
+
+  };
+
   const onSubmit = (data: z.infer<typeof SearchSchema>) => {
+  
     const searchParams = createSearchParams(data);
 
     if (searchParams && searchParams.size) {
@@ -122,7 +138,7 @@ export function Search() {
               <BsFilter className="ml-1 h-6 w-6" />
             </Button>
           </CollapsibleTrigger>
-          <Button className="py-6 text-sm" variant="ghost" size="sm">
+          <Button className="py-6 text-sm" variant="ghost" size="sm" onClick={handleMapButtonClick} >
             Map <BsMap className="ml-1 h-6 w-6" />
           </Button>
         </div>
@@ -153,7 +169,8 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
       bathroom_count: z.string(),
       sqm_min: z.string(),
       sqm_max: z.string(),
-      max_price: z.string(),
+      max_price: z.number(),
+      min_price: z.number(),
     })
     .partial();
 
@@ -188,8 +205,11 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
         ? String(searchParams.get("sqm_max"))
         : "",
       max_price: searchParams.has("max_price")
-        ? String(searchParams.get("max_price"))
-        : undefined,
+        ? Number(searchParams.get("max_price"))
+        : 999_999_999,
+      // max_price: searchParams.has("max_price")
+      //   ? String(searchParams.get("max_price")).split(",").map(Number)
+      //   : undefined,
     },
   });
 
@@ -213,6 +233,8 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   };
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
+
+    console.log('test',value)
 
     if (value?.location) {
       value.location = cities.find((ct) => ct.value === value.location)
@@ -403,12 +425,26 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
               />
               <div className="w-full space-y-4">
                 <label
-                  htmlFor="maximumPrice"
+                  htmlFor="max_price"
                   className="text-sm font-medium leading-none text-neutral-500 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Maximum price
                 </label>
-                <FormField
+                 < MultiSlider
+                                  max={999_999_999}
+                                  min={0}
+                                  step={1}
+                                  value={[0, 999_999_999]}
+                                  minStepsBetweenThumbs={555_555_555}
+                                  onValueChange={(values) => {
+                                    // console.log(values)
+                                    additionalFiltersForm.setValue('min_price',values[0])
+                                    additionalFiltersForm.setValue('max_price',values[1])}
+                                  }
+                                  formatLabel={(value) => `${formatToPhp(value)}`}
+                                  withoutLabel
+                             />
+                {/* <FormField
                   control={additionalFiltersForm.control}
                   name="max_price"
                   render={({ field: { value, onChange } }) => (
@@ -417,13 +453,17 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Slider
-                                defaultValue={[Number(value) ?? 0]}
-                                onValueChange={(values) => onChange(values[0])}
-                                min={0}
-                                max={999_999_999}
-                                step={1}
-                              />
+                             < MultiSlider
+                                  max={999_999_999}
+                                  min={0}
+                                  step={1}
+                                  value={[0, 999_999_999]}
+                                  minStepsBetweenThumbs={555_555_555}
+                                  onValueChange={(values) => {
+                                    onChange(values)}}
+                                  formatLabel={(value) => `${formatToPhp(value)}`}
+                                  withoutLabel
+                             />
                             </TooltipTrigger>
                             <TooltipContent>
                               <p>{formatToPhp(Number(value))}</p>
@@ -433,7 +473,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                       </FormControl>
                     </FormItem>
                   )}
-                />
+                /> */}
               </div>
             </div>
             <div className="mx-auto flex flex-col w-full md:flex-row md:w-1/2 items-end justify-center gap-x-2 pt-4 gap-y-2 md:gap-y-0">
