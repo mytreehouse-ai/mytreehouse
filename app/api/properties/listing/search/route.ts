@@ -54,7 +54,7 @@ export async function GET(req: Request) {
             ${
               queryParams.data?.text_search
                 ? `
-            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || lt.name || ' ' || pt.name || ' ' || coalesce(p.address, '') || ' ' || ct.name || ' ' || coalesce(p.description, '')), to_tsquery('english', '${queryParams.data.text_search.replace(
+            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || p.ts_query_listing_type_name || ' ' || p.ts_query_property_type_name || ' ' || coalesce(p.address, '') || ' ' || p.ts_query_city_name || ' ' || coalesce(p.description, '')), to_tsquery('english', '${queryParams.data.text_search.replace(
               /\s+/g,
               " | ",
             )}')) as rank
@@ -76,7 +76,7 @@ export async function GET(req: Request) {
           ${
             queryParams.data?.text_search
               ? `
-          and to_tsvector('english', p.listing_title || ' ' || lt.name || ' ' || pt.name || ' ' || coalesce(p.address, '') || ' ' || ct.name || ' ' || coalesce(p.description, '')) @@ to_tsquery('english', '${queryParams.data.text_search.replace(
+          and to_tsvector('english', p.listing_title || ' ' || p.ts_query_listing_type_name || ' ' || p.ts_query_property_type_name || ' ' || coalesce(p.address, '') || ' ' || p.ts_query_city_name || ' ' || coalesce(p.description, '')) @@ to_tsquery('english', '${queryParams.data.text_search.replace(
             /\s+/g,
             " | ",
           )}')
