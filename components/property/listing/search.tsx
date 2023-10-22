@@ -62,6 +62,7 @@ export function Search() {
   });
 
   const onSubmit = (data: z.infer<typeof SearchSchema>) => {
+  
     const searchParams = createSearchParams(data);
 
     if (searchParams && searchParams.size) {
@@ -154,7 +155,8 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
       bathroom_count: z.string(),
       sqm_min: z.string(),
       sqm_max: z.string(),
-      max_price: z.array(z.number()),
+      max_price: z.number(),
+      min_price: z.number(),
     })
     .partial();
 
@@ -189,8 +191,11 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
         ? String(searchParams.get("sqm_max"))
         : "",
       max_price: searchParams.has("max_price")
-        ? String(searchParams.get("max_price")).split(",").map(Number)
-        : undefined,
+        ? Number(searchParams.get("max_price"))
+        : 999_999_999,
+      // max_price: searchParams.has("max_price")
+      //   ? String(searchParams.get("max_price")).split(",").map(Number)
+      //   : undefined,
     },
   });
 
@@ -214,6 +219,8 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   };
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
+
+    console.log('test',value)
 
     if (value?.location) {
       value.location = cities.find((ct) => ct.value === value.location)
@@ -404,12 +411,26 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
               />
               <div className="w-full space-y-4">
                 <label
-                  htmlFor="maximumPrice"
+                  htmlFor="max_price"
                   className="text-sm font-medium leading-none text-neutral-500 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Maximum price
                 </label>
-                <FormField
+                 < MultiSlider
+                                  max={999_999_999}
+                                  min={0}
+                                  step={1}
+                                  value={[0, 999_999_999]}
+                                  minStepsBetweenThumbs={555_555_555}
+                                  onValueChange={(values) => {
+                                    // console.log(values)
+                                    additionalFiltersForm.setValue('min_price',values[0])
+                                    additionalFiltersForm.setValue('max_price',values[1])}
+                                  }
+                                  formatLabel={(value) => `${formatToPhp(value)}`}
+                                  withoutLabel
+                             />
+                {/* <FormField
                   control={additionalFiltersForm.control}
                   name="max_price"
                   render={({ field: { value, onChange } }) => (
@@ -418,21 +439,14 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              {/* <Slider
-                                defaultValue={[Number(value) ?? 0]}
-                                onValueChange={(values) => onChange(values[0])}
-                                min={0}
-                                max={999_999_999}
-                                step={1}
-                              /> */}
                              < MultiSlider
-                                  // defaultValue={[0, 24]}
                                   max={999_999_999}
                                   min={0}
                                   step={1}
                                   value={[0, 999_999_999]}
                                   minStepsBetweenThumbs={555_555_555}
-                                  onValueChange={(values) => onChange(values[0])}
+                                  onValueChange={(values) => {
+                                    onChange(values)}}
                                   formatLabel={(value) => `${formatToPhp(value)}`}
                                   withoutLabel
                              />
@@ -445,7 +459,7 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                       </FormControl>
                     </FormItem>
                   )}
-                />
+                /> */}
               </div>
             </div>
             <div className="mx-auto flex flex-col w-full md:flex-row md:w-1/2 items-end justify-center gap-x-2 pt-4 gap-y-2 md:gap-y-0">
