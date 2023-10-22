@@ -51,11 +51,11 @@ const page: React.FC<pageProps> = async ({ params }) => {
       <PropertyImagesPlaceholder images={data.images} />
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold lg:w-full">
-          {data.listing_title ? data.listing_title : "N/A"}
+          {data.listing_title}
         </h1>
         <address className="inline-flex gap-x-1 font-semibold not-italic text-gray-800 ">
           <MapPin className="h-6 w-6" />
-          {data.address ? data.address : "N/A"}
+          {data.address}
         </address>
         <p className="text-2xl font-semibold">
           {formatToPhp(data.current_price)}
@@ -89,10 +89,7 @@ const page: React.FC<pageProps> = async ({ params }) => {
                     <Grid className="h-4 w-4 text-gray-500" />
                     <span className="text-sm text-gray-500 ">Floor area</span>
                   </div>
-                  <p className="text-sm font-semibold">
-                    {" "}
-                    {data.floor_area} sqm
-                  </p>
+                  <p className="text-sm font-semibold">{data.floor_area} sqm</p>
                 </div>
               )}
 
@@ -115,7 +112,6 @@ const page: React.FC<pageProps> = async ({ params }) => {
                     <span className="text-sm text-gray-500 ">Bedroom</span>
                   </div>
                   <p className="text-sm font-semibold">
-                    {" "}
                     {data.bedroom} bedroom/s
                   </p>
                 </div>
@@ -129,7 +125,6 @@ const page: React.FC<pageProps> = async ({ params }) => {
                     <span className="text-sm text-gray-500 ">Bathroom</span>
                   </div>
                   <p className="text-sm font-semibold">
-                    {" "}
                     {data.bathroom} bathroom/s
                   </p>
                 </div>
@@ -145,7 +140,6 @@ const page: React.FC<pageProps> = async ({ params }) => {
                     </span>
                   </div>
                   <p className="text-sm font-semibold">
-                    {" "}
                     {data.turnover_status_name}
                   </p>
                 </div>
@@ -159,7 +153,6 @@ const page: React.FC<pageProps> = async ({ params }) => {
                     <span className="text-sm text-gray-500 ">Parking lot</span>
                   </div>
                   <p className="text-sm font-semibold">
-                    {" "}
                     {data.parking_lot} parking lot/s
                   </p>
                 </div>
@@ -171,7 +164,6 @@ const page: React.FC<pageProps> = async ({ params }) => {
                   <span className="text-sm text-gray-500 ">Property type</span>
                 </div>
                 <p className="text-sm font-semibold">
-                  {" "}
                   {data.property_type_name}
                 </p>
               </div>
@@ -184,7 +176,6 @@ const page: React.FC<pageProps> = async ({ params }) => {
                   <span className="text-sm text-gray-500 ">Listing type</span>
                 </div>
                 <p className="text-sm font-semibold">
-                  {" "}
                   {data.listing_type_name}
                 </p>
               </div>
