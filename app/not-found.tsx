@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Component() {
   return (
@@ -11,9 +12,11 @@ export default function Component() {
         moved or deleted.`}
       </p>
       <div className="mt-6">
-        <Button className="rounded-md px-4 py-2 text-white">
-          Go Back Home
-        </Button>
+        <Link href="/">
+          <Button className="rounded-md px-4 py-2 text-white">
+            Go Back Home
+          </Button>
+        </Link>
       </div>
     </main>
   );
