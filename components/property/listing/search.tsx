@@ -42,7 +42,6 @@ import { cities } from "@/static_data/cities";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MultiSlider } from "@/components/ui/multislider";
 
-
 const SearchSchema = z.object({
   text_search: z.string(),
 });
@@ -63,12 +62,13 @@ export function Search() {
   });
 
     const handleMapButtonClick = () => {
-    if(searchParams.has('map-view')) {
-      router.replace(pathName,{
+    if(searchParams.get('map-view') === 'true') {
+      // console.log('mapview = true',pathName + `?map-view=false`)
+      router.replace(pathName + `?map-view=false`,{
         scroll: false,
       })
     } else {
-    router.replace(pathName + `?map-view`,{
+    router.replace(pathName + `?map-view=true`,{
       scroll: false,
     })
     }
@@ -234,7 +234,6 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
 
-    console.log('test',value)
 
     if (value?.location) {
       value.location = cities.find((ct) => ct.value === value.location)
@@ -253,11 +252,18 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
       )?.urlValue;
     }
 
-    const filterSearchParams = createSearchParams(value);
+    const urlValue = searchParams.has('map-view') ? {
+      ...value,
+      "map-view": searchParams.get('map-view') 
+    } : value
+
+    const filterSearchParams = createSearchParams(urlValue);
+
+    console.log("FILTER SEARCH",filterSearchParams?.toString())
 
     if (filterSearchParams && filterSearchParams.size) {
       router.replace(
-        window.location.pathname + "?" + filterSearchParams.toString(),
+        window.location.pathname + "?" + filterSearchParams.toString() ,
         {
           scroll: false,
         },
