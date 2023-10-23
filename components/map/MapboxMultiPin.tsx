@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useQuery } from "@tanstack/react-query";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useMemo, useState } from "react";
@@ -10,21 +10,20 @@ import Map, {
 } from "react-map-gl";
 import { Property } from "@/interface/property";
 import { formatToPhp } from "@/lib/utils";
-
+import { env } from "@/lib/env.mjs";
 
 interface MapboxMultiPinProps {
-    propertyListings: Property[];
+  propertyListings: Property[];
 }
 
-const MapboxMultiPin = ({propertyListings}:MapboxMultiPinProps) => {
-
+const MapboxMultiPin = ({ propertyListings }: MapboxMultiPinProps) => {
   // TODO: IMRPOVE IMPROVE IMPROVE!
-//   const { isLoading, data: propertyListings } = useGetPropertyListingsHook({
-//     city: router.query.searchParams?.[0] || "",
-//     listing_type: router.query.searchParams?.[1] || "",
-//     property_type: router.query.searchParams?.[2] || "",
-//     page_limit: 100,
-//   });
+  //   const { isLoading, data: propertyListings } = useGetPropertyListingsHook({
+  //     city: router.query.searchParams?.[0] || "",
+  //     listing_type: router.query.searchParams?.[1] || "",
+  //     property_type: router.query.searchParams?.[2] || "",
+  //     page_limit: 100,
+  //   });
 
   const [viewState, setViewState] = useState({
     longitude: Number(propertyListings?.[0]?.longitude || "121.02354"),
@@ -46,7 +45,7 @@ const MapboxMultiPin = ({propertyListings}:MapboxMultiPinProps) => {
 
   const { data: clickedProperty } = useQuery({
     queryKey: ["property_id", popUpLocation.property_id],
-    queryFn: () => console.log('test'),
+    queryFn: () => console.log("test"),
     enabled: popUpLocation.property_id !== "",
   });
 
@@ -79,9 +78,9 @@ const MapboxMultiPin = ({propertyListings}:MapboxMultiPinProps) => {
     [propertyListings],
   );
 
-//   if (isLoading) {
-//     return null;
-//   }
+  //   if (isLoading) {
+  //     return null;
+  //   }
 
   return (
     <Map
@@ -93,7 +92,7 @@ const MapboxMultiPin = ({propertyListings}:MapboxMultiPinProps) => {
       }}
       {...viewState}
       onMove={(nextViewState) => setViewState(nextViewState.viewState)}
-      mapboxAccessToken={"pk.eyJ1IjoiY2FzdWxpdCIsImEiOiJjbGhpaG95b24wN3piM2RwYmNsejBodGIwIn0.s-EaLYosGWCP_yuWppR_wQ"}
+      mapboxAccessToken={env.NEXT_PUBLIC_MAPBOX_API_KEY}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       attributionControl={false}
     >
@@ -102,7 +101,6 @@ const MapboxMultiPin = ({propertyListings}:MapboxMultiPinProps) => {
         <ScaleControl position="bottom-right" />
         {pins}
       </>
-
 
       {propertyListings?.map((property) => {
         if (!property.longitude && !property.latitude) {
