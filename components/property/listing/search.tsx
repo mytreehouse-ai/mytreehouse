@@ -42,7 +42,6 @@ import { cities } from "@/static_data/cities";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MultiSlider } from "@/components/ui/multislider";
 
-
 const SearchSchema = z.object({
   text_search: z.string(),
 });
@@ -63,16 +62,24 @@ export function Search() {
   });
 
     const handleMapButtonClick = () => {
-    if(searchParams.has('map-view')) {
-      router.replace(pathName,{
-        scroll: false,
-      })
-    } else {
-    router.replace(pathName + `?map-view`,{
-      scroll: false,
-    })
-    }
 
+const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Record<string, string>, [key, value]) => {
+  acc[key] = value;
+  return acc;
+}, {});
+
+    const newUrlValue = searchParams.get('map-view') === 'true' ? {...searchParamsObject, 'map-view': 'false'} : {...searchParamsObject, 'map-view': 'true'}
+
+    const newSearchParams = createSearchParams(newUrlValue);
+
+    if(newSearchParams){
+      router.replace(
+        window.location.pathname + "?" + newSearchParams.toString() ,
+        {
+          scroll: false,
+        },
+      );
+    }
   };
 
   const onSubmit = (data: z.infer<typeof SearchSchema>) => {
@@ -234,7 +241,6 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
 
-    console.log('test',value)
 
     if (value?.location) {
       value.location = cities.find((ct) => ct.value === value.location)
@@ -253,11 +259,16 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
       )?.urlValue;
     }
 
-    const filterSearchParams = createSearchParams(value);
+    const urlValue = searchParams.has('map-view') ? {
+      ...value,
+      "map-view": searchParams.get('map-view') 
+    } : value
+
+    const filterSearchParams = createSearchParams(urlValue);
 
     if (filterSearchParams && filterSearchParams.size) {
       router.replace(
-        window.location.pathname + "?" + filterSearchParams.toString(),
+        window.location.pathname + "?" + filterSearchParams.toString() ,
         {
           scroll: false,
         },

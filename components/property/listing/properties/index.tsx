@@ -54,21 +54,14 @@ const Properties: React.FC = () => {
   return (
     <div className="relative mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 xl:mt-40">
       <Grid>
-        <div
-          className={cn(
-            searchParams.has("map-view")
-              ? "col-span-2 grid h-screen gap-6 overflow-y-auto sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-              : "col-span-4 grid gap-x-6 gap-y-8 overflow-y-auto sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4",
-          )}
-        >
-          {data?.map((pt) => <Card key={pt.property_id} property={pt} />)}
+        <div className={cn(searchParams.get("map-view") === 'true'?  "col-span-2 grid grid-cols-3 gap-6 h-screen overflow-y-auto" : "col-span-4 grid grid-cols-4 gap-x-6 overflow-y-auto gap-y-8")}>
+        {data?.map((pt) => <Card key={pt.property_id} property={pt} />)}
         </div>
-
-        {searchParams.has("map-view") && (
-          <div className="col-span-2 h-screen w-full">
-            {data && <MapboxMultiPin propertyListings={data} />}
-          </div>
-        )}
+        {searchParams.get("map-view") === 'true' && (
+            <div className="w-full h-screen col-span-2">
+              {data && <MapboxMultiPin propertyListings={data} />} 
+            </div>
+        ) }
       </Grid>
     </div>
   );
