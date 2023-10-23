@@ -72,8 +72,6 @@ const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Recor
 
     const newSearchParams = createSearchParams(newUrlValue);
 
-    console.log(newSearchParams?.toString())
-
     if(newSearchParams){
       router.replace(
         window.location.pathname + "?" + newSearchParams.toString() ,
