@@ -62,17 +62,26 @@ export function Search() {
   });
 
     const handleMapButtonClick = () => {
-    if(searchParams.get('map-view') === 'true') {
-      // console.log('mapview = true',pathName + `?map-view=false`)
-      router.replace(pathName + `?map-view=false`,{
-        scroll: false,
-      })
-    } else {
-    router.replace(pathName + `?map-view=true`,{
-      scroll: false,
-    })
-    }
 
+const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Record<string, string>, [key, value]) => {
+  acc[key] = value;
+  return acc;
+}, {});
+
+    const newUrlValue = searchParams.get('map-view') === 'true' ? {...searchParamsObject, 'map-view': 'false'} : {...searchParamsObject, 'map-view': 'true'}
+
+    const newSearchParams = createSearchParams(newUrlValue);
+
+    console.log(newSearchParams?.toString())
+
+    if(newSearchParams){
+      router.replace(
+        window.location.pathname + "?" + newSearchParams.toString() ,
+        {
+          scroll: false,
+        },
+      );
+    }
   };
 
   const onSubmit = (data: z.infer<typeof SearchSchema>) => {
@@ -258,8 +267,6 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
     } : value
 
     const filterSearchParams = createSearchParams(urlValue);
-
-    console.log("FILTER SEARCH",filterSearchParams?.toString())
 
     if (filterSearchParams && filterSearchParams.size) {
       router.replace(
