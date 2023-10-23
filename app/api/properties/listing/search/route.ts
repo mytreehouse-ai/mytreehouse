@@ -54,10 +54,7 @@ export async function GET(req: Request) {
             ${
               queryParams.data?.text_search
                 ? `
-            ,ts_rank(to_tsvector('english', p.listing_title || ' ' || lt.name || ' ' || pt.name || ' ' || coalesce(p.address, '') || ' ' || ct.name || ' ' || coalesce(p.description, '')), to_tsquery('english', '${queryParams.data.text_search.replace(
-              /\s+/g,
-              " | ",
-            )}')) as rank
+            ,ts_rank(tsv, plainto_tsquery('english', '${queryParams.data.text_search}')) as rank
             `
                 : ``
             }
@@ -76,10 +73,7 @@ export async function GET(req: Request) {
           ${
             queryParams.data?.text_search
               ? `
-          and to_tsvector('english', p.listing_title || ' ' || lt.name || ' ' || pt.name || ' ' || coalesce(p.address, '') || ' ' || ct.name || ' ' || coalesce(p.description, '')) @@ to_tsquery('english', '${queryParams.data.text_search.replace(
-            /\s+/g,
-            " | ",
-          )}')
+          and tsv @@ plainto_tsquery('english', '${queryParams.data.text_search}')
           `
               : ``
           }

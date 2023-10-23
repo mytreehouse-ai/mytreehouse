@@ -61,7 +61,7 @@ export async function GET(
 
     const property = await sql.query(query);
 
-    return NextResponse.json(property.rows);
+    return NextResponse.json(property.rowCount ? property.rows[0] : {});
   } catch (error: any) {
     return NextResponse.json(
       { message: "Neon database internal server error" },
