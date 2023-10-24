@@ -31,7 +31,7 @@ export default withSentryConfig(
 
     // Suppresses source map uploading logs during build
     silent: true,
-    org: "kmc-solutions",
+    org: "kmc-savills",
     project: "mytreehouse",
   },
   {
