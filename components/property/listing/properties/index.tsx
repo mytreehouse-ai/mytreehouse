@@ -54,7 +54,7 @@ const Properties: React.FC = () => {
   return (
     <div className="relative mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 xl:mt-40">
       <Grid>
-        <div className={cn(searchParams.get("map-view") === 'true'?  "col-span-2 grid grid-cols-3 gap-6 h-screen overflow-y-auto" : "col-span-4 grid grid-cols-4 gap-x-6 overflow-y-auto gap-y-8")}>
+        <div className={cn(searchParams.get("map-view") === 'true'?  "col-span-2 grid grid-cols-2 gap-6 h-screen overflow-y-auto" : "col-span-4 grid grid-cols-4 gap-x-6 overflow-y-auto gap-y-8")}>
         {data?.map((pt) => <Card key={pt.property_id} property={pt} />)}
         </div>
         {searchParams.get("map-view") === 'true' && (
