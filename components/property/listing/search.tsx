@@ -260,11 +260,23 @@ const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersPr
 
       const listingType = listingTypes.find(lt => lt.value === value.listing_type)?.urlValue
 
+  const { location, listing_type, property_type, ...newFilters } = value;
+
+       const filterSearchParams = createSearchParams(newFilters);
+
+       console.log(filterSearchParams?.toString())
+
+      if(filterSearchParams) {
       router.push(
-         `/property-listings/${propertyType}/${city}/${listingType}`
+         `/property-listings/${propertyType}/${city}/${listingType}?${filterSearchParams.toString()}`
       ,{
         scroll: false,
       })
+      }
+
+
+
+
     } 
     else {
     if (value?.location) {
