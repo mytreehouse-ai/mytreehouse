@@ -1,7 +1,7 @@
 "use client";
 import { usePropertyListingHook } from "@/hooks/usePropertyListingHook";
 import PropertyCardSkeletonLoader from "./propertycardskeletonloader";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams, usePathname, useRouter } from "next/navigation";
 import Grid from "../../grid";
 import Card from "../../card";
 import { listingTypes } from "@/static_data/listing-types";
@@ -9,9 +9,24 @@ import { cities } from "@/static_data/cities";
 import { propertyTypes } from "@/static_data/property-types";
 import MapboxMultiPin from "@/components/map/MapboxMultiPin";
 import { cn } from "@/lib/utils";
+import type { GetServerSideProps } from "next";
+import type { NextPage } from "next";
 
-const Properties: React.FC = () => {
+type PageProps = {
+   params?: {
+  "property-type": string,
+    "property-location": string,
+    "listing-type": string,  
+   } 
+}
+
+
+const Properties: NextPage<PageProps>= ({
+  params
+}) => {
   const searchParams = useSearchParams();
+
+  console.log('from server', params?.["property-location"])
 
   const { isLoading, data } = usePropertyListingHook({
     text_search: searchParams.has("text_search")
@@ -32,17 +47,17 @@ const Properties: React.FC = () => {
     max_price: searchParams.has("max_price")
       ? Number(searchParams.get("max_price"))
       : undefined,
-    city: searchParams.has("location")
+    city: params ? cities.find(ct => ct.urlValue === params?.["property-location"])?.value : searchParams.has("location")
       ? cities.find(
           (ct) => ct.urlValue === String(searchParams.get("location")),
         )?.value
       : undefined,
-    property_type: searchParams.has("property_type")
+    property_type: params ? propertyTypes.find(pt => params?.["property-type"] === pt.urlValue)?.value : searchParams.has("property_type")
       ? propertyTypes.find(
           (pt) => pt.urlValue === String(searchParams.get("property_type")),
         )?.value
       : undefined,
-    listing_type: searchParams.has("listing_type")
+    listing_type: params ? listingTypes.find(lt => lt.urlValue === params?.["listing-type"])?.value : searchParams.has("listing_type")
       ? listingTypes.find(
           (lt) => lt.urlValue === String(searchParams.get("listing_type")),
         )?.value
@@ -68,3 +83,19 @@ const Properties: React.FC = () => {
 };
 
 export default Properties;
+
+// const getServerSideProps: GetServerSideProps<PageProps> = async (context) => {
+//   const { params, query } = context;
+
+//   const pageProps: PageProps = {
+//     params: {
+//       "listing-type": params?.listingType as string,
+//       "property-location": params?.propertyLocation as string,
+//       "property-type": params?.propertyType as string,
+//     },
+//   };
+
+//   return {
+//     props: pageProps,
+//   };
+// };

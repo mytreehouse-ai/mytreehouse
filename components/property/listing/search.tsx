@@ -23,13 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { CityCombobox } from "@/components/ui/citycombobox";
 import { propertyTypes } from "@/static_data/property-types";
 import { listingTypes } from "@/static_data/listing-types";
@@ -41,16 +34,28 @@ import {
 import { cities } from "@/static_data/cities";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MultiSlider } from "@/components/ui/multislider";
+import type { GetServerSideProps } from "next";
+import type { NextPage } from "next";
 
 const SearchSchema = z.object({
   text_search: z.string(),
 });
 
-export function Search() {
+type PageProps = {
+   params?: {
+  "property-type": string,
+    "property-location": string,
+    "listing-type": string,  
+   } 
+}
+
+ const Search:NextPage<PageProps> = ({ params})  => {
   const searchParams = useSearchParams();
   const pathName = usePathname()
   const router = useRouter();
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
+
+  console.log('FROM SERVER SIDE',params)
 
   const form = useForm<z.infer<typeof SearchSchema>>({
     resolver: zodResolver(SearchSchema),
@@ -455,36 +460,6 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                                   formatLabel={(value) => `${formatToPhp(value)}`}
                                   withoutLabel
                              />
-                {/* <FormField
-                  control={additionalFiltersForm.control}
-                  name="max_price"
-                  render={({ field: { value, onChange } }) => (
-                    <FormItem>
-                      <FormControl>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                             < MultiSlider
-                                  max={999_999_999}
-                                  min={0}
-                                  step={1}
-                                  value={[0, 999_999_999]}
-                                  minStepsBetweenThumbs={555_555_555}
-                                  onValueChange={(values) => {
-                                    onChange(values)}}
-                                  formatLabel={(value) => `${formatToPhp(value)}`}
-                                  withoutLabel
-                             />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{formatToPhp(Number(value))}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                /> */}
               </div>
             </div>
             <div className="mx-auto flex flex-col w-full md:flex-row md:w-1/2 items-end justify-center gap-x-2 pt-4 gap-y-2 md:gap-y-0">
@@ -499,4 +474,22 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
     </div>
     </ScrollArea>
   );
+};
+
+export default Search;
+
+ const getServerSideProps: GetServerSideProps<PageProps> = async (context) => {
+  const { params, query } = context;
+
+  const pageProps: PageProps = {
+    params: {
+      "listing-type": params?.listingType as string,
+      "property-location": params?.propertyLocation as string,
+      "property-type": params?.propertyType as string,
+    },
+  };
+
+  return {
+    props: pageProps,
+  };
 };
