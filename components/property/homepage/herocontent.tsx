@@ -45,6 +45,7 @@ const HeroContent: React.FC = () => {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log(data);
     const propertyTypeUrlValue = getPropertyTypeUrlValue(data.propertyType);
 
     const cityUrlValue = getCityUrlValue(data.location);
