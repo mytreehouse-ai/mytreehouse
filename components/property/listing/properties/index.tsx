@@ -26,8 +26,6 @@ const Properties: NextPage<PageProps>= ({
 }) => {
   const searchParams = useSearchParams();
 
-  console.log('from server', params?.["property-location"])
-
   const { isLoading, data } = usePropertyListingHook({
     text_search: searchParams.has("text_search")
       ? String(searchParams.get("text_search"))
@@ -83,19 +81,3 @@ const Properties: NextPage<PageProps>= ({
 };
 
 export default Properties;
-
-// const getServerSideProps: GetServerSideProps<PageProps> = async (context) => {
-//   const { params, query } = context;
-
-//   const pageProps: PageProps = {
-//     params: {
-//       "listing-type": params?.listingType as string,
-//       "property-location": params?.propertyLocation as string,
-//       "property-type": params?.propertyType as string,
-//     },
-//   };
-
-//   return {
-//     props: pageProps,
-//   };
-// };

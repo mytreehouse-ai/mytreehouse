@@ -55,8 +55,6 @@ type PageProps = {
   const router = useRouter();
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
 
-  console.log('FROM SERVER SIDE',params)
-
   const form = useForm<z.infer<typeof SearchSchema>>({
     resolver: zodResolver(SearchSchema),
     defaultValues: {
@@ -157,6 +155,7 @@ const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Recor
       </div>
       <CollapsibleContent className="mt-8 w-full">
         <PropertyFilters
+        pagePropParams={params}
           closeCollapsible={() => setCollapsibleOpen(!collapsibleOpen)}
         />
       </CollapsibleContent>
@@ -166,9 +165,15 @@ const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Recor
 
 interface PropertyFiltersProps {
   closeCollapsible: () => void;
-}
+  pagePropParams?: {
+    "property-type": string;
+    "property-location": string;
+    "listing-type": string;
+  },
+  }
 
-const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
+
+const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -189,17 +194,17 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     values: {
-      location: searchParams.has("location")
+      location: pagePropParams ? cities.find(ct => ct.urlValue === pagePropParams?.["property-location"])?.value : searchParams.has("location")
         ? cities.find(
             (ct) => ct.urlValue === String(searchParams.get("location")),
           )?.value
         : "",
-      listing_type: searchParams.has("listing_type")
+      listing_type: pagePropParams ? listingTypes.find(lt => lt.urlValue === pagePropParams?.["listing-type"])?.value : searchParams.has("listing_type")
         ? listingTypes.find(
             (lt) => lt.urlValue === String(searchParams.get("listing_type")),
           )?.value
         : "",
-      property_type: searchParams.has("property_type")
+      property_type: pagePropParams ? propertyTypes.find(pt => pt.urlValue === pagePropParams?.["property-type"])?.value : searchParams.has("property_type")
         ? propertyTypes.find(
             (pt) => pt.urlValue === String(searchParams.get("property_type")),
           )?.value
@@ -247,6 +252,21 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
 
 
+    if(pagePropParams) {
+
+      const propertyType = propertyTypes.find(pt => pt.value === value.property_type)?.urlValue
+
+      const city = cities.find(ct => ct .value === value.location)?.urlValue
+
+      const listingType = listingTypes.find(lt => lt.value === value.listing_type)?.urlValue
+
+      router.push(
+         `/property-listings/${propertyType}/${city}/${listingType}`
+      ,{
+        scroll: false,
+      })
+    } 
+    else {
     if (value?.location) {
       value.location = cities.find((ct) => ct.value === value.location)
         ?.urlValue;
@@ -279,6 +299,9 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
         },
       );
     }
+    }
+
+
     void closeCollapsible();
   };
 
@@ -477,19 +500,3 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
 };
 
 export default Search;
-
- const getServerSideProps: GetServerSideProps<PageProps> = async (context) => {
-  const { params, query } = context;
-
-  const pageProps: PageProps = {
-    params: {
-      "listing-type": params?.listingType as string,
-      "property-location": params?.propertyLocation as string,
-      "property-type": params?.propertyType as string,
-    },
-  };
-
-  return {
-    props: pageProps,
-  };
-};
