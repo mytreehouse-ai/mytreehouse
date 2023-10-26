@@ -23,13 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { CityCombobox } from "@/components/ui/citycombobox";
 import { propertyTypes } from "@/static_data/property-types";
 import { listingTypes } from "@/static_data/listing-types";
@@ -41,13 +34,22 @@ import {
 import { cities } from "@/static_data/cities";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MultiSlider } from "@/components/ui/multislider";
-
+import type { GetServerSideProps } from "next";
+import type { NextPage } from "next";
 
 const SearchSchema = z.object({
   text_search: z.string(),
 });
 
-export function Search() {
+type PageProps = {
+   params?: {
+  "property-type": string,
+    "property-location": string,
+    "listing-type": string,  
+   } 
+}
+
+ const Search:NextPage<PageProps> = ({ params})  => {
   const searchParams = useSearchParams();
   const pathName = usePathname()
   const router = useRouter();
@@ -63,16 +65,24 @@ export function Search() {
   });
 
     const handleMapButtonClick = () => {
-    if(searchParams.has('map-view')) {
-      router.replace(pathName,{
-        scroll: false,
-      })
-    } else {
-    router.replace(pathName + `?map-view`,{
-      scroll: false,
-    })
-    }
 
+const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Record<string, string>, [key, value]) => {
+  acc[key] = value;
+  return acc;
+}, {});
+
+    const newUrlValue = searchParams.get('map-view') === 'true' ? {...searchParamsObject, 'map-view': 'false'} : {...searchParamsObject, 'map-view': 'true'}
+
+    const newSearchParams = createSearchParams(newUrlValue);
+
+    if(newSearchParams){
+      router.replace(
+        window.location.pathname + "?" + newSearchParams.toString() ,
+        {
+          scroll: false,
+        },
+      );
+    }
   };
 
   const onSubmit = (data: z.infer<typeof SearchSchema>) => {
@@ -145,6 +155,7 @@ export function Search() {
       </div>
       <CollapsibleContent className="mt-8 w-full">
         <PropertyFilters
+        pagePropParams={params}
           closeCollapsible={() => setCollapsibleOpen(!collapsibleOpen)}
         />
       </CollapsibleContent>
@@ -154,9 +165,15 @@ export function Search() {
 
 interface PropertyFiltersProps {
   closeCollapsible: () => void;
-}
+  pagePropParams?: {
+    "property-type": string;
+    "property-location": string;
+    "listing-type": string;
+  },
+  }
 
-const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
+
+const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -177,17 +194,17 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     values: {
-      location: searchParams.has("location")
+      location: pagePropParams ? cities.find(ct => ct.urlValue === pagePropParams?.["property-location"])?.value : searchParams.has("location")
         ? cities.find(
             (ct) => ct.urlValue === String(searchParams.get("location")),
           )?.value
         : "",
-      listing_type: searchParams.has("listing_type")
+      listing_type: pagePropParams ? listingTypes.find(lt => lt.urlValue === pagePropParams?.["listing-type"])?.value : searchParams.has("listing_type")
         ? listingTypes.find(
             (lt) => lt.urlValue === String(searchParams.get("listing_type")),
           )?.value
         : "",
-      property_type: searchParams.has("property_type")
+      property_type: pagePropParams ? propertyTypes.find(pt => pt.urlValue === pagePropParams?.["property-type"])?.value : searchParams.has("property_type")
         ? propertyTypes.find(
             (pt) => pt.urlValue === String(searchParams.get("property_type")),
           )?.value
@@ -234,8 +251,34 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
 
-    console.log('test',value)
 
+    if(pagePropParams) {
+
+      const propertyType = propertyTypes.find(pt => pt.value === value.property_type)?.urlValue
+
+      const city = cities.find(ct => ct .value === value.location)?.urlValue
+
+      const listingType = listingTypes.find(lt => lt.value === value.listing_type)?.urlValue
+
+  const { location, listing_type, property_type, ...newFilters } = value;
+
+       const filterSearchParams = createSearchParams(newFilters);
+
+       console.log(filterSearchParams?.toString())
+
+      if(filterSearchParams) {
+      router.push(
+         `/property-listings/${propertyType}/${city}/${listingType}?${filterSearchParams.toString()}`
+      ,{
+        scroll: false,
+      })
+      }
+
+
+
+
+    } 
+    else {
     if (value?.location) {
       value.location = cities.find((ct) => ct.value === value.location)
         ?.urlValue;
@@ -253,16 +296,24 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
       )?.urlValue;
     }
 
-    const filterSearchParams = createSearchParams(value);
+    const urlValue = searchParams.has('map-view') ? {
+      ...value,
+      "map-view": searchParams.get('map-view') 
+    } : value
+
+    const filterSearchParams = createSearchParams(urlValue);
 
     if (filterSearchParams && filterSearchParams.size) {
       router.replace(
-        window.location.pathname + "?" + filterSearchParams.toString(),
+        window.location.pathname + "?" + filterSearchParams.toString() ,
         {
           scroll: false,
         },
       );
     }
+    }
+
+
     void closeCollapsible();
   };
 
@@ -444,36 +495,6 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
                                   formatLabel={(value) => `${formatToPhp(value)}`}
                                   withoutLabel
                              />
-                {/* <FormField
-                  control={additionalFiltersForm.control}
-                  name="max_price"
-                  render={({ field: { value, onChange } }) => (
-                    <FormItem>
-                      <FormControl>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                             < MultiSlider
-                                  max={999_999_999}
-                                  min={0}
-                                  step={1}
-                                  value={[0, 999_999_999]}
-                                  minStepsBetweenThumbs={555_555_555}
-                                  onValueChange={(values) => {
-                                    onChange(values)}}
-                                  formatLabel={(value) => `${formatToPhp(value)}`}
-                                  withoutLabel
-                             />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{formatToPhp(Number(value))}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                /> */}
               </div>
             </div>
             <div className="mx-auto flex flex-col w-full md:flex-row md:w-1/2 items-end justify-center gap-x-2 pt-4 gap-y-2 md:gap-y-0">
@@ -489,3 +510,5 @@ const PropertyFilters = ({ closeCollapsible }: PropertyFiltersProps) => {
     </ScrollArea>
   );
 };
+
+export default Search;

@@ -1,5 +1,5 @@
 import Properties from "@/components/property/listing/properties";
-import { Search } from "@/components/property/listing/search";
+import Search from "@/components/property/listing/search";
 
 const page = () => {
   return (
