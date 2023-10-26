@@ -3,9 +3,9 @@ import ContactCard from "@/components/property/contact/contactcard";
 
 const page = async () => {
   return (
-    <main className="relative mt-5 flex h-full flex-col py-20 md:flex-row md:items-center md:justify-center px-4 md:px-14 lg:px-14 xl:px-72">
+    <main className="relative mt-5 flex h-full flex-col px-4 py-20 md:flex-row md:items-center md:justify-center md:px-14 lg:px-14 xl:px-72">
       <BgImage />
-      <div className="z-10 w-full space-y-2 text-white px-6 md:px-0 mb-8">
+      <div className="z-10 mb-8 space-y-2 px-6 text-center text-white md:px-0 md:text-left">
         <h1 className="bg-gradient-to-r from-emerald-300 to-emerald-600 bg-clip-text text-2xl font-bold text-transparent md:text-5xl">
           We&apos;d love to <br />
           hear from you
