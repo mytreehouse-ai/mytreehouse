@@ -86,7 +86,7 @@ const Properties: NextPage<PageProps> = ({ params }) => {
           )}
         >
           {data?.map((pt) => <Card key={pt.property_id} property={pt} />)}
-        </div>
+          </div>
 
         {searchParams.get("map-view") === "true" && (
           <div className="col-span-2 h-screen w-full">

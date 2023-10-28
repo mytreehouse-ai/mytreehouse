@@ -100,3 +100,30 @@ export const imageKitLoader = ({
 
   return `${urlEndpoint}/${src}?tr=${paramsString}`;
 };
+
+export const formatToPhpForSlider = (number?: number) => {
+  if (!number) number = 0;
+
+  let formattedNumber = new Intl.NumberFormat("en-PH", {
+    style: "currency",
+    currency: "PHP",
+  }).format(number);
+
+  if (number >= 1000000000) {
+    formattedNumber = new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(number / 1000000000) + "B";
+  } else if (number >= 1000000) {
+    formattedNumber = new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(number / 1000000) + "M";
+  }
+
+  return formattedNumber;
+};
