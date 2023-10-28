@@ -67,7 +67,7 @@ const MultiSlider = React.forwardRef(
                 top: `10px`,
               }}
             >
-              {index === 0 && <div className="border-l ml-[5px] w-[0.5px] h-9"/>}
+              {index === 0 && <div className={cn("hidden md:block md:border-l md:ml-[5px] md:w-[0.5px] md:h-9")}/>}
               <span className={cn(index === 0 ? "mt-0 " : "mt-0","text-sm bg-white p-2 border shadow-sm rounded absolute")}>
                 {formatLabel ? formatLabel(value) : value}
               </span>
