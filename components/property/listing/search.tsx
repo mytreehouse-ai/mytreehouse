@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { BsFilter } from "react-icons-all-files/bs/BsFilter";
 import { BsMap } from "react-icons-all-files/bs/BsMap";
-import { cn, createSearchParams, formatToPhp } from "@/lib/utils";
+import { cn, createSearchParams, formatToPhpForSlider } from "@/lib/utils";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useState } from "react";
 import {
@@ -482,18 +482,18 @@ const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersPr
                   Maximum price
                 </label>
                  < MultiSlider
-                                  max={999_999_999}
+                                max={1_000_000_000}
                                   min={0}
                                   step={1}
-                                  value={[0, 999_999_999]}
-                                  minStepsBetweenThumbs={555_555_555}
+                                  value={[0, 1_000_000_000]}
+                                  minStepsBetweenThumbs={100_000_000}
                                   onValueChange={(values) => {
                                     // console.log(values)
                                     additionalFiltersForm.setValue('min_price',values[0])
                                     additionalFiltersForm.setValue('max_price',values[1])}
                                   }
-                                  formatLabel={(value) => `${formatToPhp(value)}`}
-                                  withoutLabel
+                                  formatLabel={(value) => `${formatToPhpForSlider(value)}`}
+                                  withoutLabel={false}
                              />
               </div>
             </div>
