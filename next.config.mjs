@@ -5,19 +5,34 @@ await import("./lib/env.mjs");
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      "d2wy52y0hrt3v.cloudfront.net",
-      "images.unsplash.com",
-      "static-mp.lamudi.com",
-      "static-ph.lamudi.com",
-      "tailwindui.com",
-      "loading.io",
-      "ik.imagekit.io",
-    ],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "d2wy52y0hrt3v.cloudfront.net",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "static-mp.lamudi.com",
+      },
+      {
+        protocol: "https",
+        hostname: "static-ph.lamudi.com",
+      },
+      {
+        protocol: "https",
+        hostname: "tailwindui.com",
+      },
+      {
+        protocol: "https",
+        hostname: "loading.io",
+      },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
       },
     ],
   },
