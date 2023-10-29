@@ -41,10 +41,10 @@ const InsertPropertySchema = z.object({
     return isNaN(floatVal) ? 0 : floatVal;
   }, z.number()),
   lease_end: z.string().datetime().nullable(),
+  created_at: z.string().datetime(),
   ts_query_listing_type_name: z.string(),
   ts_query_property_type_name: z.string(),
   ts_query_city_name: z.string(),
-  created_at: z.string().datetime(),
 });
 
 export async function GET(req: Request) {
@@ -67,9 +67,42 @@ export async function POST(req: Request) {
     const images = parsed.data.images ?? [];
     const amenities = parsed.data.amenities ?? [];
 
-    const insertPropertyTextQuery = `insert into properties (property_id, listing_title, listing_url, property_type_id, listing_type_id, property_status_id, turnover_status_id, current_price, floor_area, lot_area, sqm, bedroom, bathroom, parking_lot, is_corner_lot, studio_type, building_name, year_built, city_id,
-    address, is_active, is_cbd, amenities, images, description, longitude, latitude, lease_end, created_at) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
-    $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32) on conflict(property_id) do nothing`;
+    const insertPropertyTextQuery = `insert into properties (
+      property_id, 
+      listing_title, 
+      listing_url, 
+      property_type_id, 
+      listing_type_id, 
+      property_status_id, 
+      turnover_status_id, 
+      current_price, 
+      floor_area, 
+      lot_area, 
+      sqm, 
+      bedroom, 
+      bathroom, 
+      parking_lot, 
+      is_corner_lot, 
+      studio_type, 
+      building_name, 
+      year_built, 
+      city_id, 
+      address, 
+      is_active, 
+      is_cbd, 
+      amenities, 
+      images, 
+      description, 
+      longitude, 
+      latitude, 
+      lease_end, 
+      created_at, 
+      ts_query_listing_type_name, 
+      ts_query_property_type_name, 
+      ts_query_city_name
+      ) 
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32) 
+      on conflict(property_id) do nothing`;
 
     const insertPropertyQuery = await sql.query(insertPropertyTextQuery, [
       parsed.data.property_id,
