@@ -105,9 +105,6 @@ export async function POST(req: Request) {
       inserted: insertPropertyQuery.rowCount,
     });
   } catch (error: any) {
-    return NextResponse.json(
-      { message: "Neon database internal server error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
