@@ -41,6 +41,9 @@ const InsertPropertySchema = z.object({
     return isNaN(floatVal) ? 0 : floatVal;
   }, z.number()),
   lease_end: z.string().datetime().nullable(),
+  ts_query_listing_type_name: z.string(),
+  ts_query_property_type_name: z.string(),
+  ts_query_city_name: z.string(),
   created_at: z.string().datetime(),
 });
 
