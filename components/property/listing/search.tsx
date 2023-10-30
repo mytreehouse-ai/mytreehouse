@@ -408,7 +408,8 @@ const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersPr
                             {...field}
                             value={field.value ?? ""}
                             placeholder="Enter bedroom count"
-                            type="text"
+                            type="number"
+                                  min={1}
                           />
                         </FormControl>
                       </FormItem>
@@ -427,7 +428,8 @@ const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersPr
                             {...field}
                             value={field.value ?? ""}
                             placeholder="Enter bathroom count"
-                            type="text"
+                            type="number"
+                            min={1}
                           />
                         </FormControl>
                       </FormItem>
@@ -450,6 +452,7 @@ const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersPr
                         value={field.value ?? ""}
                         placeholder="Enter minimum sqm"
                         type="number"
+                              min={1}
                       />
                     </FormControl>
                   </FormItem>
@@ -469,6 +472,7 @@ const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersPr
                         value={field.value ?? ""}
                         placeholder="Enter maximum sqm"
                         type="number"
+                              min={1}
                       />
                     </FormControl>
                   </FormItem>

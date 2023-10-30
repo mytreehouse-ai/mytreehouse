@@ -64,7 +64,7 @@ const MultiSlider = React.forwardRef(
                      <div
               className={cn(index === showValues[1] ? "z-20": "z-10","absolute text-center")}
               style={{
-                left: `calc(${((value - min) / (max - min)) * 100}% + 0px)`,
+                left: `calc(${((value - min) / (max - min)) * 100}% - 40px)`,
                 top: `10px`,
               }}
             >
