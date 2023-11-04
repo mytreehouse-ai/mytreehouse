@@ -42,9 +42,9 @@ const InsertPropertySchema = z.object({
   }, z.number()),
   lease_end: z.string().datetime().nullable(),
   created_at: z.string().datetime(),
-  ts_query_listing_type_name: z.string(),
-  ts_query_property_type_name: z.string(),
-  ts_query_city_name: z.string(),
+  ts_query_listing_type_name: z.string().min(1),
+  ts_query_property_type_name: z.string().min(1),
+  ts_query_city_name: z.string().min(1),
 });
 
 export async function GET(req: Request) {
