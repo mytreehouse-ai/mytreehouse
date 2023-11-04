@@ -1,5 +1,5 @@
+import { AuthProvider } from "@propelauth/nextjs/client";
 import { env } from "@/lib/env.mjs";
-// import { AuthProvider } from "@propelauth/nextjs/client";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (

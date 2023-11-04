@@ -1,9 +1,16 @@
 import Overview from "@/components/admin/dashboard/overview/overview";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { getUserOrRedirect } from "@propelauth/nextjs/server/app-router";
+import Test from "@/components/cms/test";
 
-const page = () => {
+const page = async () => {
+  const user = await getUserOrRedirect();
+
   return (
     <>
+      {/* <div>
+        <Test />
+      </div> */}
       <div className="flex-col md:flex">
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
