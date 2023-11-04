@@ -1,4 +1,22 @@
 {
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "cSpell.words": [
+    "alisamar",
+    "clsx",
+    "cmdk",
+    "datetime",
+    "hookform",
+    "ilike",
+    "lucide",
+    "mapbox",
+    "mytreehouse",
+    "nextjs",
+    "propelauth",
+    "tailwindcss",
+    "tanstack",
+    "uidotdev",
+    "usehooks",
+    "zustand"
+  ]
 }
