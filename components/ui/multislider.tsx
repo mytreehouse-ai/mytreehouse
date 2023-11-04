@@ -32,6 +32,7 @@ const MultiSlider = React.forwardRef(
   ) => {
     const initialValue = Array.isArray(value) ? value : [min, max];
     const [localValues, setLocalValues] = useState(initialValue);
+    const [showValues, setShowValues] = useState([false, 0])
 
     const handleValueChange = (newValues: number[]) => {
       setLocalValues(newValues);
@@ -59,22 +60,24 @@ const MultiSlider = React.forwardRef(
         </SliderPrimitive.Track>
         {localValues.map((value, index) => (
           <React.Fragment key={index}>
-            {!withoutLabel && (
+            {!withoutLabel && showValues[0] && (
                      <div
-              className="absolute text-center"
+              className={cn(index === showValues[1] ? "z-20": "z-10","absolute text-center")}
               style={{
-                left: `calc(${((value - min) / (max - min)) * 100}% + 0px)`,
+                left: `calc(${((value - min) / (max - min)) * 100}% - 40px)`,
                 top: `10px`,
               }}
             >
-              {index === 0 && <div className={cn("hidden md:block md:border-l md:ml-[5px] md:w-[0.5px] md:h-9")}/>}
-              <span className={cn(index === 0 ? "mt-0 " : "mt-0","text-sm bg-white p-2 border shadow-sm rounded absolute")}>
+              <span className={cn("text-sm bg-white p-2 border shadow-sm rounded absolute")}>
                 {formatLabel ? formatLabel(value) : value}
               </span>
             </div>
             )}
-       
-            <SliderPrimitive.Thumb className="block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50" />
+            <SliderPrimitive.Thumb 
+            key={index}
+            onMouseOver={(e)=> {
+              console.log(index)
+              setShowValues([true, index])}} onMouseLeave={()=>setShowValues([false, index])} className="block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:cursor-pointer"  />
           </React.Fragment>
         ))}
       </SliderPrimitive.Root>
