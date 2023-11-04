@@ -31,7 +31,7 @@ const Card: React.FC<cardProps> = ({ property }) => {
       </div>
       <h3 className="text-base font-bold text-gray-700">
         <Link href={`/property-listings/details/${property.property_id}`}>
-          <span aria-hidden="true" className="absolute inset-0" />
+          <span  className="absolute inset-0" />
           {property.listing_title}
         </Link>
       </h3>

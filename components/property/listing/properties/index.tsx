@@ -16,6 +16,7 @@ import MapboxMultiPin from "@/components/map/MapboxMultiPin";
 import { cn } from "@/lib/utils";
 import type { GetServerSideProps } from "next";
 import type { NextPage } from "next";
+import { Badge } from "@/components/ui/badge";
 
 type PageProps = {
   params?: {
@@ -85,7 +86,8 @@ const Properties: NextPage<PageProps> = ({ params }) => {
               : "col-span-4 grid gap-x-6 gap-y-8 overflow-y-auto sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4",
           )}
         >
-          {data?.map((pt) => <Card key={pt.property_id} property={pt} />)}
+          {data?.map((pt) => (<Card key={pt.property_id} property={pt} />
+          ))}
           </div>
 
         {searchParams.get("map-view") === "true" && (
