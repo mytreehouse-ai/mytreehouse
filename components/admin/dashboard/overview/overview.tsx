@@ -10,6 +10,8 @@ import {
 import OverviewChart from "./overview-chart";
 import Table from "@/components/cms/Table";
 
+
+
 const Overview = () => {
   return (
     <>
@@ -126,7 +128,6 @@ const Overview = () => {
           </CardHeader>
           <CardContent>
             <Table />
-            {/* <RecentSales /> */}
           </CardContent>
         </Card>
       </div>
