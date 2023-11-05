@@ -2,7 +2,6 @@ import Overview from "@/components/admin/dashboard/overview/overview";
 import Logout from "@/components/cms/logout";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { getUserOrRedirect } from "@propelauth/nextjs/server/app-router";
-import Table from "@/components/cms/Table";
 
 const page = async () => {
   const user = await getUserOrRedirect();

@@ -8,7 +8,6 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import OverviewChart from "./overview-chart";
-import RecentSales from "./recent-sales";
 import Table from "@/components/cms/Table";
 
 const Overview = () => {
