@@ -8,6 +8,7 @@ export interface Property {
   current_price: number;
   floor_area: number | null;
   lot_area: number | null;
+  building_size: number | null;
   sqm: number;
   bedroom: number;
   bathroom: number;

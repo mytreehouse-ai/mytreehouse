@@ -32,6 +32,7 @@ export async function GET(req: Request) {
             p.current_price,
             p.floor_area,
             p.lot_area,
+            p.building_size,
             p.sqm,
             p.bedroom,
             p.bathroom,
