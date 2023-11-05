@@ -1,8 +1,14 @@
-import Overview from "@/components/admin/dashboard/overview/overview";
+import React, { Suspense } from "react";
 import Logout from "@/components/cms/logout";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { getUserOrRedirect } from "@propelauth/nextjs/server/app-router";
-import AgGridTable from "@/components/admin/dashboard/table/AgGridTable";
+
+const Overview = React.lazy(
+  () => import("@/components/admin/dashboard/overview/overview"),
+);
+const AgGridTable = React.lazy(
+  () => import("@/components/admin/dashboard/table/AgGridTable"),
+);
 
 const page = async () => {
   const user = await getUserOrRedirect();
@@ -28,8 +34,14 @@ const page = async () => {
               <TabsTrigger value="table">AG Grid Table</TabsTrigger>
             </TabsList>
             <TabsContent value="overview" className="space-y-4">
-              {/* <Overview /> */}
-              <AgGridTable />
+              <Suspense fallback={<div>Loading...</div>}>
+                <Overview />
+              </Suspense>
+            </TabsContent>
+            <TabsContent value="table" className="space-y-4">
+              <Suspense fallback={<div>Loading...</div>}>
+                <AgGridTable />
+              </Suspense>
             </TabsContent>
           </Tabs>
         </div>
