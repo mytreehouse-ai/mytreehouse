@@ -75,6 +75,15 @@ const Table = () => {
   const gridOptions: GridOptions<ITableRowData> = {
     rowData: rowData,
     getRowId: getRowId,
+    editType: "fullRow",
+    pagination: true,
+
+    // onCellValueChanged: (event) => {
+    //   console.log(event);
+    // },
+    onRowValueChanged: (event) => {
+      console.log(event);
+    },
   };
 
   const defaultColDef = useMemo(() => {
