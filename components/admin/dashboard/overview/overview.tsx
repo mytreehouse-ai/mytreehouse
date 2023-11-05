@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import OverviewChart from "./overview-chart";
 import RecentSales from "./recent-sales";
+import Table from "@/components/cms/Table";
 
 const Overview = () => {
   return (
@@ -125,7 +126,8 @@ const Overview = () => {
             <CardDescription>You made 265 sales this month.</CardDescription>
           </CardHeader>
           <CardContent>
-            <RecentSales />
+            <Table />
+            {/* <RecentSales /> */}
           </CardContent>
         </Card>
       </div>
