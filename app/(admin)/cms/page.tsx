@@ -6,6 +6,8 @@ import Test from "@/components/cms/test";
 const page = async () => {
   // const user = await getUserOrRedirect();
 
+  console.log(user);
+
   return (
     <>
       {/* <div>
