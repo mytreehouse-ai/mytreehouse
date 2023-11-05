@@ -55,6 +55,7 @@
     "react-icons-all-files": "github:alisamar/react-icons-all-files#4.8.0",
     "react-map-gl": "^7.1.6",
     "react-select": "^5.7.5",
+    "recharts": "^2.9.2",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.3",

@@ -42,16 +42,16 @@ const SearchSchema = z.object({
 });
 
 type PageProps = {
-   params?: {
-  "property-type": string,
-    "property-location": string,
-    "listing-type": string,  
-   } 
-}
+  params?: {
+    "property-type": string;
+    "property-location": string;
+    "listing-type": string;
+  };
+};
 
- const Search:NextPage<PageProps> = ({ params})  => {
+const Search: NextPage<PageProps> = ({ params }) => {
   const searchParams = useSearchParams();
-  const pathName = usePathname()
+  const pathName = usePathname();
   const router = useRouter();
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
 
@@ -64,20 +64,25 @@ type PageProps = {
     },
   });
 
-    const handleMapButtonClick = () => {
+  const handleMapButtonClick = () => {
+    const searchParamsObject = Array.from(searchParams.entries()).reduce(
+      (acc: Record<string, string>, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      },
+      {},
+    );
 
-const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Record<string, string>, [key, value]) => {
-  acc[key] = value;
-  return acc;
-}, {});
-
-    const newUrlValue = searchParams.get('map-view') === 'true' ? {...searchParamsObject, 'map-view': 'false'} : {...searchParamsObject, 'map-view': 'true'}
+    const newUrlValue =
+      searchParams.get("map-view") === "true"
+        ? { ...searchParamsObject, "map-view": "false" }
+        : { ...searchParamsObject, "map-view": "true" };
 
     const newSearchParams = createSearchParams(newUrlValue);
 
-    if(newSearchParams){
+    if (newSearchParams) {
       router.replace(
-        window.location.pathname + "?" + newSearchParams.toString() ,
+        window.location.pathname + "?" + newSearchParams.toString(),
         {
           scroll: false,
         },
@@ -86,7 +91,6 @@ const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Recor
   };
 
   const onSubmit = (data: z.infer<typeof SearchSchema>) => {
-  
     const searchParams = createSearchParams(data);
 
     if (searchParams && searchParams.size) {
@@ -98,7 +102,7 @@ const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Recor
 
   return (
     <Collapsible
-      className="w-full relative"
+      className="relative w-full"
       open={collapsibleOpen}
       onOpenChange={setCollapsibleOpen}
     >
@@ -134,7 +138,7 @@ const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Recor
             />
           </form>
         </Form>
-        <div className="mt-4 flex sm:mt-0 space-x-2">
+        <div className="mt-4 flex space-x-2 sm:mt-0">
           <CollapsibleTrigger asChild>
             <Button
               className={cn(
@@ -148,20 +152,25 @@ const searchParamsObject = Array.from(searchParams.entries()).reduce((acc: Recor
               <BsFilter className="ml-1 h-6 w-6" />
             </Button>
           </CollapsibleTrigger>
-          <Button className="py-6 text-sm" variant="ghost" size="sm" onClick={handleMapButtonClick} >
+          <Button
+            className="py-6 text-sm"
+            variant="ghost"
+            size="sm"
+            onClick={handleMapButtonClick}
+          >
             Map <BsMap className="ml-1 h-6 w-6" />
           </Button>
         </div>
       </div>
       <CollapsibleContent className="mt-8 w-full">
         <PropertyFilters
-        pagePropParams={params}
+          pagePropParams={params}
           closeCollapsible={() => setCollapsibleOpen(!collapsibleOpen)}
         />
       </CollapsibleContent>
     </Collapsible>
   );
-}
+};
 
 interface PropertyFiltersProps {
   closeCollapsible: () => void;
@@ -169,11 +178,13 @@ interface PropertyFiltersProps {
     "property-type": string;
     "property-location": string;
     "listing-type": string;
-  },
-  }
+  };
+}
 
-
-const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersProps) => {
+const PropertyFilters = ({
+  closeCollapsible,
+  pagePropParams,
+}: PropertyFiltersProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -194,17 +205,29 @@ const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersPr
   const additionalFiltersForm = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     values: {
-      location: pagePropParams ? cities.find(ct => ct.urlValue === pagePropParams?.["property-location"])?.value : searchParams.has("location")
+      location: pagePropParams
+        ? cities.find(
+            (ct) => ct.urlValue === pagePropParams?.["property-location"],
+          )?.value
+        : searchParams.has("location")
         ? cities.find(
             (ct) => ct.urlValue === String(searchParams.get("location")),
           )?.value
         : "",
-      listing_type: pagePropParams ? listingTypes.find(lt => lt.urlValue === pagePropParams?.["listing-type"])?.value : searchParams.has("listing_type")
+      listing_type: pagePropParams
+        ? listingTypes.find(
+            (lt) => lt.urlValue === pagePropParams?.["listing-type"],
+          )?.value
+        : searchParams.has("listing_type")
         ? listingTypes.find(
             (lt) => lt.urlValue === String(searchParams.get("listing_type")),
           )?.value
         : "",
-      property_type: pagePropParams ? propertyTypes.find(pt => pt.urlValue === pagePropParams?.["property-type"])?.value : searchParams.has("property_type")
+      property_type: pagePropParams
+        ? propertyTypes.find(
+            (pt) => pt.urlValue === pagePropParams?.["property-type"],
+          )?.value
+        : searchParams.has("property_type")
         ? propertyTypes.find(
             (pt) => pt.urlValue === String(searchParams.get("property_type")),
           )?.value
@@ -250,267 +273,276 @@ const PropertyFilters = ({ closeCollapsible, pagePropParams }: PropertyFiltersPr
   };
 
   const onFilterFormSubmit = (value: z.infer<typeof filterSchema>) => {
-
-
-    if(pagePropParams) {
-
-      const propertyType = propertyTypes.find(pt => pt.value === value.property_type)?.urlValue
-
-      const city = cities.find(ct => ct .value === value.location)?.urlValue
-
-      const listingType = listingTypes.find(lt => lt.value === value.listing_type)?.urlValue
-
-  const { location, listing_type, property_type, ...newFilters } = value;
-
-       const filterSearchParams = createSearchParams(newFilters);
-
-       console.log(filterSearchParams?.toString())
-
-      if(filterSearchParams) {
-      router.push(
-         `/property-listings/${propertyType}/${city}/${listingType}?${filterSearchParams.toString()}`
-      ,{
-        scroll: false,
-      })
-      }
-
-
-
-
-    } 
-    else {
-    if (value?.location) {
-      value.location = cities.find((ct) => ct.value === value.location)
-        ?.urlValue;
-    }
-
-    if (value?.listing_type) {
-      value.listing_type = listingTypes.find(
-        (lt) => lt.value === value.listing_type,
-      )?.urlValue;
-    }
-
-    if (value?.property_type) {
-      value.property_type = propertyTypes.find(
+    if (pagePropParams) {
+      const propertyType = propertyTypes.find(
         (pt) => pt.value === value.property_type,
       )?.urlValue;
+
+      const city = cities.find((ct) => ct.value === value.location)?.urlValue;
+
+      const listingType = listingTypes.find(
+        (lt) => lt.value === value.listing_type,
+      )?.urlValue;
+
+      const { location, listing_type, property_type, ...newFilters } = value;
+
+      const filterSearchParams = createSearchParams(newFilters);
+
+      console.log(filterSearchParams?.toString());
+
+      if (filterSearchParams) {
+        router.push(
+          `/property-listings/${propertyType}/${city}/${listingType}?${filterSearchParams.toString()}`,
+          {
+            scroll: false,
+          },
+        );
+      }
+    } else {
+      if (value?.location) {
+        value.location = cities.find((ct) => ct.value === value.location)
+          ?.urlValue;
+      }
+
+      if (value?.listing_type) {
+        value.listing_type = listingTypes.find(
+          (lt) => lt.value === value.listing_type,
+        )?.urlValue;
+      }
+
+      if (value?.property_type) {
+        value.property_type = propertyTypes.find(
+          (pt) => pt.value === value.property_type,
+        )?.urlValue;
+      }
+
+      const urlValue = searchParams.has("map-view")
+        ? {
+            ...value,
+            "map-view": searchParams.get("map-view"),
+          }
+        : value;
+
+      const filterSearchParams = createSearchParams(urlValue);
+
+      if (filterSearchParams && filterSearchParams.size) {
+        router.replace(
+          window.location.pathname + "?" + filterSearchParams.toString(),
+          {
+            scroll: false,
+          },
+        );
+      }
     }
-
-    const urlValue = searchParams.has('map-view') ? {
-      ...value,
-      "map-view": searchParams.get('map-view') 
-    } : value
-
-    const filterSearchParams = createSearchParams(urlValue);
-
-    if (filterSearchParams && filterSearchParams.size) {
-      router.replace(
-        window.location.pathname + "?" + filterSearchParams.toString() ,
-        {
-          scroll: false,
-        },
-      );
-    }
-    }
-
 
     void closeCollapsible();
   };
 
   return (
-    <ScrollArea className="mx-auto mt-6 w-full h-96 md:h-auto">
-    <div >
-      <Form {...additionalFiltersForm}>
-        <form
-          name="additionalFilters"
-          onSubmit={additionalFiltersForm.handleSubmit(onFilterFormSubmit)}
-        >
-          <div className="space-y-4">
-            <div className="mx-auto flex flex-col gap-y-4 md:gap-y-0 md:flex-row w-5/6 items-end justify-center gap-x-2">
-              <FormField
-                control={additionalFiltersForm.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="text-neutral-500">City</FormLabel>
-                    <FormControl>
-                      <CityCombobox onCityChange={field.onChange} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={additionalFiltersForm.control}
-                name="listing_type"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="text-neutral-500">Listing</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+    <ScrollArea className="mx-auto mt-6 h-96 w-full md:h-auto">
+      <div>
+        <Form {...additionalFiltersForm}>
+          <form
+            name="additionalFilters"
+            onSubmit={additionalFiltersForm.handleSubmit(onFilterFormSubmit)}
+          >
+            <div className="space-y-4">
+              <div className="mx-auto flex w-5/6 flex-col items-end justify-center gap-x-2 gap-y-4 md:flex-row md:gap-y-0">
+                <FormField
+                  control={additionalFiltersForm.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-neutral-500">City</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Type of listing" />
-                        </SelectTrigger>
+                        <CityCombobox onCityChange={field.onChange} />
                       </FormControl>
-                      <SelectContent>
-                        {listingTypes.map((pt) => (
-                          <SelectItem key={pt.value} value={pt.value}>
-                            {pt.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={additionalFiltersForm.control}
-                name="property_type"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="text-neutral-500">Property</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Type of property" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {propertyTypes.map((pt) => (
-                          <SelectItem key={pt.value} value={pt.value}>
-                            {pt.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="mx-auto flex flex-col gap-y-4 md:gap-y-0 md:flex-row w-5/6 items-start justify-center gap-x-2">
-              {shouldShowFields && (
-                <>
-                  <FormField
-                    control={additionalFiltersForm.control}
-                    name="bedroom_count"
-                    render={({ field }) => (
-                      <FormItem className="w-full">
-                        <FormLabel className="text-neutral-500 ">
-                          Bedroom
-                        </FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={additionalFiltersForm.control}
+                  name="listing_type"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-neutral-500">
+                        Listing
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
-                          <Input
-                            {...field}
-                            value={field.value ?? ""}
-                            placeholder="Enter bedroom count"
-                            type="number"
-                                  min={1}
-                          />
+                          <SelectTrigger>
+                            <SelectValue placeholder="Type of listing" />
+                          </SelectTrigger>
                         </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={additionalFiltersForm.control}
-                    name="bathroom_count"
-                    render={({ field }) => (
-                      <FormItem className="w-full">
-                        <FormLabel className="text-neutral-500">
-                          Bathroom
-                        </FormLabel>
+                        <SelectContent>
+                          {listingTypes.map((pt) => (
+                            <SelectItem key={pt.value} value={pt.value}>
+                              {pt.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={additionalFiltersForm.control}
+                  name="property_type"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-neutral-500">
+                        Property
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
-                          <Input
-                            {...field}
-                            value={field.value ?? ""}
-                            placeholder="Enter bathroom count"
-                            type="number"
-                            min={1}
-                          />
+                          <SelectTrigger>
+                            <SelectValue placeholder="Type of property" />
+                          </SelectTrigger>
                         </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </>
-              )}
+                        <SelectContent>
+                          {propertyTypes.map((pt) => (
+                            <SelectItem key={pt.value} value={pt.value}>
+                              {pt.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="mx-auto flex w-5/6 flex-col items-start justify-center gap-x-2 gap-y-4 md:flex-row md:gap-y-0">
+                {shouldShowFields && (
+                  <>
+                    <FormField
+                      control={additionalFiltersForm.control}
+                      name="bedroom_count"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <FormLabel className="text-neutral-500 ">
+                            Bedroom
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              value={field.value ?? ""}
+                              placeholder="Enter bedroom count"
+                              type="number"
+                              min={1}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={additionalFiltersForm.control}
+                      name="bathroom_count"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <FormLabel className="text-neutral-500">
+                            Bathroom
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              value={field.value ?? ""}
+                              placeholder="Enter bathroom count"
+                              type="number"
+                              min={1}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
 
-              <FormField
-                control={additionalFiltersForm.control}
-                name="sqm_min"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="text-neutral-500">
-                      Minimum sqm
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        value={field.value ?? ""}
-                        placeholder="Enter minimum sqm"
-                        type="number"
-                              min={1}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={additionalFiltersForm.control}
-                name="sqm_max"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="text-neutral-500">
-                      Maximum sqm
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        value={field.value ?? ""}
-                        placeholder="Enter maximum sqm"
-                        type="number"
-                              min={1}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <div className="w-full space-y-4">
-                <label
-                  htmlFor="max_price"
-                  className="text-sm font-medium leading-none text-neutral-500 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                <FormField
+                  control={additionalFiltersForm.control}
+                  name="sqm_min"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-neutral-500">
+                        Minimum sqm
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          value={field.value ?? ""}
+                          placeholder="Enter minimum sqm"
+                          type="number"
+                          min={1}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={additionalFiltersForm.control}
+                  name="sqm_max"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-neutral-500">
+                        Maximum sqm
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          value={field.value ?? ""}
+                          placeholder="Enter maximum sqm"
+                          type="number"
+                          min={1}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <div className="w-full space-y-4">
+                  <label
+                    htmlFor="max_price"
+                    className="text-sm font-medium leading-none text-neutral-500 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Price Range
+                  </label>
+                  <MultiSlider
+                    max={1_000_000_000}
+                    min={0}
+                    step={1}
+                    value={[0, 1_000_000_000]}
+                    minStepsBetweenThumbs={100_000_000}
+                    onValueChange={(values) => {
+                      // console.log(values)
+                      additionalFiltersForm.setValue("min_price", values[0]);
+                      additionalFiltersForm.setValue("max_price", values[1]);
+                    }}
+                    formatLabel={(value) => `${formatToPhpForSlider(value)}`}
+                    withoutLabel={false}
+                  />
+                </div>
+              </div>
+              <div className="mx-auto flex w-full flex-col items-end justify-center gap-x-2 gap-y-2 pt-4 md:w-1/2 md:flex-row md:gap-y-0">
+                <Button
+                  type="reset"
+                  variant="outline"
+                  onClick={onClearFilters}
+                  className="w-full md:w-fit"
                 >
-                  Maximum price
-                </label>
-                 < MultiSlider
-                                max={1_000_000_000}
-                                  min={0}
-                                  step={1}
-                                  value={[0, 1_000_000_000]}
-                                  minStepsBetweenThumbs={100_000_000}
-                                  onValueChange={(values) => {
-                                    // console.log(values)
-                                    additionalFiltersForm.setValue('min_price',values[0])
-                                    additionalFiltersForm.setValue('max_price',values[1])}
-                                  }
-                                  formatLabel={(value) => `${formatToPhpForSlider(value)}`}
-                                  withoutLabel={false}
-                             />
+                  Clear
+                </Button>
+                <Button type="submit" className="w-full md:w-fit">
+                  Submit filters
+                </Button>
               </div>
             </div>
-            <div className="mx-auto flex flex-col w-full md:flex-row md:w-1/2 items-end justify-center gap-x-2 pt-4 gap-y-2 md:gap-y-0">
-              <Button type="reset" variant="outline" onClick={onClearFilters} className="w-full md:w-fit">
-                Clear
-              </Button>
-              <Button type="submit" className="w-full md:w-fit">Submit filters</Button>
-            </div>
-          </div>
-        </form>
-      </Form>
-    </div>
+          </form>
+        </Form>
+      </div>
     </ScrollArea>
   );
 };
