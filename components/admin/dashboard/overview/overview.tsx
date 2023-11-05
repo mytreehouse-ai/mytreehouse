@@ -9,8 +9,7 @@ import {
 } from "@/components/ui/card";
 import OverviewChart from "./overview-chart";
 import Table from "@/components/cms/Table";
-
-
+import RecentSales from "./recent-sales";
 
 const Overview = () => {
   return (
@@ -131,7 +130,7 @@ const Overview = () => {
             <CardDescription>265 new property this month</CardDescription>
           </CardHeader>
           <CardContent>
-            <Table />
+            <RecentSales />
           </CardContent>
         </Card>
       </div>
