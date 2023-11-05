@@ -9,6 +9,7 @@ import type { GridOptions } from "ag-grid-community";
 import type { GetRowIdParams } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import { formatToPhp } from "@/lib/utils";
 
 interface IPropertyData {
   id: string;
@@ -310,6 +311,9 @@ const AgGridTable = () => {
       headerName: "Current price",
       sortable: true,
       filter: false,
+      valueFormatter: (params) => {
+        return params?.data?.current_price ? formatToPhp(params.value) : "";
+      },
     },
   ]);
 
