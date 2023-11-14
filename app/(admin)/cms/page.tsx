@@ -3,7 +3,6 @@ import Logout from "@/components/cms/logout";
 import { getUserOrRedirect } from "@propelauth/nextjs/server/app-router";
 import Dashboard from "@/components/admin/dashboard/Dashboard";
 
-
 const page = async () => {
   const user = await getUserOrRedirect();
 
