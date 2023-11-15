@@ -66,3 +66,11 @@
 .remove-arrow {
     -moz-appearance: textfield;
 }
+
+.ag-theme-alpine {
+    --ag-borders: none;
+    /* then add back a border between rows */
+    --ag-row-border-style: dashed;
+    --ag-row-border-width: 5px;
+    --ag-row-border-color: rgb(150, 150, 200);
+}
