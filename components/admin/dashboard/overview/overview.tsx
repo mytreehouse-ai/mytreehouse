@@ -9,8 +9,13 @@ import {
 } from "@/components/ui/card";
 import OverviewChart from "./overview-chart";
 import RecentSales from "./recent-sales";
+import { useGetTotalScrapedData } from "@/hooks/useGetTotalScrapedData";
 
 const Overview = () => {
+  const { data: totalScrapedData } = useGetTotalScrapedData();
+
+  console.log("SCRAPED", totalScrapedData);
+
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -33,7 +38,9 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">69143</div>
+            <div className="text-2xl font-bold">
+              {totalScrapedData ? totalScrapedData.count : "0"}
+            </div>
             <p className="text-xs text-muted-foreground">
               +20.1% from last month
             </p>
