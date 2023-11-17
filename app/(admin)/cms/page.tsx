@@ -1,9 +1,6 @@
 import { getUserOrRedirect } from "@propelauth/nextjs/server/app-router";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import Overview from "@/components/admin/dashboard/overview/overview";
 import Logout from "@/components/cms/logout";
-import { Suspense } from "react";
-import AgGridTable from "@/components/admin/dashboard/table/AgGridTable";
+import Dashboard from "@/components/admin/dashboard/Dashboard";
 
 const page = async () => {
   const user = await getUserOrRedirect();
