@@ -9,23 +9,16 @@ import {
 } from "@/components/ui/card";
 import OverviewChart from "./overview-chart";
 import RecentSales from "./recent-sales";
-import { useGetTotalScrapedData } from "@/hooks/useGetTotalScrapedData";
-import { useGetTotalPropertiesForSale } from "@/hooks/useGetTotalPropertiesForSale";
-import { useGetTotalPropertiesForRent } from "@/hooks/useGetTotalPropertiesForRent";
-import { useGetTotalSoldProperties } from "@/hooks/useGetTotalSoldProperties";
+import { useGetTotalScrapedData } from "@/hooks/analytics/useGetTotalScrapedData";
+import { useGetTotalPropertiesForSale } from "@/hooks/analytics/useGetTotalPropertiesForSale";
+import { useGetTotalPropertiesForRent } from "@/hooks/analytics/useGetTotalPropertiesForRent";
+import { useGetTotalSoldProperties } from "@/hooks/analytics/useGetTotalSoldProperties";
 
 const Overview = () => {
   const { data: totalScrapedData } = useGetTotalScrapedData();
   const { data: totalPropertiesForSaleData } = useGetTotalPropertiesForSale();
   const { data: totalPropertiesForRentData } = useGetTotalPropertiesForRent();
   const { data: totalSoldPropertiesData } = useGetTotalSoldProperties();
-
-  console.log(
-    "total",
-    totalPropertiesForSaleData,
-    totalPropertiesForRentData,
-    totalSoldPropertiesData,
-  );
 
   return (
     <>
