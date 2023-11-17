@@ -34,7 +34,6 @@ import {
 import { cities } from "@/static_data/cities";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MultiSlider } from "@/components/ui/multislider";
-import type { GetServerSideProps } from "next";
 import type { NextPage } from "next";
 
 const SearchSchema = z.object({
@@ -51,7 +50,6 @@ type PageProps = {
 
 const Search: NextPage<PageProps> = ({ params }) => {
   const searchParams = useSearchParams();
-  const pathName = usePathname();
   const router = useRouter();
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
 
