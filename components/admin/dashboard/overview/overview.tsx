@@ -12,13 +12,20 @@ import RecentSales from "./recent-sales";
 import { useGetTotalScrapedData } from "@/hooks/useGetTotalScrapedData";
 import { useGetTotalPropertiesForSale } from "@/hooks/useGetTotalPropertiesForSale";
 import { useGetTotalPropertiesForRent } from "@/hooks/useGetTotalPropertiesForRent";
+import { useGetTotalSoldProperties } from "@/hooks/useGetTotalSoldProperties";
 
 const Overview = () => {
   const { data: totalScrapedData } = useGetTotalScrapedData();
   const { data: totalPropertiesForSaleData } = useGetTotalPropertiesForSale();
   const { data: totalPropertiesForRentData } = useGetTotalPropertiesForRent();
+  const { data: totalSoldPropertiesData } = useGetTotalSoldProperties();
 
-  console.log("total", totalPropertiesForSaleData, totalPropertiesForRentData);
+  console.log(
+    "total",
+    totalPropertiesForSaleData,
+    totalPropertiesForRentData,
+    totalSoldPropertiesData,
+  );
 
   return (
     <>
@@ -122,7 +129,9 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">573</div>
+            <div className="text-2xl font-bold">
+              {totalSoldPropertiesData?.count ?? "0"}
+            </div>
             <p className="text-xs text-muted-foreground">
               +201 since last hour
             </p>
