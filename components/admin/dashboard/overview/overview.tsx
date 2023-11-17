@@ -9,8 +9,17 @@ import {
 } from "@/components/ui/card";
 import OverviewChart from "./overview-chart";
 import RecentSales from "./recent-sales";
+import { useGetTotalScrapedData } from "@/hooks/analytics/useGetTotalScrapedData";
+import { useGetTotalPropertiesForSale } from "@/hooks/analytics/useGetTotalPropertiesForSale";
+import { useGetTotalPropertiesForRent } from "@/hooks/analytics/useGetTotalPropertiesForRent";
+import { useGetTotalSoldProperties } from "@/hooks/analytics/useGetTotalSoldProperties";
 
 const Overview = () => {
+  const { data: totalScrapedData } = useGetTotalScrapedData();
+  const { data: totalPropertiesForSaleData } = useGetTotalPropertiesForSale();
+  const { data: totalPropertiesForRentData } = useGetTotalPropertiesForRent();
+  const { data: totalSoldPropertiesData } = useGetTotalSoldProperties();
+
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -33,7 +42,9 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">69143</div>
+            <div className="text-2xl font-bold">
+              {totalScrapedData ? totalScrapedData.count : "0"}
+            </div>
             <p className="text-xs text-muted-foreground">
               +20.1% from last month
             </p>
@@ -58,7 +69,9 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">23500</div>
+            <div className="text-2xl font-bold">
+              {totalPropertiesForSaleData?.count ?? "0"}
+            </div>
             <p className="text-xs text-muted-foreground">
               +18.1% from last month
             </p>
@@ -82,7 +95,9 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">45643</div>
+            <div className="text-2xl font-bold">
+              {totalPropertiesForRentData?.count ?? "0"}
+            </div>
             <p className="text-xs text-muted-foreground">
               +17% from last month
             </p>
@@ -107,7 +122,9 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">573</div>
+            <div className="text-2xl font-bold">
+              {totalSoldPropertiesData?.count ?? "0"}
+            </div>
             <p className="text-xs text-muted-foreground">
               +201 since last hour
             </p>
