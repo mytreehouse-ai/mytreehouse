@@ -10,11 +10,12 @@ import {
 import OverviewChart from "./overview-chart";
 import RecentSales from "./recent-sales";
 import { useGetTotalScrapedData } from "@/hooks/useGetTotalScrapedData";
-
+import { useGetTotalPropertiesForSale } from "@/hooks/useGetTotalPropertiesForSale";
 const Overview = () => {
   const { data: totalScrapedData } = useGetTotalScrapedData();
+  const { data: totalPropertiesForSaleData } = useGetTotalPropertiesForSale();
 
-  console.log("SCRAPED", totalScrapedData);
+  console.log("total", totalPropertiesForSaleData);
 
   return (
     <>
@@ -65,7 +66,9 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">23500</div>
+            <div className="text-2xl font-bold">
+              {totalPropertiesForSaleData?.count ?? "0"}
+            </div>
             <p className="text-xs text-muted-foreground">
               +18.1% from last month
             </p>
