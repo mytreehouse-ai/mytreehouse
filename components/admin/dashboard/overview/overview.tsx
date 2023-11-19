@@ -9,10 +9,6 @@ import {
 } from "@/components/ui/card";
 import OverviewChart from "./overview-chart";
 import RecentSales from "./recent-sales";
-import { useGetTotalScrapedData } from "@/hooks/analytics/useGetTotalScrapedData";
-import { useGetTotalPropertiesForSale } from "@/hooks/analytics/useGetTotalPropertiesForSale";
-import { useGetTotalPropertiesForRent } from "@/hooks/analytics/useGetTotalPropertiesForRent";
-import { useGetTotalSoldProperties } from "@/hooks/analytics/useGetTotalSoldProperties";
 import { useGetDashboardAnalyticsDataQuery } from "@/hooks/analytics/useGetDashboardAnalyticsData";
 
 const Overview = () => {
