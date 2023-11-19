@@ -16,14 +16,14 @@ import { useGetTotalSoldProperties } from "@/hooks/analytics/useGetTotalSoldProp
 import { useGetDashboardAnalyticsDataQuery } from "@/hooks/analytics/useGetDashboardAnalyticsData";
 
 const Overview = () => {
-  const { data: totalScrapedData } = useGetTotalScrapedData();
-  const { data: totalPropertiesForSaleData } = useGetTotalPropertiesForSale();
-  const { data: totalPropertiesForRentData } = useGetTotalPropertiesForRent();
-  const { data: totalSoldPropertiesData } = useGetTotalSoldProperties();
-
   const { data: dashboardAnalyticsData } = useGetDashboardAnalyticsDataQuery();
 
-  console.log(dashboardAnalyticsData);
+  const {
+    totalPropertiesForRent,
+    totalPropertiesForSale,
+    totalPropertiesScraped,
+    totalPropertiesSold,
+  } = dashboardAnalyticsData;
 
   return (
     <>
@@ -47,9 +47,7 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {totalScrapedData ? totalScrapedData.count : "0"}
-            </div>
+            <div className="text-2xl font-bold">{totalPropertiesScraped}</div>
             <p className="text-xs text-muted-foreground">
               +20.1% from last month
             </p>
@@ -74,9 +72,7 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {totalPropertiesForSaleData?.count ?? "0"}
-            </div>
+            <div className="text-2xl font-bold">{totalPropertiesForSale}</div>
             <p className="text-xs text-muted-foreground">
               +18.1% from last month
             </p>
@@ -100,9 +96,7 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {totalPropertiesForRentData?.count ?? "0"}
-            </div>
+            <div className="text-2xl font-bold">{totalPropertiesForRent}</div>
             <p className="text-xs text-muted-foreground">
               +17% from last month
             </p>
@@ -127,9 +121,7 @@ const Overview = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {totalSoldPropertiesData?.count ?? "0"}
-            </div>
+            <div className="text-2xl font-bold">{totalPropertiesSold}</div>
             <p className="text-xs text-muted-foreground">
               +201 since last hour
             </p>
