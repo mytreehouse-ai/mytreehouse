@@ -13,12 +13,17 @@ import { useGetTotalScrapedData } from "@/hooks/analytics/useGetTotalScrapedData
 import { useGetTotalPropertiesForSale } from "@/hooks/analytics/useGetTotalPropertiesForSale";
 import { useGetTotalPropertiesForRent } from "@/hooks/analytics/useGetTotalPropertiesForRent";
 import { useGetTotalSoldProperties } from "@/hooks/analytics/useGetTotalSoldProperties";
+import { useGetDashboardAnalyticsDataQuery } from "@/hooks/analytics/useGetDashboardAnalyticsData";
 
 const Overview = () => {
   const { data: totalScrapedData } = useGetTotalScrapedData();
   const { data: totalPropertiesForSaleData } = useGetTotalPropertiesForSale();
   const { data: totalPropertiesForRentData } = useGetTotalPropertiesForRent();
   const { data: totalSoldPropertiesData } = useGetTotalSoldProperties();
+
+  const { data: dashboardAnalyticsData } = useGetDashboardAnalyticsDataQuery();
+
+  console.log(dashboardAnalyticsData);
 
   return (
     <>
