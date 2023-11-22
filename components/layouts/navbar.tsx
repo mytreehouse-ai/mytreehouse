@@ -93,7 +93,7 @@ const Navbar: React.FC = () => {
                     className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium md:inline-flex md:items-center md:border-l-0 md:px-1 md:py-0 md:pl-0 md:pr-0 md:pt-1 ${
                       pathName === item.href
                         ? "border-emerald-500 bg-indigo-50  text-emerald-700 md:bg-transparent"
-                        : "border-transparent  text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 md:hover:bg-transparent"
+                        : "border-transparent  text-gray-700 hover:border-gray-300 hover:bg-gray-50 hover:text-emerald-700 md:hover:bg-transparent"
                     }`}
                     aria-current="page"
                   >
