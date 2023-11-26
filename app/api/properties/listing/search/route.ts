@@ -40,7 +40,7 @@ export async function GET(req: Request) {
             p.is_corner_lot,
             p.studio_type,
             p.building_name,
-            p.year_built,
+            p.year_built, 
             ct.name as city_name,
             p.address,
             p.is_active,
