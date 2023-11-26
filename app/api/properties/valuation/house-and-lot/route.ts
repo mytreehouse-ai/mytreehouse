@@ -6,7 +6,6 @@ import { z } from "zod";
 
 const HouseAndLotValuationSchema = z.object({
   sqm: z.preprocess((input) => Number(input), z.number().positive()),
-  year_built: z.preprocess((input) => Number(input), z.number().positive()),
   city_id: z.string().uuid(),
 });
 
@@ -34,7 +33,7 @@ export async function GET(req: NextRequest) {
       UNTAGGED_TRANSACTION_ID,
     } = await fetchVercelEdgeConfig();
 
-    const { sqm, year_built, city_id } = parsedQueryData.data;
+    const { sqm, city_id } = parsedQueryData.data;
 
     const closedTransaction = {
       average_property_price_for_sale: 0,
