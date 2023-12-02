@@ -10,6 +10,7 @@ import { propertyTypes } from "@/static_data/property-types";
 import MapboxMultiPin from "@/components/map/MapboxMultiPin";
 import { cn } from "@/lib/utils";
 import type { NextPage } from "next";
+import { Button } from "@/components/ui/button";
 
 type PageProps = {
   params?: {
@@ -74,7 +75,7 @@ const Properties: NextPage<PageProps> = ({ params }) => {
   if (isLoading) return <PropertyCardSkeletonLoader />;
 
   return (
-    <div className="relative mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 xl:mt-40">
+    <div className="relative mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 lg:px-36 xl:mt-40">
       <Grid>
         <div
           className={cn(
@@ -93,6 +94,21 @@ const Properties: NextPage<PageProps> = ({ params }) => {
             {data && <MapboxMultiPin propertyListings={data.properties} />}
           </div>
         )}
+
+        <div
+          className={cn(
+            "col-span-4 mt-4 flex items-center justify-between",
+            searchParams.get("map-view") === "true" && "col-span-2",
+          )}
+        >
+          <div className="text-sm text-neutral-500">
+            <p>Page 1 of {data && data?.totalPages ? data?.totalPages : 1}</p>
+          </div>
+          <div className="space-x-2">
+            <Button variant="outline">Back</Button>
+            <Button variant="outline">Next</Button>
+          </div>
+        </div>
       </Grid>
     </div>
   );

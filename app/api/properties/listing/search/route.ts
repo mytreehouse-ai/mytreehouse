@@ -258,7 +258,7 @@ const count_query = `
     const countResult: QueryResult<{ count: number }> = await sql.query(count_query);
     
     const totalRecords = countResult.rows[0].count;
-    const totalPages = queryParams.data.page_limit ? Math.ceil(totalRecords / queryParams.data.page_limit) : 0;
+    const totalPages = Math.ceil(totalRecords / pageLimit);
 
     const properties = await sql.query(query);
 
