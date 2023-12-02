@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
+import { QueryResult, sql } from "@vercel/postgres";
 import { UNKNOWN_CITY } from "@/lib/constant";
 import { PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
 import { fetchVercelEdgeConfig } from "@/lib/edge-config";
@@ -20,6 +20,11 @@ export async function GET(req: Request) {
         statusText: "Bad request",
       });
     }
+
+    const pageNumber = queryParams.data.page_number || 1;
+    const pageLimit = queryParams.data.page_limit || 10;
+    const offset = (pageNumber - 1) * pageLimit;
+  
 
     const query = `
           select
@@ -152,13 +157,112 @@ export async function GET(req: Request) {
             queryParams.data?.text_search ? "rank" : "p.created_at"
           } desc 
           limit ${
-            queryParams.data?.page_limit ? queryParams.data.page_limit : 30
+            queryParams.data?.page_limit ? queryParams.data.page_limit : 10
+          }
+          offset ${offset}
+  `.replace(/\n\s*\n/g, "\n");
+
+const count_query = `
+          select count(*)
+          from properties p
+          inner join property_types pt on pt.property_type_id = p.property_type_id
+          inner join listing_types lt on lt.listing_type_id = p.listing_type_id
+          inner join turnover_status ts on ts.turnover_status_id = p.turnover_status_id
+          inner join cities ct on ct.city_id = p.city_id
+          where p.images is not null and
+          p.images != '[]' and
+          p.longitude is not null and
+          p.latitude is not null and
+          p.property_status_id != '${UNTAGGED_TRANSACTION_ID}' and
+          p.city_id != '${UNKNOWN_CITY}' and
+          p.current_price is distinct from 'NaN'::numeric
+          ${
+            queryParams.data?.text_search
+              ? `
+          and tsv @@ plainto_tsquery('english', '${queryParams.data.text_search}')
+          `
+              : ``
+          }
+          ${
+            queryParams.data?.property_type
+              ? `
+          and p.property_type_id = '${queryParams.data.property_type}'
+          `
+              : ``
+          }
+          ${
+            queryParams.data?.listing_type
+              ? `
+          and p.listing_type_id = '${queryParams.data.listing_type}'
+          `
+              : ``
+          }
+          ${
+            queryParams.data?.turnover_status
+              ? `
+          and p.turnover_status_id = '${queryParams.data.turnover_status}'
+          `
+              : ``
+          }
+          ${
+            queryParams.data?.bedroom_count
+              ? `
+            and p.bedroom = ${queryParams.data.bedroom_count}
+            `
+              : ``
+          }
+          ${
+            queryParams.data?.bathroom_count
+              ? `
+          and p.bathroom = ${queryParams.data.bathroom_count}
+          `
+              : ``
+          }
+          ${
+            queryParams.data?.studio_type
+              ? `
+          and p.studio_type = ${queryParams.data.studio_type}
+          `
+              : ``
+          }
+          ${
+            queryParams.data?.is_cbd
+              ? `
+          and p.is_cbd = ${queryParams.data.is_cbd}
+          `
+              : ``
+          }
+          ${
+            queryParams.data?.city
+              ? `
+          and p.city_id = '${queryParams.data.city}'
+          `
+              : ``
+          }
+          ${
+            queryParams.data?.sqm
+              ? `
+          and p.sqm = ${queryParams.data.sqm}
+          `
+              : ``
+          }
+          ${
+            queryParams.data?.sqm_min && queryParams.data?.sqm_max
+              ? `
+          and p.sqm between ${queryParams.data.sqm_min} and ${queryParams.data.sqm_max}
+          `
+              : ``
           }
   `.replace(/\n\s*\n/g, "\n");
 
+    const countResult: QueryResult<{ count: number }> = await sql.query(count_query);
+    
+    const totalRecords = countResult.rows[0].count;
+    const totalPages = Math.ceil(totalRecords / pageLimit);
+
     const properties = await sql.query(query);
 
-    return NextResponse.json(properties.rows);
+    return NextResponse.json({properties: properties.rows, totalPages: totalPages});
   } catch (error: any) {
     return NextResponse.json(
       { message: "Neon database internal server error" },

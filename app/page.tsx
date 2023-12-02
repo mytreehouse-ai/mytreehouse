@@ -5,7 +5,7 @@ import Footer from "@/components/layouts/footer";
 import HeroContent from "@/components/property/homepage/herocontent";
 import HeroImageBanner from "@/components/property/homepage/heroimagebanner";
 import Navbar from "@/components/layouts/navbar";
-import { Property } from "@/interface/property";
+import { PropertyResponse } from "@/interface/property";
 import { FetchApiError } from "@/lib/exceptions";
 import { env } from "@/lib/env.mjs";
 
@@ -23,7 +23,7 @@ export default async function Home() {
     throw new FetchApiError("Error fetching top 4 properties");
   }
 
-  const data: Property[] = await topFourProperties.json();
+  const data: PropertyResponse = await topFourProperties.json();
 
   return (
     <main className="h-screen">
@@ -45,7 +45,7 @@ export default async function Home() {
           </Link>
         </div>
         <Grid>
-          {data.map((pt) => (
+          {data?.properties.map((pt) => (
             <Card key={pt.property_id} property={pt} />
           ))}
         </Grid>
