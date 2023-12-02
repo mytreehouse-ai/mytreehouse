@@ -1,6 +1,6 @@
 import { Property } from "@/interface/property";
 import { createSearchParams } from "@/lib/utils";
-import { PropertyListingSearchType } from "@/schema/propertyListingSearch.schema";
+import { PropertyListingSearchType,PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
 import { useQuery } from "@tanstack/react-query";
 
 async function getPropertiesApiQuery(
@@ -17,8 +17,9 @@ async function getPropertiesApiQuery(
   const response = await fetch(url);
 
   if (!response.ok) throw new Error("Error while querying properties");
-
-  return await response.json();
+  const data = await response.json();
+  const properties = data.data as Property[];
+  return properties;
 }
 
 export const usePropertyListingHook = (query?: PropertyListingSearchType) => {
