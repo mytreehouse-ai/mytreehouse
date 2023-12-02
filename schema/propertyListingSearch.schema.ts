@@ -1,5 +1,10 @@
 import z from 'zod'
 
+const pagination = z.object({
+  pageSize: z.preprocess((val) => Number(val), z.number().min(1)),
+  pageNumber: z.preprocess((val) => Number(val), z.number().min(1)),
+})
+
 export const PropertyListingSearchSchema = z
   .object({
     property_type: z.string().uuid(),
@@ -17,6 +22,8 @@ export const PropertyListingSearchSchema = z
     min_price: z.preprocess((val) => Number(val), z.number().min(0)),
     max_price: z.preprocess((val) => Number(val), z.number().min(0)),
     page_limit: z.preprocess((val) => Number(val), z.number().min(0)),
+    page_number: z.preprocess((val) => Number(val), z.number().min(0)),
+
   })
   .partial()
   .refine((input) => {

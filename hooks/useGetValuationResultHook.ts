@@ -21,6 +21,7 @@ const propertyValuationApiQuery = async (data: PropertyDetailValues) => {
     sqm,
     year_built: yearBuilt,
     city_id: location,
+    
   });
 
   let url = `/api/properties/valuation/${propertyTypeUrlValue}`;

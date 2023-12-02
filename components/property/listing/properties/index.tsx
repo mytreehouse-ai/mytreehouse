@@ -1,12 +1,7 @@
 "use client";
 import { usePropertyListingHook } from "@/hooks/usePropertyListingHook";
 import PropertyCardSkeletonLoader from "./propertycardskeletonloader";
-import {
-  useSearchParams,
-  useParams,
-  usePathname,
-  useRouter,
-} from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Grid from "../../grid";
 import Card from "../../card";
 import { listingTypes } from "@/static_data/listing-types";
@@ -14,9 +9,7 @@ import { cities } from "@/static_data/cities";
 import { propertyTypes } from "@/static_data/property-types";
 import MapboxMultiPin from "@/components/map/MapboxMultiPin";
 import { cn } from "@/lib/utils";
-import type { GetServerSideProps } from "next";
 import type { NextPage } from "next";
-import { Badge } from "@/components/ui/badge";
 
 type PageProps = {
   params?: {
@@ -72,6 +65,8 @@ const Properties: NextPage<PageProps> = ({ params }) => {
           (lt) => lt.urlValue === String(searchParams.get("listing_type")),
         )?.value
       : undefined,
+    page_limit: 20,
+    page_number: 2,
   });
 
   if (isLoading) return <PropertyCardSkeletonLoader />;
@@ -86,9 +81,8 @@ const Properties: NextPage<PageProps> = ({ params }) => {
               : "col-span-4 grid gap-x-6 gap-y-8 overflow-y-auto sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4",
           )}
         >
-          {data?.map((pt) => (<Card key={pt.property_id} property={pt} />
-          ))}
-          </div>
+          {data?.map((pt) => <Card key={pt.property_id} property={pt} />)}
+        </div>
 
         {searchParams.get("map-view") === "true" && (
           <div className="col-span-2 h-screen w-full">

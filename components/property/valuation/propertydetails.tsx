@@ -38,6 +38,7 @@ const PropertyDetails: React.FC = () => {
 
   const onSubmit = (values: z.infer<typeof propertyValuationFormSchema>) => {
     setPropertyDetailValues(values);
+    console.log("values set", values);
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(+1);
     }

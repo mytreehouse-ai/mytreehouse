@@ -21,6 +21,11 @@ export async function GET(req: Request) {
       });
     }
 
+    const pageNumber = queryParams.data.page_number || 1;
+    const pageLimit = queryParams.data.page_limit || 10;
+    const offset = (pageNumber - 1) * pageLimit;
+  
+
     const query = `
           select
             p.property_id,
@@ -152,8 +157,9 @@ export async function GET(req: Request) {
             queryParams.data?.text_search ? "rank" : "p.created_at"
           } desc 
           limit ${
-            queryParams.data?.page_limit ? queryParams.data.page_limit : 30
+            queryParams.data?.page_limit ? queryParams.data.page_limit : 10
           }
+          offset ${offset}
   `.replace(/\n\s*\n/g, "\n");
 
     const properties = await sql.query(query);
