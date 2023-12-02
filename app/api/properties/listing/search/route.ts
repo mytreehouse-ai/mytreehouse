@@ -262,7 +262,7 @@ const count_query = `
 
     const properties = await sql.query(query);
 
-    return NextResponse.json({data: properties.rows, totalPages: totalPages});
+    return NextResponse.json({properties: properties.rows, totalPages: totalPages});
   } catch (error: any) {
     return NextResponse.json(
       { message: "Neon database internal server error" },

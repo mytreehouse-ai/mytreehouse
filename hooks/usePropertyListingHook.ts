@@ -3,9 +3,14 @@ import { createSearchParams } from "@/lib/utils";
 import { PropertyListingSearchType,PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
 import { useQuery } from "@tanstack/react-query";
 
+interface PropertyResponse {
+  properties: Property[];
+  totalPages: number;
+}
+
 async function getPropertiesApiQuery(
   query?: PropertyListingSearchType,
-): Promise<Property[]> {
+): Promise<PropertyResponse> {
   const searchParams = createSearchParams(query || {});
 
   let url = "/api/properties/listing/search";
@@ -17,16 +22,30 @@ async function getPropertiesApiQuery(
   const response = await fetch(url);
 
   if (!response.ok) throw new Error("Error while querying properties");
-  const data = await response.json();
-  const properties = data.data as Property[];
-  return properties;
+
+
+    return (await response.json()) as PropertyResponse;
+
+  // const data = (await response.json()) as {
+  //   data: Property[]
+  //   totalPages: number
+  // };
+
+  // const properties = data.data as Property[];
+  // const totalPages = data.totalPages as number
+
 }
 
 export const usePropertyListingHook = (query?: PropertyListingSearchType) => {
-  const propertyQuery = useQuery({
+
+  const {data, isLoading} = useQuery({
     queryKey: ["properties", JSON.stringify(query)],
     queryFn: () => getPropertiesApiQuery(query),
   });
 
-  return propertyQuery;
+
+  return {
+    data, 
+    isLoading
+  };
 };
