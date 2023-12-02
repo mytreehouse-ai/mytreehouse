@@ -1,12 +1,8 @@
-import { Property } from "@/interface/property";
+import {  PropertyResponse } from "@/interface/property";
 import { createSearchParams } from "@/lib/utils";
-import { PropertyListingSearchType,PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
+import { PropertyListingSearchType } from "@/schema/propertyListingSearch.schema";
 import { useQuery } from "@tanstack/react-query";
 
-interface PropertyResponse {
-  properties: Property[];
-  totalPages: number;
-}
 
 async function getPropertiesApiQuery(
   query?: PropertyListingSearchType,
