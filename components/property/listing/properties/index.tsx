@@ -11,6 +11,8 @@ import MapboxMultiPin from "@/components/map/MapboxMultiPin";
 import { cn } from "@/lib/utils";
 import type { NextPage } from "next";
 import { Button } from "@/components/ui/button";
+import { createSearchParams } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 type PageProps = {
   params?: {
@@ -22,6 +24,7 @@ type PageProps = {
 
 const Properties: NextPage<PageProps> = ({ params }) => {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const { isLoading, data } = usePropertyListingHook({
     text_search: searchParams.has("text_search")
@@ -66,11 +69,54 @@ const Properties: NextPage<PageProps> = ({ params }) => {
           (lt) => lt.urlValue === String(searchParams.get("listing_type")),
         )?.value
       : undefined,
-    // page_limit: 20,
-    // page_number: 1,
+    page_number:
+      parseInt(
+        (searchParams.has("page_number") &&
+          searchParams.get("page_number")?.toString()) ||
+          "1",
+      ) || 1,
   });
 
-  console.log("PROPERTY", data);
+  const onPreviousPageHandler = () => {
+    const currentPageNumber = searchParams.has("page_number")
+      ? parseInt(searchParams.get("page_number") as string)
+      : 1;
+    const previousPageNumber =
+      currentPageNumber > 1 ? currentPageNumber - 1 : 1;
+
+    const newSearchParams = new URLSearchParams(window.location.search);
+
+    newSearchParams.set("page_number", previousPageNumber.toString());
+
+    router.replace(
+      `${window.location.pathname}?${newSearchParams.toString()}`,
+      {
+        scroll: false,
+      },
+    );
+  };
+
+  const onNextPageHandler = () => {
+    const currentPageNumber = searchParams.has("page_number")
+      ? parseInt(searchParams.get("page_number") as string)
+      : 1;
+    const nextPageNumber = currentPageNumber + 1;
+
+    const totalPages = data?.totalPages;
+
+    const newSearchParams = new URLSearchParams(window.location.search);
+
+    newSearchParams.set("page_number", nextPageNumber.toString());
+
+    if (currentPageNumber !== totalPages) {
+      router.replace(
+        `${window.location.pathname}?${newSearchParams.toString()}`,
+        {
+          scroll: false,
+        },
+      );
+    }
+  };
 
   if (isLoading) return <PropertyCardSkeletonLoader />;
 
@@ -102,11 +148,18 @@ const Properties: NextPage<PageProps> = ({ params }) => {
           )}
         >
           <div className="text-sm text-neutral-500">
-            <p>Page 1 of {data && data?.totalPages ? data?.totalPages : 1}</p>
+            <p>
+              Page {searchParams.get("page_number")?.toString() || "1"} of{" "}
+              {data && data?.totalPages ? data?.totalPages : 1}
+            </p>
           </div>
           <div className="space-x-2">
-            <Button variant="outline">Back</Button>
-            <Button variant="outline">Next</Button>
+            <Button variant="outline" onClick={onPreviousPageHandler}>
+              Back
+            </Button>
+            <Button variant="outline" onClick={onNextPageHandler}>
+              Next
+            </Button>
           </div>
         </div>
       </Grid>
