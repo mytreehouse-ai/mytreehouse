@@ -45,7 +45,7 @@ export default async function Home() {
           </Link>
         </div>
         <Grid>
-          {data?.properties.map((pt) => (
+          {data?.properties?.map((pt) => (
             <Card key={pt.property_id} property={pt} />
           ))}
         </Grid>
