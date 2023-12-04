@@ -19,6 +19,16 @@ export const formatToPhp = (number?: number) => {
   return formattedNumber;
 };
 
+export const formatPrice = (price: number): [number, string] => {
+  if (price >= 1e6) {
+    return [parseFloat((price / 1e6).toFixed(1)), "M"];
+  } else if (price >= 1e3) {
+    return [parseFloat((price / 1e3).toFixed(1)), "K"];
+  } else {
+    return [price, ""];
+  }
+};
+
 export function toUrlFriendlyLabel(str: string) {
   return str
     .toLowerCase()
@@ -110,19 +120,21 @@ export const formatToPhpForSlider = (number?: number) => {
   }).format(number);
 
   if (number >= 1000000000) {
-    formattedNumber = new Intl.NumberFormat("en-PH", {
-      style: "currency",
-      currency: "PHP",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(number / 1000000000) + "B";
+    formattedNumber =
+      new Intl.NumberFormat("en-PH", {
+        style: "currency",
+        currency: "PHP",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(number / 1000000000) + "B";
   } else if (number >= 1000000) {
-    formattedNumber = new Intl.NumberFormat("en-PH", {
-      style: "currency",
-      currency: "PHP",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(number / 1000000) + "M";
+    formattedNumber =
+      new Intl.NumberFormat("en-PH", {
+        style: "currency",
+        currency: "PHP",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(number / 1000000) + "M";
   }
 
   return formattedNumber;
