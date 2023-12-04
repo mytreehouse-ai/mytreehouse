@@ -2,18 +2,18 @@ import { Property } from "@/interface/property";
 
 export default async function sitemap() {
   const res = await fetch(
-    `https://mytreehouse.vercel.app/api/properties/listing/search`,
+    `https://beta.mytree.house/api/properties/listing/search`,
   );
 
   const allPropertyListings: Property[] = await res.json();
 
-  const propertyListings = allPropertyListings.map((propertyListing) => ({
-    url: `https://mytreehouse.vercel.app/property-listings/details/${propertyListing.property_id}`,
+  const propertyListings = allPropertyListings?.map((propertyListing) => ({
+    url: `https://beta.mytree.house/property-listings/details/${propertyListing.property_id}`,
     lastModified: new Date().toISOString(),
   }));
 
-  const routes = ["/property-valuation", "/contact-us"].map((route) => ({
-    url: `https://mytreehouse.vercel.app${route}`,
+  const routes = ["/property-valuation", "/contact-us"]?.map((route) => ({
+    url: `https://beta.mytree.house${route}`,
     lastModified: new Date().toISOString(),
   }));
 

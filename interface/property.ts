@@ -29,3 +29,8 @@ export interface Property {
   lease_end: string | null;
   created_at: string;
 }
+
+export interface PropertyResponse {
+  properties: Property[];
+  totalPages: number;
+}
