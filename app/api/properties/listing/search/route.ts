@@ -155,9 +155,7 @@ export async function GET(req: Request) {
           order by ${
             queryParams.data?.text_search ? "rank" : "p.created_at"
           } desc 
-          limit ${
-            queryParams.data?.page_limit ? queryParams.data.page_limit : 12
-          }
+          limit ${pageLimit}
           offset ${offset}
   `.replace(/\n\s*\n/g, "\n");
 
