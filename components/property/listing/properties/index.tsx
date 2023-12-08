@@ -121,7 +121,7 @@ const Properties: NextPage<PageProps> = ({ params }) => {
   if (isLoading) return <PropertyCardSkeletonLoader />;
 
   return (
-    <div className="relative mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 lg:px-36 xl:mt-40">
+    <div className="relative mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 xl:mt-40">
       <Grid>
         <div
           className={cn(

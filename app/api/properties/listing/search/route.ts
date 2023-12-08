@@ -22,9 +22,8 @@ export async function GET(req: Request) {
     }
 
     const pageNumber = queryParams.data.page_number || 1;
-    const pageLimit = queryParams.data.page_limit || 10;
+    const pageLimit = queryParams.data.page_limit || 12;
     const offset = (pageNumber - 1) * pageLimit;
-  
 
     const query = `
           select
@@ -157,12 +156,12 @@ export async function GET(req: Request) {
             queryParams.data?.text_search ? "rank" : "p.created_at"
           } desc 
           limit ${
-            queryParams.data?.page_limit ? queryParams.data.page_limit : 10
+            queryParams.data?.page_limit ? queryParams.data.page_limit : 12
           }
           offset ${offset}
   `.replace(/\n\s*\n/g, "\n");
 
-const count_query = `
+    const count_query = `
           select count(*)
           from properties p
           inner join property_types pt on pt.property_type_id = p.property_type_id
@@ -255,14 +254,18 @@ const count_query = `
           }
   `.replace(/\n\s*\n/g, "\n");
 
-    const countResult: QueryResult<{ count: number }> = await sql.query(count_query);
-    
+    const countResult: QueryResult<{ count: number }> =
+      await sql.query(count_query);
+
     const totalRecords = countResult.rows[0].count;
     const totalPages = Math.ceil(totalRecords / pageLimit);
 
     const properties = await sql.query(query);
 
-    return NextResponse.json({properties: properties.rows, totalPages: totalPages});
+    return NextResponse.json({
+      properties: properties.rows,
+      totalPages: totalPages,
+    });
   } catch (error: any) {
     return NextResponse.json(
       { message: "Neon database internal server error" },
