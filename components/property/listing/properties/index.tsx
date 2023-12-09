@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import type { NextPage } from "next";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useMobileDetect } from "@/hooks/useMobileDetect";
 
 type PageProps = {
   params?: {
@@ -24,6 +25,8 @@ type PageProps = {
 const Properties: NextPage<PageProps> = ({ params }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const isMobile = useMobileDetect();
 
   const { isLoading, data } = usePropertyListingHook({
     text_search: searchParams.has("text_search")
@@ -121,6 +124,7 @@ const Properties: NextPage<PageProps> = ({ params }) => {
 
   return (
     <div className="relative mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 xl:mt-40">
+      {isMobile ? <p>Mobile</p> : <p>Desktop</p>}
       <Grid>
         <div
           className={cn(
