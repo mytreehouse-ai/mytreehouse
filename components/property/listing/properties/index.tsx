@@ -13,6 +13,8 @@ import type { NextPage } from "next";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useMobileDetect } from "@/hooks/useMobileDetect";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useState } from "react";
 
 type PageProps = {
   params?: {
@@ -23,6 +25,7 @@ type PageProps = {
 };
 
 const Properties: NextPage<PageProps> = ({ params }) => {
+  const [] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -124,7 +127,6 @@ const Properties: NextPage<PageProps> = ({ params }) => {
 
   return (
     <div className="relative mx-5 mb-10 mt-60 sm:mt-40 md:mt-40 lg:mt-40 xl:mt-40">
-      {isMobile ? <p>Mobile</p> : <p>Desktop</p>}
       <Grid>
         <div
           className={cn(
@@ -138,11 +140,29 @@ const Properties: NextPage<PageProps> = ({ params }) => {
           ))}
         </div>
 
-        {searchParams.get("map-view") === "true" && (
-          <div className="col-span-2 h-screen w-full">
-            {data && <MapboxMultiPin propertyListings={data.properties} />}
-          </div>
-        )}
+        {searchParams.get("map-view") === "true" &&
+          (isMobile ? (
+            <Dialog
+              open={searchParams.get("map-view") === "true" ? true : false}
+              onOpenChange={(isOpen) => {
+                if (!isOpen) {
+                  const newSearchParams = new URLSearchParams(
+                    window.location.search,
+                  );
+                  newSearchParams.set("map-view", "false");
+                  router.replace(
+                    `${window.location.pathname}?${newSearchParams.toString()}`,
+                  );
+                }
+              }}
+            >
+              <PopupMap />
+            </Dialog>
+          ) : (
+            <div className="col-span-2 h-screen w-full">
+              {data && <MapboxMultiPin propertyListings={data.properties} />}
+            </div>
+          ))}
 
         <div
           className={cn(
@@ -171,3 +191,13 @@ const Properties: NextPage<PageProps> = ({ params }) => {
 };
 
 export default Properties;
+
+const PopupMap = () => {
+  return (
+    <DialogContent className="px-2 py-0 sm:max-w-[425px]">
+      <div className="my-10 h-[calc(100vh_-_200px)] w-full">
+        <MapboxMultiPin propertyListings={[]} />
+      </div>
+    </DialogContent>
+  );
+};
