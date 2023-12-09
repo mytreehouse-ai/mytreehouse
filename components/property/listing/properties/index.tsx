@@ -11,7 +11,6 @@ import MapboxMultiPin from "@/components/map/MapboxMultiPin";
 import { cn } from "@/lib/utils";
 import type { NextPage } from "next";
 import { Button } from "@/components/ui/button";
-import { createSearchParams } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 type PageProps = {
