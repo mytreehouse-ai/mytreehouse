@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface PropertyImagesPlaceholderProps {
   images: string[];
@@ -12,14 +13,15 @@ const PropertyImagesPlaceholder = ({
   images,
 }: PropertyImagesPlaceholderProps) => {
   const [imgShowcase, setImgShowcase] = useState("");
+  const [isLoading, setIsLoading] = useState(true); // Add this line
 
   useEffect(() => {
     if (images && images.length > 0) {
+      setIsLoading(true); // Set loading to true when changing image
       setImgShowcase(images[0]);
     }
   }, [images]);
 
-  // Render the component only if there are images
   if (!images || !images.length) {
     return null;
   }
@@ -27,6 +29,7 @@ const PropertyImagesPlaceholder = ({
   return (
     <div className="flex flex-col gap-x-2 gap-y-2 lg:flex-row">
       <div className="relative h-96 w-full">
+        {isLoading && <Skeleton className="h-96 w-full" />}
         <Image
           className="rounded-md object-cover"
           src={imgShowcase}
@@ -34,6 +37,7 @@ const PropertyImagesPlaceholder = ({
           sizes="(max-width: 768px) 100vw, 700px"
           fill={true}
           priority={true}
+          onLoad={() => setIsLoading(false)}
         />
       </div>
       <div
