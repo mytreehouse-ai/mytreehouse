@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,47 +38,23 @@ const Navbar: React.FC = () => {
           </div>
 
           <div
-            className={`${
-              isOpen ? "z-50 block" : "hidden"
-            } block w-full flex-grow md:flex md:w-auto md:items-center md:justify-end `}
+            className={cn(
+              "block w-full flex-grow md:flex md:w-auto md:items-center md:justify-end ",
+              isOpen ? "z-50 block" : "hidden",
+            )}
           >
             <ul className="mt-4 flex flex-col rounded-lg font-medium rtl:space-x-reverse md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0">
               {navItems.map((item) => (
                 <li key={item.href}>
-                  {/* <a
-                    href={item.href}
-                    onClick={() => router.push(item.href)}
-                    className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-                      pathName === item.href
-                        ? "border-emerald-500 bg-indigo-50  text-emerald-700"
-                        : "border-transparent  text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-                    }`}
-                    aria-current="page"
-                  >
-                    {item.text}
-                  </a> */}
-
-                  {/* <a
-                    href={item.href}
-                    onClick={() => router.push(item.href)}
-                    className={`inline-flex items-center px-1 pt-1 text-base font-medium ${
-                      pathName === item.href
-                        ? " border-emerald-500 text-emerald-700"
-                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                    }`}
-                    aria-current="page"
-                  >
-                    {item.text}
-                  </a> */}
-
                   <a
                     href={item.href}
                     onClick={() => router.push(item.href)}
-                    className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium md:inline-flex md:items-center md:border-l-0 md:px-1 md:py-0 md:pl-0 md:pr-0 md:pt-1 ${
+                    className={cn(
+                      "block border-l-4 py-2 pl-3 pr-4 text-base font-medium md:inline-flex md:items-center md:border-l-0 md:px-1 md:py-0 md:pl-0 md:pr-0 md:pt-1",
                       pathName === item.href
                         ? "border-emerald-500 bg-indigo-50  text-emerald-700 md:bg-transparent"
-                        : "border-transparent  text-gray-700 hover:border-gray-300 hover:bg-gray-50 hover:text-emerald-700 md:hover:bg-transparent"
-                    }`}
+                        : "border-transparent  text-gray-700 hover:border-gray-300 hover:bg-gray-50 hover:text-emerald-700 md:hover:bg-transparent",
+                    )}
                     aria-current="page"
                   >
                     {item.text}
