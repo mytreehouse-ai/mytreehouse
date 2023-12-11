@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useMobileDetect } from "@/hooks/useMobileDetect";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useState } from "react";
+import type { Property } from "@/interface/property";
 
 type PageProps = {
   params?: {
@@ -156,11 +157,13 @@ const Properties: NextPage<PageProps> = ({ params }) => {
                 }
               }}
             >
-              <PopupMap />
+              <PopupMap propertyListings={data?.properties || []} />
             </Dialog>
           ) : (
             <div className="col-span-2 h-screen w-full">
-              {data && <MapboxMultiPin propertyListings={data.properties} />}
+              {data && (
+                <MapboxMultiPin propertyListings={data.properties || []} />
+              )}
             </div>
           ))}
 
@@ -192,11 +195,15 @@ const Properties: NextPage<PageProps> = ({ params }) => {
 
 export default Properties;
 
-const PopupMap = () => {
+interface PopupMapProps {
+  propertyListings: Property[];
+}
+
+const PopupMap = ({ propertyListings }: PopupMapProps) => {
   return (
-    <DialogContent className="px-2 py-0 sm:max-w-[425px]">
+    <DialogContent className="rounded-lg px-2 py-0 sm:max-w-[425px]">
       <div className="my-10 h-[calc(100vh_-_200px)] w-full">
-        <MapboxMultiPin propertyListings={[]} />
+        <MapboxMultiPin propertyListings={propertyListings} />
       </div>
     </DialogContent>
   );
