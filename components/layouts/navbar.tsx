@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,25 +32,7 @@ const Navbar: React.FC = () => {
               onClick={() => setIsOpen(!isOpen)}
               className="flex items-center rounded border border-emerald-600 px-3 py-2 text-emerald-600 hover:border-emerald-600 hover:text-emerald-600"
             >
-              {isOpen ? (
-                <svg
-                  className="h-3 w-3 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <title>Close</title>
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                </svg>
-              ) : (
-                <svg
-                  className="h-3 w-3 fill-current"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <title>Menu</title>
-                  <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-                </svg>
-              )}
+              {isOpen ? <X size="16" /> : <Menu size="16" />}
             </button>
           </div>
 
