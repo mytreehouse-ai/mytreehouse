@@ -11,8 +11,11 @@ import MapboxMultiPin from "@/components/map/MapboxMultiPin";
 import { cn } from "@/lib/utils";
 import type { NextPage } from "next";
 import { Button } from "@/components/ui/button";
-import { createSearchParams } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useMobileDetect } from "@/hooks/useMobileDetect";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useState } from "react";
+import type { Property } from "@/interface/property";
 
 type PageProps = {
   params?: {
@@ -23,8 +26,11 @@ type PageProps = {
 };
 
 const Properties: NextPage<PageProps> = ({ params }) => {
+  const [] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const isMobile = useMobileDetect();
 
   const { isLoading, data } = usePropertyListingHook({
     text_search: searchParams.has("text_search")
@@ -135,11 +141,31 @@ const Properties: NextPage<PageProps> = ({ params }) => {
           ))}
         </div>
 
-        {searchParams.get("map-view") === "true" && (
-          <div className="col-span-2 h-screen w-full">
-            {data && <MapboxMultiPin propertyListings={data.properties} />}
-          </div>
-        )}
+        {searchParams.get("map-view") === "true" &&
+          (isMobile ? (
+            <Dialog
+              open={searchParams.get("map-view") === "true" ? true : false}
+              onOpenChange={(isOpen) => {
+                if (!isOpen) {
+                  const newSearchParams = new URLSearchParams(
+                    window.location.search,
+                  );
+                  newSearchParams.set("map-view", "false");
+                  router.replace(
+                    `${window.location.pathname}?${newSearchParams.toString()}`,
+                  );
+                }
+              }}
+            >
+              <PopupMap propertyListings={data?.properties || []} />
+            </Dialog>
+          ) : (
+            <div className="col-span-2 h-screen w-full">
+              {data && (
+                <MapboxMultiPin propertyListings={data.properties || []} />
+              )}
+            </div>
+          ))}
 
         <div
           className={cn(
@@ -168,3 +194,17 @@ const Properties: NextPage<PageProps> = ({ params }) => {
 };
 
 export default Properties;
+
+interface PopupMapProps {
+  propertyListings: Property[];
+}
+
+const PopupMap = ({ propertyListings }: PopupMapProps) => {
+  return (
+    <DialogContent className="rounded-lg px-2 py-0 sm:max-w-[425px]">
+      <div className="my-10 h-[calc(100vh_-_200px)] w-full">
+        <MapboxMultiPin propertyListings={propertyListings} />
+      </div>
+    </DialogContent>
+  );
+};
