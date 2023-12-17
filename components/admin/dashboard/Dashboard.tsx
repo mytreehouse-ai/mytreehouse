@@ -4,7 +4,6 @@ import React, { Suspense } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-
 const Overview = React.lazy(
   () => import("@/components/admin/dashboard/overview/overview"),
 );
