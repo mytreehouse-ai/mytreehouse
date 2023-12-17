@@ -18,6 +18,9 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import { formatToPhp } from "@/lib/utils";
 import type { Property } from "@/interface/property";
 import { usePropertyListingHook } from "@/hooks/usePropertyListingHook";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface NumericEditorProps {
   value: string;
@@ -32,12 +35,19 @@ interface NumericEditorHandle {
 }
 
 const AgGridTable = () => {
-  const [rowData, setRowData] = useState<Property[]>([]);
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
 
   const { data: properties, isLoading: propertiesIsLoading } =
-    usePropertyListingHook();
-
-  console.log(properties);
+    usePropertyListingHook({
+      page_number:
+        parseInt(
+          (searchParams.has("page_number") &&
+            searchParams.get("page_number")?.toString()) ||
+            "1",
+        ) || 1,
+    });
 
   const NumericEditor = memo(
     forwardRef<NumericEditorHandle, NumericEditorProps>((props, ref) => {
@@ -255,11 +265,9 @@ const AgGridTable = () => {
   }, []);
 
   const gridOptions: GridOptions<Property> = {
-    rowData: !propertiesIsLoading ? properties?.properties : [],
     getRowId: getRowId,
     editType: "fullRow",
-    pagination: true,
-    paginationPageSize: !propertiesIsLoading ? properties?.totalPages : 1,
+    suppressPaginationPanel: true,
     onRowValueChanged: (event) => {
       if (event.type === "rowValueChanged") {
         console.log(event.data);
@@ -276,15 +284,77 @@ const AgGridTable = () => {
     };
   }, []);
 
+  const onNextPageHandler = () => {
+    const currentPageNumber = searchParams.has("page_number")
+      ? parseInt(searchParams.get("page_number") as string)
+      : 1;
+    const nextPageNumber = currentPageNumber + 1;
+
+    const totalPages = properties?.totalPages;
+
+    const newSearchParams = new URLSearchParams(window.location.search);
+
+    newSearchParams.set("page_number", nextPageNumber.toString());
+
+    if (currentPageNumber !== totalPages) {
+      router.replace(
+        `${window.location.pathname}?${newSearchParams.toString()}`,
+        {
+          scroll: false,
+        },
+      );
+    }
+  };
+
+  const onPreviousPageHandler = () => {
+    const currentPageNumber = searchParams.has("page_number")
+      ? parseInt(searchParams.get("page_number") as string)
+      : 1;
+    const previousPageNumber =
+      currentPageNumber > 1 ? currentPageNumber - 1 : 1;
+
+    const newSearchParams = new URLSearchParams(window.location.search);
+
+    newSearchParams.set("page_number", previousPageNumber.toString());
+
+    router.replace(
+      `${window.location.pathname}?${newSearchParams.toString()}`,
+      {
+        scroll: false,
+      },
+    );
+  };
+
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <div className="ag-theme-alpine " style={{ width: "100%", height: 500 }}>
         <AgGridReact
           ref={gridRef}
+          rowData={!propertiesIsLoading ? properties?.properties : []}
           gridOptions={gridOptions}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
         />
+      </div>
+      <div
+        className={cn(
+          "col-span-4 mt-4 flex w-full items-center justify-end gap-4",
+        )}
+      >
+        <div className="text-sm text-neutral-500">
+          <p>
+            Page {searchParams.get("page_number")?.toString() || "1"} of{" "}
+            {properties && properties?.totalPages ? properties?.totalPages : 1}
+          </p>
+        </div>
+        <div className="space-x-2">
+          <Button variant="outline" onClick={onPreviousPageHandler}>
+            Back
+          </Button>
+          <Button variant="outline" onClick={onNextPageHandler}>
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );
