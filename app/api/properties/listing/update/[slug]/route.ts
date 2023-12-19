@@ -7,8 +7,8 @@ const PropertySlugSchema = z.object({
 });
 
 const UpdatePropertySchema = z.object({
-property_type_name: z.string().optional(),
-listing_type_name: z.string().optional(),
+property_type_id: z.string().optional(),
+listing_type_id: z.string().optional(),
 turnover_status_name: z.string().optional()
 });
 

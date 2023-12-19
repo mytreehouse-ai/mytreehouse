@@ -21,6 +21,7 @@ import { usePropertyListingHook } from "@/hooks/usePropertyListingHook";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useUpdatePropertyHook } from "@/hooks/ag-grid/useUpdatePropertyHook";
 
 interface NumericEditorProps {
   value: string;
@@ -38,6 +39,13 @@ const AgGridTable = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
+
+  const updateProperty = useUpdatePropertyHook({
+    slug: "60a0ed17-2d63-45aa-a723-d01d9ca2251e",
+    data: {
+      property_type_id: "e718f6f2-6f4b-48ae-9dff-93d64d5fb1a8",
+    },
+  });
 
   const { data: properties, isLoading: propertiesIsLoading } =
     usePropertyListingHook({
