@@ -49,6 +49,10 @@ const AgGridTable = () => {
         ) || 1,
     });
 
+  const totalPages = useMemo(() => {
+    return properties?.totalPages ? properties?.totalPages : 1;
+  }, [properties]);
+
   const NumericEditor = memo(
     forwardRef<NumericEditorHandle, NumericEditorProps>((props, ref) => {
       const KEY_BACKSPACE = "Backspace";
@@ -344,7 +348,7 @@ const AgGridTable = () => {
         <div className="text-sm text-neutral-500">
           <p>
             Page {searchParams.get("page_number")?.toString() || "1"} of{" "}
-            {properties && properties?.totalPages ? properties?.totalPages : 1}
+            {propertiesIsLoading ? "Loading..." : properties?.totalPages || 1}
           </p>
         </div>
         <div className="space-x-2">
