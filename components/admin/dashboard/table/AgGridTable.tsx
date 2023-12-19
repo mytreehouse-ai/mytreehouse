@@ -40,12 +40,7 @@ const AgGridTable = () => {
 
   const searchParams = useSearchParams();
 
-  const updateProperty = useUpdatePropertyHook({
-    slug: "60a0ed17-2d63-45aa-a723-d01d9ca2251e",
-    data: {
-      property_type_id: "e718f6f2-6f4b-48ae-9dff-93d64d5fb1a8",
-    },
-  });
+  const updateProperty = useUpdatePropertyHook();
 
   const { data: properties, isLoading: propertiesIsLoading } =
     usePropertyListingHook({
@@ -230,6 +225,7 @@ const AgGridTable = () => {
           "Vacant Lot",
         ],
       },
+      // onCellValueChanged: (data) => console.log(data),
     },
     {
       field: "listing_type_name",
@@ -278,13 +274,42 @@ const AgGridTable = () => {
 
   const gridOptions: GridOptions<Property> = {
     getRowId: getRowId,
-    editType: "fullRow",
+    // editType: "fullRow",
     suppressPaginationPanel: true,
-    onRowValueChanged: (event) => {
-      if (event.type === "rowValueChanged") {
-        console.log(event.data);
+    onCellValueChanged: (cell) => {
+      const { property_id } = cell.data;
+
+      if (cell?.type === "cellValueChanged") {
+        if (cell.colDef.field === "listing_type_name") {
+          const listing_type_id = [
+            {
+              value: "6af21b8c-3022-41fa-86dc-3730d8bf0d4f",
+              label: "For rent",
+            },
+            {
+              value: "cb2fbe3c-b9d0-4cbe-8b62-c28693837d2c",
+              label: "For sale",
+            },
+          ];
+
+          const selected_listing_type = listing_type_id.find(
+            (e) => e.label === cell.newValue,
+          );
+
+          void updateProperty.mutate({
+            slug: property_id,
+            data: {
+              listing_type_id: selected_listing_type?.value,
+            },
+          });
+        }
       }
     },
+    // onRowValueChanged: (event) => {
+    //   if (event.type === "rowValueChanged") {
+    //     console.log(event.data);
+    //   }
+    // },
   };
 
   const defaultColDef = useMemo(() => {

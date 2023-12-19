@@ -31,7 +31,7 @@ const updateProperty = async ({slug, data}:UpdatePropertySchemaType) => {
 }
 
 
-export const useUpdatePropertyHook = ({slug, data}:UpdatePropertySchemaType) => {
+export const useUpdatePropertyHook = () => {
 
 const mutationKey = ["properties"]
 
@@ -39,17 +39,15 @@ const queryClient = useQueryClient()
 
 const mutation = useMutation({
     mutationKey,
-    mutationFn: () => updateProperty({
-        slug,
-        data
-    }),
+    mutationFn: updateProperty,
     onSuccess: () => {
         queryClient.invalidateQueries({
             queryKey: ["properties"]
         })
-        console.log('mutate success')}
+
+    }
 })
 
-return mutation.mutate
+return mutation
 
 }
