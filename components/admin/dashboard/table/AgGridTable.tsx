@@ -40,7 +40,7 @@ const AgGridTable = () => {
 
   const searchParams = useSearchParams();
 
-  const updateProperty = useUpdatePropertyHook();
+  const { mutate: updateProperty } = useUpdatePropertyHook();
 
   const { data: properties, isLoading: propertiesIsLoading } =
     usePropertyListingHook({
@@ -296,10 +296,55 @@ const AgGridTable = () => {
             (e) => e.label === cell.newValue,
           );
 
-          void updateProperty.mutate({
+          void updateProperty({
             slug: property_id,
             data: {
               listing_type_id: selected_listing_type?.value,
+            },
+          });
+        }
+        if (cell.colDef.field === "property_type_name") {
+          const property_type_id = [
+            {
+              value: "e718f6f2-6f4b-48ae-9dff-93d64d5fb1a8",
+              label: "Condominium",
+              url_value: "condominium",
+            },
+            {
+              value: "6b9b82cc-537c-4af6-9200-e82c3d539118",
+              label: "Townhouse",
+              url_value: "townhouse",
+            },
+            {
+              value: "a8171faf-00a9-47e4-b1db-8efca25381a2",
+              label: "Apartment",
+              url_value: "apartment",
+            },
+            {
+              value: "166968a2-1c59-412c-8a50-4a75f61e56bc",
+              label: "Warehouse",
+              url_value: "warehouse",
+            },
+            {
+              value: "0944fceb-6e81-41d7-8d45-18fa5d33d754",
+              label: "House & Lot",
+              url_value: "house-and-lot",
+            },
+            {
+              value: "238aa2f4-d1aa-4af7-8afe-9413b24cf3ae",
+              label: "Vacant Lot",
+              url_value: "vacant-lot",
+            },
+          ];
+
+          const selected_property_type = property_type_id.find(
+            (e) => e.label === cell.newValue,
+          );
+
+          void updateProperty({
+            slug: property_id,
+            data: {
+              property_type_id: selected_property_type?.value,
             },
           });
         }
