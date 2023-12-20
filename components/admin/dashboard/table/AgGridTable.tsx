@@ -22,6 +22,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUpdatePropertyHook } from "@/hooks/ag-grid/useUpdatePropertyHook";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 
 interface NumericEditorProps {
   value: string;
@@ -35,12 +37,26 @@ interface NumericEditorHandle {
   isCancelAfterEnd: () => boolean;
 }
 
+interface UpdatedRowData {
+  fieldName: string;
+  newValue: string;
+  oldValue: string;
+}
+
 const AgGridTable = () => {
+  const [updatedRowData, setUpdatedRowData] = useState<UpdatedRowData>();
+
   const router = useRouter();
 
   const searchParams = useSearchParams();
 
-  const { mutate: updateProperty } = useUpdatePropertyHook();
+  const { toast } = useToast();
+
+  const {
+    mutate: updateProperty,
+    isPending: updateIsPending,
+    isSuccess: updateIsSuccess,
+  } = useUpdatePropertyHook();
 
   const { data: properties, isLoading: propertiesIsLoading } =
     usePropertyListingHook({
@@ -302,7 +318,14 @@ const AgGridTable = () => {
               listing_type_id: selected_listing_type?.value,
             },
           });
+
+          setUpdatedRowData({
+            fieldName: "Listing type",
+            oldValue: cell.oldValue,
+            newValue: cell.newValue,
+          });
         }
+
         if (cell.colDef.field === "property_type_name") {
           const property_type_id = [
             {
@@ -347,6 +370,12 @@ const AgGridTable = () => {
               property_type_id: selected_property_type?.value,
             },
           });
+
+          setUpdatedRowData({
+            fieldName: "Property type",
+            oldValue: cell.oldValue,
+            newValue: cell.newValue,
+          });
         }
       }
     },
@@ -365,6 +394,28 @@ const AgGridTable = () => {
       filter: true,
     };
   }, []);
+
+  useEffect(() => {
+    if (updateIsPending) {
+      toast({
+        title: "Updating cell ",
+        style: {
+          borderColor: "#71717a",
+        },
+        // description: "Friday, February 10, 2023 at 5:57 PM",
+        // action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+      });
+    } else if (updateIsSuccess) {
+      toast({
+        title: `Update on ${updatedRowData?.fieldName} is success `,
+        description: `Value changed from ${updatedRowData?.oldValue} to ${updatedRowData?.newValue}`,
+        style: {
+          borderColor: "#17a34a",
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateIsSuccess, updateIsPending]);
 
   const onNextPageHandler = () => {
     const currentPageNumber = searchParams.has("page_number")
@@ -424,10 +475,12 @@ const AgGridTable = () => {
         )}
       >
         <div className="text-sm text-neutral-500">
-          <p>
-            Page {searchParams.get("page_number")?.toString() || "1"} of{" "}
-            {propertiesIsLoading ? "Loading..." : properties?.totalPages || 1}
-          </p>
+          {!propertiesIsLoading && (
+            <p>
+              Page {searchParams.get("page_number")?.toString() || "1"} of{" "}
+              {propertiesIsLoading ? "Loading..." : properties?.totalPages || 1}
+            </p>
+          )}
         </div>
         <div className="space-x-2">
           <Button variant="outline" onClick={onPreviousPageHandler}>
