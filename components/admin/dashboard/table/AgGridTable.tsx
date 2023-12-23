@@ -16,38 +16,14 @@ import type { GetRowIdParams } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { formatToPhp } from "@/lib/utils";
-
-interface IPropertyData {
-  id: string;
-  address: string;
-  amenities: string[];
-  bathroom: number;
-  bedroom: number;
-  building_name: string | null;
-  city_name: string;
-  created_at: string;
-  current_price: string;
-  description: string;
-  floor_area: number;
-  images: string[];
-  is_active: boolean;
-  is_cbd: boolean;
-  is_corner_lot: boolean;
-  latitude: string;
-  lease_end: string | null;
-  listing_title: string;
-  listing_type_name: string;
-  listing_url: string;
-  longitude: string;
-  lot_area: number;
-  parking_lot: number;
-  property_id: string;
-  property_type_name: string;
-  sqm: number;
-  studio_type: boolean;
-  turnover_status_name: string;
-  year_built: string | null;
-}
+import type { Property } from "@/interface/property";
+import { usePropertyListingHook } from "@/hooks/usePropertyListingHook";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useUpdatePropertyHook } from "@/hooks/ag-grid/useUpdatePropertyHook";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 
 interface NumericEditorProps {
   value: string;
@@ -61,254 +37,40 @@ interface NumericEditorHandle {
   isCancelAfterEnd: () => boolean;
 }
 
-const dummyData: IPropertyData[] = [
-  {
-    id: "1",
-    address: "Ortigas CBD, Pasig",
-    amenities: [],
-    bathroom: 1,
-    bedroom: 1,
-    building_name: null,
-    city_name: "Pasig",
-    created_at: "2023-10-29T07:12:06.227Z",
-    current_price: "26582000.00",
-    description: "Description for Property 1",
-    floor_area: 69,
-    images: [
-      "https://static-ph.lamudi.com/static/media/bm9uZS9ub25l/2x2x5x880x450/614913aa7bed19.jpg",
-    ],
-    is_active: true,
-    is_cbd: false,
-    is_corner_lot: false,
-    latitude: "14.58377100",
-    lease_end: null,
-    listing_title:
-      "Residences at The Galleon | 1BR Condo Unit for Sale in Ortigas CBD, Pasig City | 43K",
-    listing_type_name: "For Sale",
-    listing_url:
-      "https://www.lamudi.com.ph/residences-at-the-galleon-1br-condo-unit-for-sale-169501854719.html",
-    longitude: "121.05967500",
-    lot_area: 0,
-    parking_lot: 0,
-    property_id: "da3d02f5-82fa-4eca-a0bf-50d14326489f",
-    property_type_name: "Condominium",
-    sqm: 69,
-    studio_type: false,
-    turnover_status_name: "Furnished",
-    year_built: null,
-  },
-  {
-    id: "2",
-    address: "Ortigas CBD, Pasig",
-    amenities: [],
-    bathroom: 1,
-    bedroom: 1,
-    building_name: null,
-    city_name: "Pasig",
-    created_at: "2023-10-29T07:12:06.227Z",
-    current_price: "26582000.00",
-    description: "Description for Property 1",
-    floor_area: 69,
-    images: [
-      "https://static-ph.lamudi.com/static/media/bm9uZS9ub25l/2x2x5x880x450/614913aa7bed19.jpg",
-    ],
-    is_active: true,
-    is_cbd: false,
-    is_corner_lot: false,
-    latitude: "14.58377100",
-    lease_end: null,
-    listing_title:
-      "Maple at Verdant Towers | 1BR Condo Unit for Sale in Ortigas East, Pasig City | 3011",
-    listing_type_name: "For Sale",
-    listing_url:
-      "https://www.lamudi.com.ph/residences-at-the-galleon-1br-condo-unit-for-sale-169501854719.html",
-    longitude: "121.05967500",
-    lot_area: 0,
-    parking_lot: 0,
-    property_id: "da3d02f5-82fa-4eca-a0bf-50d14326489f",
-    property_type_name: "Condominium",
-    sqm: 69,
-    studio_type: false,
-    turnover_status_name: "Furnished",
-    year_built: null,
-  },
-  {
-    id: "3",
-    address: "Ortigas CBD, Pasig",
-    amenities: [],
-    bathroom: 1,
-    bedroom: 1,
-    building_name: null,
-    city_name: "Las Piñas",
-    created_at: "2023-10-29T07:12:06.227Z",
-    current_price: "10000000.00",
-    description: "Description for Property 1",
-    floor_area: 69,
-    images: [
-      "https://static-ph.lamudi.com/static/media/bm9uZS9ub25l/2x2x5x880x450/614913aa7bed19.jpg",
-    ],
-    is_active: true,
-    is_cbd: false,
-    is_corner_lot: false,
-    latitude: "14.58377100",
-    lease_end: null,
-    listing_title:
-      "Brand New Duplex House and Lot For Sale in BF Resort, Las Piñas",
-    listing_type_name: "For Sale",
-    listing_url:
-      "https://www.lamudi.com.ph/residences-at-the-galleon-1br-condo-unit-for-sale-169501854719.html",
-    longitude: "121.05967500",
-    lot_area: 0,
-    parking_lot: 0,
-    property_id: "da3d02f5-82fa-4eca-a0bf-50d14326489f",
-    property_type_name: "House and Lot",
-    sqm: 69,
-    studio_type: false,
-    turnover_status_name: "Semi-Furnished",
-    year_built: null,
-  },
-  {
-    id: "4",
-    address: "Ortigas CBD, Pasig",
-    amenities: [],
-    bathroom: 1,
-    bedroom: 1,
-    building_name: null,
-    city_name: "Taguig",
-    created_at: "2023-10-29T07:12:06.227Z",
-    current_price: "14000000.00",
-    description: "Description for Property 1",
-    floor_area: 69,
-    images: [
-      "https://static-ph.lamudi.com/static/media/bm9uZS9ub25l/2x2x5x880x450/614913aa7bed19.jpg",
-    ],
-    is_active: true,
-    is_cbd: false,
-    is_corner_lot: false,
-    latitude: "14.58377100",
-    lease_end: null,
-    listing_title:
-      "Fully Furnished 1-Bedroom Unit For Sale at Bellagio 3, Taguig City",
-    listing_type_name: "For Sale",
-    listing_url:
-      "https://www.lamudi.com.ph/residences-at-the-galleon-1br-condo-unit-for-sale-169501854719.html",
-    longitude: "121.05967500",
-    lot_area: 0,
-    parking_lot: 0,
-    property_id: "da3d02f5-82fa-4eca-a0bf-50d14326489f",
-    property_type_name: "Condominium",
-    sqm: 69,
-    studio_type: false,
-    turnover_status_name: "Semi-Furnished",
-    year_built: null,
-  },
-  {
-    id: "5",
-    address: "Ortigas CBD, Pasig",
-    amenities: [],
-    bathroom: 1,
-    bedroom: 1,
-    building_name: null,
-    city_name: "Dumaguete",
-    created_at: "2023-10-29T07:12:06.227Z",
-    current_price: "25000.00",
-    description: "Description for Property 1",
-    floor_area: 69,
-    images: [
-      "https://static-ph.lamudi.com/static/media/bm9uZS9ub25l/2x2x5x880x450/614913aa7bed19.jpg",
-    ],
-    is_active: true,
-    is_cbd: false,
-    is_corner_lot: false,
-    latitude: "14.58377100",
-    lease_end: null,
-    listing_title: "Apartment for Rent in Daro Dumaguete City",
-    listing_type_name: "For Rent",
-    listing_url:
-      "https://www.lamudi.com.ph/residences-at-the-galleon-1br-condo-unit-for-sale-169501854719.html",
-    longitude: "121.05967500",
-    lot_area: 0,
-    parking_lot: 0,
-    property_id: "da3d02f5-82fa-4eca-a0bf-50d14326489f",
-    property_type_name: "Townhouse",
-    sqm: 69,
-    studio_type: false,
-    turnover_status_name: "Furnished",
-    year_built: null,
-  },
-  {
-    id: "6",
-    address: "Ortigas CBD, Pasig",
-    amenities: [],
-    bathroom: 1,
-    bedroom: 1,
-    building_name: null,
-    city_name: "Quezon City",
-    created_at: "2023-10-29T07:12:06.227Z",
-    current_price: "6325600.00",
-    description: "Description for Property 1",
-    floor_area: 69,
-    images: [
-      "https://static-ph.lamudi.com/static/media/bm9uZS9ub25l/2x2x5x880x450/614913aa7bed19.jpg",
-    ],
-    is_active: true,
-    is_cbd: false,
-    is_corner_lot: false,
-    latitude: "14.58377100",
-    lease_end: null,
-    listing_title:
-      "Vacant Residential Lot for Sale inside Filinvest 2, Quezon City",
-    listing_type_name: "For Rent",
-    listing_url:
-      "https://www.lamudi.com.ph/residences-at-the-galleon-1br-condo-unit-for-sale-169501854719.html",
-    longitude: "121.05967500",
-    lot_area: 0,
-    parking_lot: 0,
-    property_id: "da3d02f5-82fa-4eca-a0bf-50d14326489f",
-    property_type_name: "Vacant Lot",
-    sqm: 69,
-    studio_type: false,
-    turnover_status_name: "Unknown",
-    year_built: null,
-  },
-  {
-    id: "7",
-    address: "Ortigas CBD, Pasig",
-    amenities: [],
-    bathroom: 1,
-    bedroom: 1,
-    building_name: null,
-    city_name: "Bulacan",
-    created_at: "2023-10-29T07:12:06.227Z",
-    current_price: "280000000.00",
-    description: "Description for Property 1",
-    floor_area: 69,
-    images: [
-      "https://static-ph.lamudi.com/static/media/bm9uZS9ub25l/2x2x5x880x450/614913aa7bed19.jpg",
-    ],
-    is_active: true,
-    is_cbd: false,
-    is_corner_lot: false,
-    latitude: "14.58377100",
-    lease_end: null,
-    listing_title: "INDUSTRIAL WAREHOUSE FOR SALE IN STA. MARIA BULACAN",
-    listing_type_name: "For Sale",
-    listing_url:
-      "https://www.lamudi.com.ph/residences-at-the-galleon-1br-condo-unit-for-sale-169501854719.html",
-    longitude: "121.05967500",
-    lot_area: 0,
-    parking_lot: 0,
-    property_id: "da3d02f5-82fa-4eca-a0bf-50d14326489f",
-    property_type_name: "Warehouse",
-    sqm: 69,
-    studio_type: false,
-    turnover_status_name: "Unknown",
-    year_built: null,
-  },
-];
+interface UpdatedRowData {
+  fieldName: string;
+  newValue: string;
+  oldValue: string;
+}
 
 const AgGridTable = () => {
-  const [rowData, setRowData] = useState<IPropertyData[]>(dummyData);
+  const [updatedRowData, setUpdatedRowData] = useState<UpdatedRowData>();
+
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+
+  const { toast } = useToast();
+
+  const {
+    mutate: updateProperty,
+    isPending: updateIsPending,
+    isSuccess: updateIsSuccess,
+  } = useUpdatePropertyHook();
+
+  const { data: properties, isLoading: propertiesIsLoading } =
+    usePropertyListingHook({
+      page_number:
+        parseInt(
+          (searchParams.has("page_number") &&
+            searchParams.get("page_number")?.toString()) ||
+            "1",
+        ) || 1,
+    });
+
+  const totalPages = useMemo(() => {
+    return properties?.totalPages ? properties?.totalPages : 1;
+  }, [properties]);
 
   const NumericEditor = memo(
     forwardRef<NumericEditorHandle, NumericEditorProps>((props, ref) => {
@@ -456,7 +218,7 @@ const AgGridTable = () => {
     }),
   );
 
-  const [columnDefs, setColumnDefs] = useState<ColDef<IPropertyData>[]>([
+  const [columnDefs, setColumnDefs] = useState<ColDef<Property>[]>([
     {
       field: "listing_title",
       headerName: "Title",
@@ -479,6 +241,7 @@ const AgGridTable = () => {
           "Vacant Lot",
         ],
       },
+      // onCellValueChanged: (data) => console.log(data),
     },
     {
       field: "listing_type_name",
@@ -519,22 +282,108 @@ const AgGridTable = () => {
     },
   ]);
 
-  const gridRef = useRef<AgGridReactType<IPropertyData>>(null);
+  const gridRef = useRef<AgGridReactType<Property>>(null);
 
   const getRowId = useMemo(() => {
-    return (data: GetRowIdParams<IPropertyData>) => data.data.id;
+    return (data: GetRowIdParams<Property>) => data.data.property_id;
   }, []);
 
-  const gridOptions: GridOptions<IPropertyData> = {
-    rowData: rowData,
+  const gridOptions: GridOptions<Property> = {
     getRowId: getRowId,
-    editType: "fullRow",
-    pagination: true,
-    onRowValueChanged: (event) => {
-      if (event.type === "rowValueChanged") {
-        console.log(event.data);
+    // editType: "fullRow",
+    suppressPaginationPanel: true,
+    onCellValueChanged: (cell) => {
+      const { property_id } = cell.data;
+
+      if (cell?.type === "cellValueChanged") {
+        if (cell.colDef.field === "listing_type_name") {
+          const listing_type_id = [
+            {
+              value: "6af21b8c-3022-41fa-86dc-3730d8bf0d4f",
+              label: "For rent",
+            },
+            {
+              value: "cb2fbe3c-b9d0-4cbe-8b62-c28693837d2c",
+              label: "For sale",
+            },
+          ];
+
+          const selected_listing_type = listing_type_id.find(
+            (e) => e.label === cell.newValue,
+          );
+
+          void updateProperty({
+            slug: property_id,
+            data: {
+              listing_type_id: selected_listing_type?.value,
+            },
+          });
+
+          setUpdatedRowData({
+            fieldName: "Listing type",
+            oldValue: cell.oldValue,
+            newValue: cell.newValue,
+          });
+        }
+
+        if (cell.colDef.field === "property_type_name") {
+          const property_type_id = [
+            {
+              value: "e718f6f2-6f4b-48ae-9dff-93d64d5fb1a8",
+              label: "Condominium",
+              url_value: "condominium",
+            },
+            {
+              value: "6b9b82cc-537c-4af6-9200-e82c3d539118",
+              label: "Townhouse",
+              url_value: "townhouse",
+            },
+            {
+              value: "a8171faf-00a9-47e4-b1db-8efca25381a2",
+              label: "Apartment",
+              url_value: "apartment",
+            },
+            {
+              value: "166968a2-1c59-412c-8a50-4a75f61e56bc",
+              label: "Warehouse",
+              url_value: "warehouse",
+            },
+            {
+              value: "0944fceb-6e81-41d7-8d45-18fa5d33d754",
+              label: "House & Lot",
+              url_value: "house-and-lot",
+            },
+            {
+              value: "238aa2f4-d1aa-4af7-8afe-9413b24cf3ae",
+              label: "Vacant Lot",
+              url_value: "vacant-lot",
+            },
+          ];
+
+          const selected_property_type = property_type_id.find(
+            (e) => e.label === cell.newValue,
+          );
+
+          void updateProperty({
+            slug: property_id,
+            data: {
+              property_type_id: selected_property_type?.value,
+            },
+          });
+
+          setUpdatedRowData({
+            fieldName: "Property type",
+            oldValue: cell.oldValue,
+            newValue: cell.newValue,
+          });
+        }
       }
     },
+    // onRowValueChanged: (event) => {
+    //   if (event.type === "rowValueChanged") {
+    //     console.log(event.data);
+    //   }
+    // },
   };
 
   const defaultColDef = useMemo(() => {
@@ -546,15 +395,101 @@ const AgGridTable = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (updateIsPending) {
+      toast({
+        title: "Updating cell ",
+        style: {
+          borderColor: "#71717a",
+        },
+        // description: "Friday, February 10, 2023 at 5:57 PM",
+        // action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+      });
+    } else if (updateIsSuccess) {
+      toast({
+        title: `Update on ${updatedRowData?.fieldName} is success `,
+        description: `Value changed from ${updatedRowData?.oldValue} to ${updatedRowData?.newValue}`,
+        style: {
+          borderColor: "#17a34a",
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateIsSuccess, updateIsPending]);
+
+  const onNextPageHandler = () => {
+    const currentPageNumber = searchParams.has("page_number")
+      ? parseInt(searchParams.get("page_number") as string)
+      : 1;
+    const nextPageNumber = currentPageNumber + 1;
+
+    const totalPages = properties?.totalPages;
+
+    const newSearchParams = new URLSearchParams(window.location.search);
+
+    newSearchParams.set("page_number", nextPageNumber.toString());
+
+    if (currentPageNumber !== totalPages) {
+      router.replace(
+        `${window.location.pathname}?${newSearchParams.toString()}`,
+        {
+          scroll: false,
+        },
+      );
+    }
+  };
+
+  const onPreviousPageHandler = () => {
+    const currentPageNumber = searchParams.has("page_number")
+      ? parseInt(searchParams.get("page_number") as string)
+      : 1;
+    const previousPageNumber =
+      currentPageNumber > 1 ? currentPageNumber - 1 : 1;
+
+    const newSearchParams = new URLSearchParams(window.location.search);
+
+    newSearchParams.set("page_number", previousPageNumber.toString());
+
+    router.replace(
+      `${window.location.pathname}?${newSearchParams.toString()}`,
+      {
+        scroll: false,
+      },
+    );
+  };
+
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <div className="ag-theme-alpine " style={{ width: "100%", height: 500 }}>
         <AgGridReact
           ref={gridRef}
+          rowData={!propertiesIsLoading ? properties?.properties : []}
           gridOptions={gridOptions}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
         />
+      </div>
+      <div
+        className={cn(
+          "col-span-4 mt-4 flex w-full items-center justify-end gap-4",
+        )}
+      >
+        <div className="text-sm text-neutral-500">
+          {!propertiesIsLoading && (
+            <p>
+              Page {searchParams.get("page_number")?.toString() || "1"} of{" "}
+              {propertiesIsLoading ? "Loading..." : properties?.totalPages || 1}
+            </p>
+          )}
+        </div>
+        <div className="space-x-2">
+          <Button variant="outline" onClick={onPreviousPageHandler}>
+            Back
+          </Button>
+          <Button variant="outline" onClick={onNextPageHandler}>
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );
