@@ -3,6 +3,7 @@ import { QueryResult, sql } from "@vercel/postgres";
 import { UNKNOWN_CITY } from "@/lib/constant";
 import { PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
 import { fetchVercelEdgeConfig } from "@/lib/edge-config";
+import { paginateQuery } from "@/lib/paginateQuery";
 
 export async function GET(req: Request) {
   try {
@@ -23,7 +24,6 @@ export async function GET(req: Request) {
 
     const pageNumber = queryParams.data.page_number || 1;
     const pageLimit = queryParams.data.page_limit || 12;
-    const offset = (pageNumber - 1) * pageLimit;
 
     const query = `
           select
@@ -156,23 +156,22 @@ export async function GET(req: Request) {
           order by ${
             queryParams.data?.text_search ? "rank" : "p.created_at"
           } desc 
-          limit ${pageLimit}
-          offset ${offset}
   `.replace(/\n\s*\n/g, "\n");
 
-    const properties = await sql.query(query);
+    const result = await paginateQuery(pageNumber, pageLimit, query);
 
-    const totalRecords = Number(properties.rows[0]?.total_records) || 0;
-    const totalPages = Math.ceil(totalRecords / pageLimit);
+    //return NextResponse.json(result);
 
     return NextResponse.json({
-      properties: properties.rows,
-      pageNumber: pageNumber,
-      pageLimit: pageLimit,
-      totalPages: totalPages,
-      totalRecords: totalRecords,
+      properties: result.items,
+      pageNumber: result.pageNumber,
+      pageLimit: result.pageLimit,
+      totalPages: result.totalPages,
+      totalRecords: result.totalRecords,
     });
   } catch (error: any) {
+    console.error(error.message);
+    console.error(error.stack);
     return NextResponse.json(
       { message: "Neon database internal server error" },
       { status: 500 },
