@@ -28,7 +28,6 @@ const PropertyImagesPlaceholder = ({
   }
 
   return (
-
     <>
       <div className="sm:hidden">
         <Carousel images={images} />
@@ -40,12 +39,12 @@ const PropertyImagesPlaceholder = ({
             {isLoading && <Skeleton className="h-96 w-full" />}
             <Image
               className="rounded-md object-cover"
-          src={imgShowcase}
-          alt="home_page_main_banner"
-          sizes="(max-width: 768px) 100vw, 700px"
-          fill={true}
-          priority={true}
-          onLoad={() => setIsLoading(false)}
+              src={imgShowcase}
+              alt="home_page_main_banner"
+              sizes="(max-width: 768px) 100vw, 700px"
+              fill={true}
+              priority={true}
+              onLoad={() => setIsLoading(false)}
             />
           </div>
           <div
