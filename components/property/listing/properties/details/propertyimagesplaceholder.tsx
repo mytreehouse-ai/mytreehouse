@@ -4,7 +4,15 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import Carousel from "@/components/ui/carousel";
+import CarouselManual from "@/components/ui/carousel-manual";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 interface PropertyImagesPlaceholderProps {
   images: string[];
@@ -29,8 +37,37 @@ const PropertyImagesPlaceholder = ({
 
   return (
     <>
-      <div className="sm:hidden">
-        <Carousel images={images} />
+      <div className="mt-5 sm:hidden">
+        {/* <CarouselManual images={images} /> */}
+        <Carousel
+          plugins={[
+            Autoplay({
+              delay: 2000,
+            }),
+          ]}
+        >
+          <CarouselContent>
+            {images?.slice(0, images?.length + 1).map((image) => (
+              <React.Fragment key={image}>
+                <CarouselItem>
+                  <div className="relative h-96 w-full overflow-clip rounded-md">
+                    <Image
+                      src={image}
+                      className="col-span-2 h-[250px] rounded-md object-cover transition ease-in-out hover:scale-110 hover:cursor-pointer"
+                      alt="home_page_main_banner"
+                      sizes="(max-width: 768px) 100vw, 350px"
+                      fill={true}
+                      priority={true}
+                      onClick={() => setImgShowcase(image)}
+                    />
+                  </div>
+                </CarouselItem>
+              </React.Fragment>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </div>
 
       <div className="hidden sm:block">
