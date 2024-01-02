@@ -201,7 +201,7 @@ interface PopupMapProps {
 
 const PopupMap = ({ propertyListings }: PopupMapProps) => {
   return (
-    <DrawerContent className="rounded-lg px-2 py-0 sm:max-w-[425px]">
+    <DrawerContent className="rounded-lg px-2 py-0 ">
       <div className="my-10 h-[calc(100vh_-_200px)] w-full">
         <MapboxMultiPin propertyListings={propertyListings} />
       </div>
