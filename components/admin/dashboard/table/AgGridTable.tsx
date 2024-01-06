@@ -451,6 +451,7 @@ const AgGridTable = () => {
 
   useEffect(() => {
     if (updateIsPending) {
+      gridRef.current?.api.showLoadingOverlay();
       toast({
         title: "Updating cell ",
         style: {
