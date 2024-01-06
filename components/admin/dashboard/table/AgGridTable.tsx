@@ -459,6 +459,7 @@ const AgGridTable = () => {
         },
       });
     } else if (updateIsSuccess) {
+      gridRef.current?.api.hideOverlay();
       toast({
         title: `Update on ${updatedRowData?.fieldName} is success `,
         description: `Value changed from ${updatedRowData?.oldValue} to ${updatedRowData?.newValue}`,
