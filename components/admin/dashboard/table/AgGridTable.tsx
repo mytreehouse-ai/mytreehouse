@@ -259,7 +259,7 @@ const AgGridTable = () => {
       editable: true,
       cellEditor: "agSelectCellEditor",
       cellEditorParams: {
-        values: ["Furnished", "Semi-Furnished", "Unknown"],
+        values: ["Fully Furnished", "Semi Furnished", "Unfurnished", "Unknown"],
       },
     },
     {
@@ -380,10 +380,37 @@ const AgGridTable = () => {
         }
 
         if (cell.colDef.field === "turnover_status_name") {
+          const turnover_status_id = [
+            {
+              value: "356940ca-28e6-448b-a683-1658d75c39fb",
+              label: "Fully Furnished",
+              url_value: "fully-furnished",
+            },
+            {
+              value: "ef19cb41-dc01-4bd7-a7ce-3ddfdda1c0da",
+              label: "Semi Furnished",
+              url_value: "semi-furnished",
+            },
+            {
+              value: "a43ac2bb-c77c-4f2d-9abe-688f0cdc62b9",
+              label: "Unfurnished",
+              url_value: "unfurnished",
+            },
+            {
+              value: "ab30ed77-3840-4754-85cc-de7cbd794cd7",
+              label: "Unknown",
+              url_value: "unknown",
+            },
+          ];
+
+          const turnover_status = turnover_status_id.find(
+            (e) => e.label === cell.newValue,
+          );
+
           void updateProperty({
             slug: property_id,
             data: {
-              turnover_status_name: "Furnished",
+              turnover_status_id: turnover_status?.value,
             },
           });
 

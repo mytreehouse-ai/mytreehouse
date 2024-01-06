@@ -8,7 +8,7 @@ slug: z.string().uuid(),
 data: z.object({
 property_type_id: z.string().optional(),
 listing_type_id: z.string().optional(),
-turnover_status_name: z.string().optional()
+turnover_status_id: z.string().optional()
 })
 });
 
