@@ -22,8 +22,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUpdatePropertyHook } from "@/hooks/ag-grid/useUpdatePropertyHook";
-import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import type { CellValueChangedEvent } from "ag-grid-community";
 
 interface NumericEditorProps {
   value: string;
@@ -241,7 +241,6 @@ const AgGridTable = () => {
           "Vacant Lot",
         ],
       },
-      // onCellValueChanged: (data) => console.log(data),
     },
     {
       field: "listing_type_name",
@@ -250,7 +249,7 @@ const AgGridTable = () => {
       editable: true,
       cellEditor: "agSelectCellEditor",
       cellEditorParams: {
-        values: ["For sale", "For rent"],
+        values: ["For Sale", "For Rent"],
       },
     },
     {
@@ -290,9 +289,11 @@ const AgGridTable = () => {
 
   const gridOptions: GridOptions<Property> = {
     getRowId: getRowId,
-    // editType: "fullRow",
+    editType: "fullRow",
     suppressPaginationPanel: true,
-    onCellValueChanged: (cell) => {
+    onCellValueChanged: (cell: CellValueChangedEvent<Property>) => {
+      console.log("value changed triggered", cell.colDef);
+
       const { property_id } = cell.data;
 
       if (cell?.type === "cellValueChanged") {
@@ -377,13 +378,23 @@ const AgGridTable = () => {
             newValue: cell.newValue,
           });
         }
+
+        if (cell.colDef.field === "turnover_status_name") {
+          void updateProperty({
+            slug: property_id,
+            data: {
+              turnover_status_name: "Furnished",
+            },
+          });
+
+          setUpdatedRowData({
+            fieldName: "Turnover status",
+            oldValue: cell.oldValue,
+            newValue: cell.newValue,
+          });
+        }
       }
     },
-    // onRowValueChanged: (event) => {
-    //   if (event.type === "rowValueChanged") {
-    //     console.log(event.data);
-    //   }
-    // },
   };
 
   const defaultColDef = useMemo(() => {
@@ -402,8 +413,6 @@ const AgGridTable = () => {
         style: {
           borderColor: "#71717a",
         },
-        // description: "Friday, February 10, 2023 at 5:57 PM",
-        // action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
     } else if (updateIsSuccess) {
       toast({
