@@ -13,9 +13,10 @@ import type { NextPage } from "next";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useMobileDetect } from "@/hooks/useMobileDetect";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useState } from "react";
 import type { Property } from "@/interface/property";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import HeatMap from "@/components/map/HeatMap";
 
 type PageProps = {
   params?: {
@@ -143,7 +144,7 @@ const Properties: NextPage<PageProps> = ({ params }) => {
 
         {searchParams.get("map-view") === "true" &&
           (isMobile ? (
-            <Dialog
+            <Drawer
               open={searchParams.get("map-view") === "true" ? true : false}
               onOpenChange={(isOpen) => {
                 if (!isOpen) {
@@ -158,7 +159,7 @@ const Properties: NextPage<PageProps> = ({ params }) => {
               }}
             >
               <PopupMap propertyListings={data?.properties || []} />
-            </Dialog>
+            </Drawer>
           ) : (
             <div className="col-span-2 h-screen w-full">
               {data && (
@@ -201,10 +202,10 @@ interface PopupMapProps {
 
 const PopupMap = ({ propertyListings }: PopupMapProps) => {
   return (
-    <DialogContent className="rounded-lg px-2 py-0 sm:max-w-[425px]">
+    <DrawerContent className="rounded-lg px-2 py-0 md:px-12 ">
       <div className="my-10 h-[calc(100vh_-_200px)] w-full">
         <MapboxMultiPin propertyListings={propertyListings} />
       </div>
-    </DialogContent>
+    </DrawerContent>
   );
 };

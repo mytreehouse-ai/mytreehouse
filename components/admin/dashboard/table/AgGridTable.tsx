@@ -22,8 +22,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUpdatePropertyHook } from "@/hooks/ag-grid/useUpdatePropertyHook";
-import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import type { CellValueChangedEvent } from "ag-grid-community";
 
 interface NumericEditorProps {
   value: string;
@@ -224,7 +224,8 @@ const AgGridTable = () => {
       headerName: "Title",
       filter: false,
       sortable: false,
-      editable: false,
+      editable: true,
+      cellEditor: "agTextCellEditor",
     },
     {
       field: "property_type_name",
@@ -241,7 +242,6 @@ const AgGridTable = () => {
           "Vacant Lot",
         ],
       },
-      // onCellValueChanged: (data) => console.log(data),
     },
     {
       field: "listing_type_name",
@@ -250,7 +250,7 @@ const AgGridTable = () => {
       editable: true,
       cellEditor: "agSelectCellEditor",
       cellEditorParams: {
-        values: ["For sale", "For rent"],
+        values: ["For Sale", "For Rent"],
       },
     },
     {
@@ -260,7 +260,7 @@ const AgGridTable = () => {
       editable: true,
       cellEditor: "agSelectCellEditor",
       cellEditorParams: {
-        values: ["Furnished", "Semi-Furnished", "Unknown"],
+        values: ["Fully Furnished", "Semi Furnished", "Unfurnished", "Unknown"],
       },
     },
     {
@@ -290,9 +290,11 @@ const AgGridTable = () => {
 
   const gridOptions: GridOptions<Property> = {
     getRowId: getRowId,
-    // editType: "fullRow",
+    editType: "fullRow",
     suppressPaginationPanel: true,
-    onCellValueChanged: (cell) => {
+    onCellValueChanged: (cell: CellValueChangedEvent<Property>) => {
+      console.log("value changed triggered", cell.colDef);
+
       const { property_id } = cell.data;
 
       if (cell?.type === "cellValueChanged") {
@@ -377,13 +379,65 @@ const AgGridTable = () => {
             newValue: cell.newValue,
           });
         }
+
+        if (cell.colDef.field === "turnover_status_name") {
+          const turnover_status_id = [
+            {
+              value: "356940ca-28e6-448b-a683-1658d75c39fb",
+              label: "Fully Furnished",
+              url_value: "fully-furnished",
+            },
+            {
+              value: "ef19cb41-dc01-4bd7-a7ce-3ddfdda1c0da",
+              label: "Semi Furnished",
+              url_value: "semi-furnished",
+            },
+            {
+              value: "a43ac2bb-c77c-4f2d-9abe-688f0cdc62b9",
+              label: "Unfurnished",
+              url_value: "unfurnished",
+            },
+            {
+              value: "ab30ed77-3840-4754-85cc-de7cbd794cd7",
+              label: "Unknown",
+              url_value: "unknown",
+            },
+          ];
+
+          const turnover_status = turnover_status_id.find(
+            (e) => e.label === cell.newValue,
+          );
+
+          void updateProperty({
+            slug: property_id,
+            data: {
+              turnover_status_id: turnover_status?.value,
+            },
+          });
+
+          setUpdatedRowData({
+            fieldName: "Turnover status",
+            oldValue: cell.oldValue,
+            newValue: cell.newValue,
+          });
+        }
+
+        if (cell.colDef.field === "listing_title") {
+          void updateProperty({
+            slug: property_id,
+            data: {
+              listing_title: cell.newValue,
+            },
+          });
+
+          setUpdatedRowData({
+            fieldName: "Listing title",
+            oldValue: cell.oldValue,
+            newValue: cell.newValue,
+          });
+        }
       }
     },
-    // onRowValueChanged: (event) => {
-    //   if (event.type === "rowValueChanged") {
-    //     console.log(event.data);
-    //   }
-    // },
   };
 
   const defaultColDef = useMemo(() => {
@@ -397,15 +451,15 @@ const AgGridTable = () => {
 
   useEffect(() => {
     if (updateIsPending) {
+      gridRef.current?.api.showLoadingOverlay();
       toast({
         title: "Updating cell ",
         style: {
           borderColor: "#71717a",
         },
-        // description: "Friday, February 10, 2023 at 5:57 PM",
-        // action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
     } else if (updateIsSuccess) {
+      gridRef.current?.api.hideOverlay();
       toast({
         title: `Update on ${updatedRowData?.fieldName} is success `,
         description: `Value changed from ${updatedRowData?.oldValue} to ${updatedRowData?.newValue}`,
