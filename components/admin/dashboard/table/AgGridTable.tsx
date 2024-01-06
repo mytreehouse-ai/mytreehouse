@@ -224,7 +224,8 @@ const AgGridTable = () => {
       headerName: "Title",
       filter: false,
       sortable: false,
-      editable: false,
+      editable: true,
+      cellEditor: "agTextCellEditor",
     },
     {
       field: "property_type_name",
@@ -416,6 +417,21 @@ const AgGridTable = () => {
 
           setUpdatedRowData({
             fieldName: "Turnover status",
+            oldValue: cell.oldValue,
+            newValue: cell.newValue,
+          });
+        }
+
+        if (cell.colDef.field === "listing_title") {
+          void updateProperty({
+            slug: property_id,
+            data: {
+              listing_title: cell.newValue,
+            },
+          });
+
+          setUpdatedRowData({
+            fieldName: "Listing title",
             oldValue: cell.oldValue,
             newValue: cell.newValue,
           });
