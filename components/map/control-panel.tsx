@@ -1,11 +1,18 @@
 import * as React from "react";
 
-function formatTime(time) {
+function formatTime(time: string | number | Date) {
   const date = new Date(time);
   return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 }
 
-function ControlPanel(props) {
+function ControlPanel(props: {
+  startTime: any;
+  endTime: any;
+  onChangeTime: any;
+  allDays: any;
+  onChangeAllDays: any;
+  selectedTime: any;
+}) {
   const {
     startTime,
     endTime,
@@ -18,7 +25,7 @@ function ControlPanel(props) {
   const days = Math.round((endTime - startTime) / day);
   const selectedDay = Math.round((selectedTime - startTime) / day);
 
-  const onSelectDay = (evt) => {
+  const onSelectDay = (evt: { target: { value: any } }) => {
     const daysToAdd = evt.target.value;
     // add selected days to start time to calculate new time
     const newTime = startTime + daysToAdd * day;
