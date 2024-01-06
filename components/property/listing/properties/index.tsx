@@ -16,6 +16,7 @@ import { useMobileDetect } from "@/hooks/useMobileDetect";
 import { useState } from "react";
 import type { Property } from "@/interface/property";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import HeatMap from "@/components/map/HeatMap";
 
 type PageProps = {
   params?: {
