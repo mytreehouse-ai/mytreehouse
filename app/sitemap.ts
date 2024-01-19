@@ -3,11 +3,6 @@ import { Property } from "@/interface/property";
 // Function to generate sitemap data for property listings and static routes
 // Only runs in production to avoid unnecessary load during development
 export default async function sitemap() {
-  // Check if the build is in production before running the sitemap generation
-  if (process.env.NODE_ENV !== 'production') {
-    return [];
-  }
-
   let allPropertyListings: Property[] = [];
 
   try {
