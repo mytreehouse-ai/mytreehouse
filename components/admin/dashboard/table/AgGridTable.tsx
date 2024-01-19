@@ -64,7 +64,7 @@ const AgGridTable = () => {
         parseInt(
           (searchParams.has("page_number") &&
             searchParams.get("page_number")?.toString()) ||
-            "1",
+          "1",
         ) || 1,
     });
 
@@ -550,3 +550,4 @@ const AgGridTable = () => {
 };
 
 export default AgGridTable;
+

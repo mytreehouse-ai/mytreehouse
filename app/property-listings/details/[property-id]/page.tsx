@@ -31,13 +31,13 @@ import { Separator } from "@/components/ui/separator";
 import PropertyContactCard from "@/components/property/contact/propertycontactcard";
 import PropertyImagesPlaceholder from "@/components/property/listing/properties/details/propertyimagesplaceholder";
 
-interface pageProps {
+interface PageProps {
   params: {
     "property-id": string;
   };
 }
 
-const page: React.FC<pageProps> = async ({ params }) => {
+const page = async ({ params }: PageProps) => {
   const response = await fetch(
     `${env.NEXT_PUBLIC_BASEAPI_URL}/api/properties/listing/search/${params["property-id"]}`,
   );
