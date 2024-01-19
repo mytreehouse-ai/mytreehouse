@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { QueryResult, sql } from "@vercel/postgres";
 import { UNKNOWN_CITY } from "@/lib/constant";
 import { PropertyListingSearchSchema } from "@/schema/propertyListingSearch.schema";
 import { fetchVercelEdgeConfig } from "@/lib/edge-config";
-import { paginateQuery } from "@/lib/paginateQuery";
+import { paginateQuery } from "@/lib/paginate-query";
 
 export async function GET(req: Request) {
   try {
@@ -57,13 +56,12 @@ export async function GET(req: Request) {
             p.lease_end,
             p.created_at,
             COUNT(*) OVER() as total_records
-            ${
-              queryParams.data?.text_search
-                ? `
+            ${queryParams.data?.text_search
+        ? `
             ,ts_rank(tsv, plainto_tsquery('english', '${queryParams.data.text_search}')) as rank
             `
-                : ``
-            }
+        : ``
+      }
           from properties p
           inner join property_types pt on pt.property_type_id = p.property_type_id
           inner join listing_types lt on lt.listing_type_id = p.listing_type_id
@@ -76,86 +74,74 @@ export async function GET(req: Request) {
           p.property_status_id != '${UNTAGGED_TRANSACTION_ID}' and
           p.city_id != '${UNKNOWN_CITY}' and
           p.current_price is distinct from 'NaN'::numeric
-          ${
-            queryParams.data?.text_search
-              ? `
+          ${queryParams.data?.text_search
+        ? `
           and tsv @@ plainto_tsquery('english', '${queryParams.data.text_search}')
           `
-              : ``
-          }
-          ${
-            queryParams.data?.property_type
-              ? `
+        : ``
+      }
+          ${queryParams.data?.property_type
+        ? `
           and p.property_type_id = '${queryParams.data.property_type}'
           `
-              : ``
-          }
-          ${
-            queryParams.data?.listing_type
-              ? `
+        : ``
+      }
+          ${queryParams.data?.listing_type
+        ? `
           and p.listing_type_id = '${queryParams.data.listing_type}'
           `
-              : ``
-          }
-          ${
-            queryParams.data?.turnover_status
-              ? `
+        : ``
+      }
+          ${queryParams.data?.turnover_status
+        ? `
           and p.turnover_status_id = '${queryParams.data.turnover_status}'
           `
-              : ``
-          }
-          ${
-            queryParams.data?.bedroom_count
-              ? `
+        : ``
+      }
+          ${queryParams.data?.bedroom_count
+        ? `
             and p.bedroom = ${queryParams.data.bedroom_count}
             `
-              : ``
-          }
-          ${
-            queryParams.data?.bathroom_count
-              ? `
+        : ``
+      }
+          ${queryParams.data?.bathroom_count
+        ? `
           and p.bathroom = ${queryParams.data.bathroom_count}
           `
-              : ``
-          }
-          ${
-            queryParams.data?.studio_type
-              ? `
+        : ``
+      }
+          ${queryParams.data?.studio_type
+        ? `
           and p.studio_type = ${queryParams.data.studio_type}
           `
-              : ``
-          }
-          ${
-            queryParams.data?.is_cbd
-              ? `
+        : ``
+      }
+          ${queryParams.data?.is_cbd
+        ? `
           and p.is_cbd = ${queryParams.data.is_cbd}
           `
-              : ``
-          }
-          ${
-            queryParams.data?.city
-              ? `
+        : ``
+      }
+          ${queryParams.data?.city
+        ? `
           and p.city_id = '${queryParams.data.city}'
           `
-              : ``
-          }
-          ${
-            queryParams.data?.sqm
-              ? `
+        : ``
+      }
+          ${queryParams.data?.sqm
+        ? `
           and p.sqm = ${queryParams.data.sqm}
           `
-              : ``
-          }
-          ${
-            queryParams.data?.sqm_min && queryParams.data?.sqm_max
-              ? `
+        : ``
+      }
+          ${queryParams.data?.sqm_min && queryParams.data?.sqm_max
+        ? `
           and p.sqm between ${queryParams.data.sqm_min} and ${queryParams.data.sqm_max}
           `
-              : ``
-          }
-          order by ${
-            queryParams.data?.text_search ? "rank" : "p.created_at"
-          } desc 
+        : ``
+      }
+          order by ${queryParams.data?.text_search ? "rank" : "p.created_at"
+      } desc 
   `.replace(/\n\s*\n/g, "\n");
 
     const result = await paginateQuery(pageNumber, pageLimit, query);

@@ -3,9 +3,7 @@ await import("./lib/env.mjs");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    webpackBuildWorker: process.env.NODE_ENV == "development",
-  },
+  experimental: {},
   images: {
     remotePatterns: [
       {
