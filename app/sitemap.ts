@@ -8,9 +8,7 @@ export default async function sitemap() {
 
   try {
     // Fetch the list of properties from the API
-    const res = await fetch(
-      `https://beta.mytree.house/api/properties/listing/search`,
-    );
+    const res = await fetch(`https://beta.mytree.house/api/properties/listing/search`);
 
     // Throw an error if the response is not OK
     if (!res.ok) {
@@ -18,15 +16,15 @@ export default async function sitemap() {
     }
 
     // Parse the JSON response
-    const data = await res.json();
+    const data = await res.json() as { properties: [] };
 
     // Validate that the data is an array
-    if (!Array.isArray(data)) {
+    if (!Array.isArray(data?.properties)) {
       throw new Error("Data is not an array");
     }
 
     // Assign the data to allPropertyListings
-    allPropertyListings = data;
+    allPropertyListings = data.properties;
   } catch (error) {
     // Log any fetch errors
     console.error("Fetch error: ", error);
