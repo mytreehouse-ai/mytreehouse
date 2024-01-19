@@ -38,11 +38,11 @@ export default async function sitemap() {
   }));
 
   // Define static routes for the sitemap
-  const routes = ["/property-valuation", "/contact-us"].map((route) => ({
-    url: `https://beta.mytree.house${route}`,
-    lastModified: new Date().toISOString(),
-  }));
+  // const routes = ["/property-valuation", "/contact-us"].map((route) => ({
+  //   url: `https://beta.mytree.house${route}`,
+  //   lastModified: new Date().toISOString(),
+  // }));
 
   // Combine property listings and static routes into a single array
-  return [...propertyListings, ...routes];
+  return [...propertyListings];
 }
