@@ -3,6 +3,7 @@ import { Property } from "@/interface/property";
 // Function to generate sitemap data for property listings and static routes
 // Only runs in production to avoid unnecessary load during development
 export default async function sitemap() {
+
   let allPropertyListings: Property[] = [];
 
   try {
@@ -38,11 +39,11 @@ export default async function sitemap() {
   }));
 
   // Define static routes for the sitemap
-  // const routes = ["/property-valuation", "/contact-us"].map((route) => ({
-  //   url: `https://beta.mytree.house${route}`,
-  //   lastModified: new Date().toISOString(),
-  // }));
+  const routes = ["/property-valuation", "/contact-us"].map((route) => ({
+    url: `https://beta.mytree.house${route}`,
+    lastModified: new Date().toISOString(),
+  }));
 
   // Combine property listings and static routes into a single array
-  return [...propertyListings];
+  return propertyListings.concat(routes);
 }
