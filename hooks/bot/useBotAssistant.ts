@@ -4,6 +4,7 @@ import { createSearchParams } from "@/lib/utils";
 
 const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
   const [data, setData] = useState<string | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     if(!enabled){
@@ -11,6 +12,7 @@ const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
     } 
 
     const fetchData = async () => {
+           setIsFetching(true);
       const searchParams = createSearchParams({ q: q });
 
       let url = `https://mytreehouse.ashycliff-1629d0c8.southeastasia.azurecontainerapps.io/ml/langchain/chat-openai`;
@@ -37,7 +39,6 @@ const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
           const decodedChunk = decoder.decode(value);
           const lines = decodedChunk.split("\n");
           const parsedLines = lines
-            .map((line) => line.replace(/^data: /, " ").trim())
             .filter((line) => line !== "")
             .map((line) => JSON.stringify(line))
             .map((line) => JSON.parse(line));
@@ -45,18 +46,24 @@ const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
           for (const parsedLine of parsedLines) {
             if (parsedLine) {
               setData((e) => (e ? `${e}\n${parsedLine}` : parsedLine));
+                  
             }
           }
         }
       } catch (error) {
         console.error(error);
+      } finally {
+         setIsFetching(false);
       }
     };
 
     fetchData();
   }, [q, enabled]);
 
-  return data;
+  return {
+    data,
+    isFetching
+  };
 };
 
 export default useBotAssistant;
