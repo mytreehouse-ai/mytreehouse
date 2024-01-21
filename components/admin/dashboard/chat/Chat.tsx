@@ -2,9 +2,13 @@
 
 import React from "react";
 import { useState, useEffect } from "react";
-import ReactMarkdown from "react-markdown";
-
 import { CardContent, Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { number } from "zod";
+
+interface TextResponse {
+  line: string;
+  index: number;
+}
 
 const Chat = () => {
   const [data, setData] = useState(null);
@@ -19,8 +23,33 @@ const Chat = () => {
           method: "GET",
         },
       );
-      const json = await response.arrayBuffer;
-      console.log(json);
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      while (true) {
+        const chunk = await reader?.read();
+        if (!chunk) {
+          break;
+        }
+        const { done, value } = chunk;
+        if (done) {
+          break;
+        }
+        const decodedChunk = decoder.decode(value);
+        const lines = decodedChunk.split("\n");
+        const parsedLines = lines
+          .map((line) => line.replace(/^data: /, " ").trim())
+          .filter((line) => line !== "")
+          .map((line) => JSON.stringify(line))
+          .map((line) => JSON.parse(line));
+
+        for (const parsedLine of parsedLines) {
+          if (parsedLine) {
+            setData((e) => (e ? `${e}\n${parsedLine}` : parsedLine));
+          }
+        }
+      }
     } catch (error) {
       console.error(error);
     }
@@ -30,47 +59,21 @@ const Chat = () => {
     fetchAnswer();
   }, []);
 
-  //   useEffect(() => {
-  //     fetch(
-  //       `https://mytreehouse.ashycliff-1629d0c8.southeastasia.azurecontainerapps.io/ml/langchain/chat-openai?q=${queryParams}`,
-  //     )
-  //       .then((response) => {
-  //         const reader = response?.body?.getReader();
-  //         return new ReadableStream({
-  //           start(controller) {
-  //             function push() {
-  //               reader.read().then(({ done, value }) => {
-  //                 if (done) {
-  //                   controller.close();
-  //                   return;
-  //                 }
-  //                 controller.enqueue(value);
-  //                 push();
-  //               });
-  //             }
-  //             push();
-  //           },
-  //         });
-  //       })
-  //       .then((stream) => {
-  //         // Convert the stream to JSON
-  //         return new Response(stream).json();
-  //       })
-  //       .then((json) => {
-  //         // Process the JSON
-  //         setData(json);
-  //       });
-  //   }, []);
-
-  console.log(data);
-
   return (
     <Card className="shadow-none">
       <CardHeader>
         <CardTitle>Chat bot</CardTitle>
       </CardHeader>
       <CardContent>
-        <ReactMarkdown>{data}</ReactMarkdown>
+        <div>
+          <p>Result</p>
+          {data &&
+            data
+              .split("\n")
+              .map(({ line, index }: TextResponse) => (
+                <p key={index}>{line}</p>
+              ))}
+        </div>
       </CardContent>
     </Card>
   );
