@@ -2,10 +2,14 @@ import { useState, useEffect } from 'react';
 import { BotQuestionSchemaType } from "@/schema/bot/botQuestionSchema";
 import { createSearchParams } from "@/lib/utils";
 
-const useBotAssistant = ({ q }: BotQuestionSchemaType) => {
+const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
   const [data, setData] = useState<string | null>(null);
 
   useEffect(() => {
+    if(!enabled){
+        return;
+    } 
+
     const fetchData = async () => {
       const searchParams = createSearchParams({ q: q });
 
@@ -50,7 +54,7 @@ const useBotAssistant = ({ q }: BotQuestionSchemaType) => {
     };
 
     fetchData();
-  }, [q]);
+  }, [q, enabled]);
 
   return data;
 };

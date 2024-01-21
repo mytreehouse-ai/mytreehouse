@@ -18,18 +18,23 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { BotQuestionSchemaType } from "@/schema/bot/botQuestionSchema";
 import useBotAssistant from "@/hooks/bot/useBotAssistant";
 
 const Chat = () => {
-  const q = "your question here"; // replace with your actual question
-  const data = useBotAssistant({ q });
+  const [enableQuery, setEnableQuery] = useState(false);
+
+  const q = "Warehouse available along taguig city with 100-300sqm?";
+  const data = useBotAssistant({
+    q,
+    enabled: enableQuery,
+  });
 
   const form = useForm();
 
   const onSubmit = () => {
     const formData = form.getValues();
     console.log("submiited", formData);
+    setEnableQuery(true);
   };
 
   return (
