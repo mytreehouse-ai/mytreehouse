@@ -37,16 +37,19 @@ const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
             break;
           }
           const decodedChunk = decoder.decode(value);
-          const lines = decodedChunk.split("\n");
-          const parsedLines = lines
-            .filter((line) => line !== "")
+          // const lines = decodedChunk.split("\n");
+          // const parsedLines = lines
+          //   .filter((line) => line !== "")
+          //   .map((line) => JSON.stringify(line))
+          //   .map((line) => JSON.parse(line));
+               const lines = decodedChunk.split("\n").filter((line) => line !== "")
             .map((line) => JSON.stringify(line))
             .map((line) => JSON.parse(line));
 
-          for (const parsedLine of parsedLines) {
+          for (const parsedLine of lines) {
             if (parsedLine) {
               setData((e) => (e ? `${e}\n${parsedLine}` : parsedLine));
-                  
+           
             }
           }
         }

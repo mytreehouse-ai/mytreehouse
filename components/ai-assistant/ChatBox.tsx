@@ -26,7 +26,8 @@ import {
   botQuestionSchema,
   type BotQuestionSchemaType,
 } from "@/schema/bot/botQuestionSchema";
-import { cn } from "@/lib/utils";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const ChatBox = () => {
   const [enableQuery, setEnableQuery] = useState(false);
@@ -67,6 +68,8 @@ const ChatBox = () => {
     });
   };
 
+  console.log(data);
+
   return (
     <>
       <Card className="w-full text-sm shadow-none md:mx-auto md:w-3/4">
@@ -86,9 +89,13 @@ const ChatBox = () => {
             <div className="flex items-start gap-x-2">
               <div className="h-6 w-6 rounded-full border bg-primary" />
               <div className=" rounded-md bg-neutral-50 px-4 py-2">
-                {data.split("\n").map((line, index) => (
-                  <p key={index}>{line}</p>
-                ))}
+                {/* {data.split("\n").map((line, index) => (
+                  <Markdown key={index} remarkPlugins={[remarkGfm]}>
+                    {line}
+                  </Markdown>
+                ))} */}
+                {/* <Markdown remarkPlugins={[remarkGfm]}>{data}</Markdown> */}
+                <Markdown remarkPlugins={[remarkGfm]}>{data}</Markdown>
               </div>
             </div>
           )}
