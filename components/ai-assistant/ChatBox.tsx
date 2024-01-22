@@ -94,8 +94,10 @@ const ChatBox = () => {
           {data && (
             <div className="flex items-start gap-x-2 ">
               <div className="h-6 w-6 shrink-0 rounded-full  bg-emerald-400" />
-              <div className=" rounded-md bg-neutral-50 px-4 py-2 shadow-sm">
-                <Markdown remarkPlugins={[remarkGfm]}>{data}</Markdown>
+              <div className="rounded-md bg-neutral-50 px-4 py-2 shadow-sm">
+                <div className="prose lg:prose-xl">
+                  <Markdown remarkPlugins={[remarkGfm]}>{data}</Markdown>
+                </div>
               </div>
             </div>
           )}
