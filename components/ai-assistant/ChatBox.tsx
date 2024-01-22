@@ -26,9 +26,11 @@ import {
   botQuestionSchema,
   type BotQuestionSchemaType,
 } from "@/schema/bot/botQuestionSchema";
-import { cn } from "@/lib/utils";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import PulseLoader from "../loader/pulseloader";
 
-const Chat = () => {
+const ChatBox = () => {
   const [enableQuery, setEnableQuery] = useState(false);
 
   const { chats, setChatMessage } = ChatSessionState();
@@ -42,9 +44,7 @@ const Chat = () => {
     resolver: zodResolver(botQuestionSchema),
   });
 
-  console.log("Q", q);
-
-  const { data, isFetching } = useBotAssistant({
+  const { data, isFetching, isFetched } = useBotAssistant({
     q: latestUserChat || "",
     enabled: enableQuery,
   });
@@ -60,6 +60,7 @@ const Chat = () => {
 
   const onSubmit = () => {
     const formData = form.getValues();
+    form.reset();
     setEnableQuery(true);
     setChatMessage({
       from: "user",
@@ -76,19 +77,25 @@ const Chat = () => {
         <CardContent className=" h-[calc(100vh-20rem)] space-y-4 overflow-y-auto">
           {latestUserChat && (
             <div className="flex justify-end gap-x-2 ">
-              <div className="rounded-md bg-neutral-50 px-4 py-2">
+              <div className="rounded-md bg-neutral-100/100 px-4 py-2">
                 {latestUserChat}
               </div>
-              <div className="h-6 w-6 rounded-full border bg-primary-foreground" />
+              <div className="h-6 w-6 rounded-full  bg-primary-foreground" />
             </div>
           )}
-          {data && (
+          {isFetching && (
             <div className="flex items-start gap-x-2">
               <div className="h-6 w-6 rounded-full border bg-primary" />
               <div className=" rounded-md bg-neutral-50 px-4 py-2">
-                {data.split("\n").map((line, index) => (
-                  <p key={index}>{line}</p>
-                ))}
+                <PulseLoader />
+              </div>
+            </div>
+          )}
+          {data && (
+            <div className="flex items-start gap-x-2 ">
+              <div className="h-6 w-6 shrink-0 rounded-full  bg-emerald-400" />
+              <div className=" rounded-md bg-neutral-50 px-4 py-2 shadow-sm">
+                <Markdown remarkPlugins={[remarkGfm]}>{data}</Markdown>
               </div>
             </div>
           )}
@@ -112,9 +119,10 @@ const Chat = () => {
                         value={field.value ?? ""}
                         className="w-full"
                         width={"full"}
+                        disabled={isFetching}
                       />
                     </FormControl>
-                    <button type="submit">
+                    <button type="submit" disabled={isFetching}>
                       <Send className="text-primary" />
                     </button>
                   </FormItem>
@@ -128,4 +136,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default ChatBox;

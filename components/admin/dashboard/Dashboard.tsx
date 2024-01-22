@@ -10,7 +10,6 @@ const Overview = React.lazy(
 const AgGridTable = React.lazy(
   () => import("@/components/admin/dashboard/table/AgGridTable"),
 );
-const Chat = React.lazy(() => import("@/components/admin/dashboard/chat/Chat"));
 
 const Dashboard = () => {
   const router = useRouter();
@@ -41,14 +40,6 @@ const Dashboard = () => {
           >
             AG Grid Table
           </TabsTrigger>
-          <TabsTrigger
-            value="chat"
-            onClick={() =>
-              router.replace(`${window.location.pathname}?tab=chat`)
-            }
-          >
-            Chat
-          </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <Suspense fallback={<div>Loading...</div>}>
@@ -58,11 +49,6 @@ const Dashboard = () => {
         <TabsContent value="table" className="space-y-4">
           <Suspense fallback={<div>Loading...</div>}>
             <AgGridTable />
-          </Suspense>
-        </TabsContent>
-        <TabsContent value="chat" className="space-y-4">
-          <Suspense fallback={<div>Loading...</div>}>
-            <Chat />
           </Suspense>
         </TabsContent>
       </Tabs>
