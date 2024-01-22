@@ -1,6 +1,5 @@
 import React from "react";
 import ChatBox from "@/components/ai-assistant/ChatBox";
-import { Card } from "@/components/ui/card";
 
 const page = () => {
   return (
