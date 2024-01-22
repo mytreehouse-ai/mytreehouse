@@ -5,6 +5,7 @@ import { createSearchParams } from "@/lib/utils";
 const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
   const [data, setData] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
+  const [isFetched, setIsFetched] = useState(false)
 
   useEffect(() => {
     if(!enabled){
@@ -12,7 +13,8 @@ const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
     } 
 
     const fetchData = async () => {
-           setIsFetching(true);
+      setIsFetching(true);
+      setIsFetched(false);
       const searchParams = createSearchParams({ q: q });
 
       let url = `https://mytreehouse.ashycliff-1629d0c8.southeastasia.azurecontainerapps.io/ml/langchain/chat-openai`;
@@ -57,6 +59,7 @@ const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
         console.error(error);
       } finally {
          setIsFetching(false);
+           setIsFetched(true);
       }
     };
 
@@ -65,7 +68,8 @@ const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
 
   return {
     data,
-    isFetching
+    isFetching,
+    isFetched
   };
 };
 

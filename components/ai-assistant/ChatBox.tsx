@@ -28,6 +28,7 @@ import {
 } from "@/schema/bot/botQuestionSchema";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import PulseLoader from "../loader/pulseloader";
 
 const ChatBox = () => {
   const [enableQuery, setEnableQuery] = useState(false);
@@ -43,9 +44,7 @@ const ChatBox = () => {
     resolver: zodResolver(botQuestionSchema),
   });
 
-  console.log("Q", q);
-
-  const { data, isFetching } = useBotAssistant({
+  const { data, isFetching, isFetched } = useBotAssistant({
     q: latestUserChat || "",
     enabled: enableQuery,
   });
@@ -68,7 +67,7 @@ const ChatBox = () => {
     });
   };
 
-  console.log(data);
+  console.log(isFetching);
 
   return (
     <>
@@ -83,6 +82,14 @@ const ChatBox = () => {
                 {latestUserChat}
               </div>
               <div className="h-6 w-6 rounded-full border bg-primary-foreground" />
+            </div>
+          )}
+          {isFetching && (
+            <div className="flex items-start gap-x-2">
+              <div className="h-6 w-6 rounded-full border bg-primary" />
+              <div className=" rounded-md bg-neutral-50 px-4 py-2">
+                <PulseLoader />
+              </div>
             </div>
           )}
           {data && (
