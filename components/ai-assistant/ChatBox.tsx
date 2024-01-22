@@ -60,14 +60,13 @@ const ChatBox = () => {
 
   const onSubmit = () => {
     const formData = form.getValues();
+    form.reset();
     setEnableQuery(true);
     setChatMessage({
       from: "user",
       message: formData.q,
     });
   };
-
-  console.log(isFetching);
 
   return (
     <>
@@ -78,10 +77,10 @@ const ChatBox = () => {
         <CardContent className=" h-[calc(100vh-20rem)] space-y-4 overflow-y-auto">
           {latestUserChat && (
             <div className="flex justify-end gap-x-2 ">
-              <div className="rounded-md bg-neutral-50 px-4 py-2">
+              <div className="rounded-md bg-neutral-100/100 px-4 py-2">
                 {latestUserChat}
               </div>
-              <div className="h-6 w-6 rounded-full border bg-primary-foreground" />
+              <div className="h-6 w-6 rounded-full  bg-primary-foreground" />
             </div>
           )}
           {isFetching && (
@@ -93,15 +92,9 @@ const ChatBox = () => {
             </div>
           )}
           {data && (
-            <div className="flex items-start gap-x-2">
-              <div className="h-6 w-6 rounded-full border bg-primary" />
-              <div className=" rounded-md bg-neutral-50 px-4 py-2">
-                {/* {data.split("\n").map((line, index) => (
-                  <Markdown key={index} remarkPlugins={[remarkGfm]}>
-                    {line}
-                  </Markdown>
-                ))} */}
-                {/* <Markdown remarkPlugins={[remarkGfm]}>{data}</Markdown> */}
+            <div className="flex items-start gap-x-2 ">
+              <div className="h-6 w-6 shrink-0 rounded-full  bg-emerald-400" />
+              <div className=" rounded-md bg-neutral-50 px-4 py-2 shadow-sm">
                 <Markdown remarkPlugins={[remarkGfm]}>{data}</Markdown>
               </div>
             </div>
@@ -126,9 +119,10 @@ const ChatBox = () => {
                         value={field.value ?? ""}
                         className="w-full"
                         width={"full"}
+                        disabled={isFetching}
                       />
                     </FormControl>
-                    <button type="submit">
+                    <button type="submit" disabled={isFetching}>
                       <Send className="text-primary" />
                     </button>
                   </FormItem>
