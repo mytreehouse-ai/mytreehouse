@@ -28,7 +28,7 @@ import {
 } from "@/schema/bot/botQuestionSchema";
 import { cn } from "@/lib/utils";
 
-const Chat = () => {
+const ChatBox = () => {
   const [enableQuery, setEnableQuery] = useState(false);
 
   const { chats, setChatMessage } = ChatSessionState();
@@ -128,4 +128,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default ChatBox;
