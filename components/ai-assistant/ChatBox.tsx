@@ -46,7 +46,7 @@ const ChatBox = () => {
     resolver: zodResolver(botQuestionSchema),
   });
 
-  const { data, isFetching, isFetched } = useBotAssistant({
+  const { data, isFetching } = useBotAssistant({
     q: latestUserChat || "",
     enabled: enableQuery,
   });
@@ -72,6 +72,7 @@ const ChatBox = () => {
 
       setTempId(Date.now())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   useEffect(() => {
