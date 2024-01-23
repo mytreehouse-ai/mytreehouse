@@ -1,26 +1,27 @@
-import {create} from 'zustand'
+import { create } from 'zustand'
 
 type Chat = {
-    from: string,
-    message: string,
+  tempId: number;
+  from: string,
+  message: string,
 }
 
 type ChatSessionState = {
-    chats: Chat[]
+  chats: Chat[]
 }
 
 type ChatSessionAction = {
-    setChatMessage: ({from, message}:Chat) => void
+  setChatMessage: ({ from, message }: Chat) => void
 }
 
-const chats: Chat[]= []
+const chats: Chat[] = []
 
 const initialState = {
-    chats,
+  chats,
 }
 
 const ChatSessionState = create<ChatSessionState & ChatSessionAction>((set) => ({
-...initialState,
+  ...initialState,
   setChatMessage: (chat: Chat) => {
     set((state) => ({
       ...state,

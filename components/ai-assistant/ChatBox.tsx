@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import {
   CardContent,
@@ -27,17 +27,20 @@ import {
 } from "@/schema/bot/botQuestionSchema";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import PulseLoader from "../loader/pulseloader";
+// import PulseLoader from "../loader/pulseloader";
+import { cn } from "@/lib/utils";
 
 const ChatBox = () => {
   const [enableQuery, setEnableQuery] = useState(false);
+  const [tempId, setTempId] = useState(1)
 
   const { chats, setChatMessage } = ChatSessionState();
 
+  const messageParentRef = useRef<HTMLDivElement>(null);
+  const scrollToBottomRef = useRef<HTMLDivElement>(null);
+
   const latestUserChat = chats.filter((chat) => chat.from === "user").pop()
     ?.message;
-
-  const q = "Warehouse available along taguig city with 100-300sqm?";
 
   const form = useForm<BotQuestionSchemaType>({
     resolver: zodResolver(botQuestionSchema),
@@ -49,19 +52,47 @@ const ChatBox = () => {
   });
 
   useEffect(() => {
+    if (messageParentRef?.current && chats) {
+      messageParentRef.current.scrollTop =
+        messageParentRef.current.scrollHeight;
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chats]);
+
+  useEffect(() => {
     if (!isFetching && data) {
+      console.log(data)
+
       setChatMessage({
+        tempId,
         from: "bot",
         message: data,
       });
+
+      setTempId(Date.now())
     }
   }, [data]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (scrollToBottomRef?.current) {
+        scrollToBottomRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+      }
+    }, 200);
+
+    return () => clearTimeout(timeout);
+  }, [chats.length]);
 
   const onSubmit = () => {
     const formData = form.getValues();
     form.reset();
     setEnableQuery(true);
     setChatMessage({
+      tempId: Date.now(),
       from: "user",
       message: formData.q,
     });
@@ -71,35 +102,20 @@ const ChatBox = () => {
     <>
       <Card className="w-full text-sm shadow-none md:mx-auto md:w-3/4">
         <CardHeader className="p-4">
-          <CardTitle>AI assistant</CardTitle>
+          <CardTitle>AI assistant {isFetching ? "..." : ""}</CardTitle>
         </CardHeader>
-        <CardContent className=" h-[calc(100vh-20rem)] space-y-4 overflow-y-auto">
-          {latestUserChat && (
-            <div className="flex justify-end gap-x-2 ">
-              <div className="rounded-md bg-neutral-100/100 px-4 py-2">
-                {latestUserChat}
-              </div>
-              <div className="h-6 w-6 rounded-full  bg-primary-foreground" />
-            </div>
-          )}
-          {isFetching && (
-            <div className="flex items-start gap-x-2">
-              <div className="h-6 w-6 rounded-full border bg-primary" />
-              <div className=" rounded-md bg-neutral-50 px-4 py-2">
-                <PulseLoader />
-              </div>
-            </div>
-          )}
-          {data && (
-            <div className="flex items-start gap-x-2 ">
-              <div className="h-6 w-6 shrink-0 rounded-full  bg-emerald-400" />
+        <CardContent ref={messageParentRef} className="h-[calc(100vh-20rem)] space-y-4 overflow-y-auto">
+          {chats.map((chat) => (
+            <div key={chat.tempId} className={cn("flex gap-x-2", chat.from === "bot" ? "items-start" : "justify-end")}>
+              {chat.from === "bot" && <div className="h-6 w-6 shrink-0 rounded-full  bg-emerald-400" />}
               <div className="rounded-md bg-neutral-50 px-4 py-2 shadow-sm">
                 <div className="prose lg:prose-sm">
-                  <Markdown remarkPlugins={[remarkGfm]}>{data}</Markdown>
+                  <Markdown remarkPlugins={[remarkGfm]}>{chat.message}</Markdown>
                 </div>
               </div>
             </div>
-          )}
+          ))}
+          <div ref={scrollToBottomRef} />
         </CardContent>
         <CardFooter className="pb-4">
           <Form {...form}>
