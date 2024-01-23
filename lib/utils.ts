@@ -139,3 +139,24 @@ export const formatToPhpForSlider = (number?: number) => {
 
   return formattedNumber;
 };
+
+export async function readAllChunks(readableStream: ReadableStream<Uint8Array>): Promise<Uint8Array[]> {
+  const reader = readableStream.getReader();
+  const chunks: Uint8Array[] = [];
+
+  let done: boolean | undefined, value: Uint8Array | undefined;
+
+  while (!done) {
+    ({ value, done } = await reader.read());
+    if (done) {
+      break;
+    }
+    if (value) {
+      chunks.push(value);
+    }
+  }
+
+  return chunks;
+}
+
+// console.log(await readAllChunks(response.body));

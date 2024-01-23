@@ -8,9 +8,9 @@ const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
   const [isFetched, setIsFetched] = useState(false)
 
   useEffect(() => {
-    if(!enabled){
-        return;
-    } 
+    if (!enabled) {
+      return;
+    }
 
     const fetchData = async () => {
       setIsFetching(true);
@@ -31,35 +31,34 @@ const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
 
         while (true) {
           const chunk = await reader?.read();
+
           if (!chunk) {
             break;
           }
+
           const { done, value } = chunk;
+
           if (done) {
             break;
           }
+
           const decodedChunk = decoder.decode(value);
-          // const lines = decodedChunk.split("\n");
-          // const parsedLines = lines
-          //   .filter((line) => line !== "")
-          //   .map((line) => JSON.stringify(line))
-          //   .map((line) => JSON.parse(line));
-               const lines = decodedChunk.split("\n").filter((line) => line !== "")
+
+          const lines = decodedChunk.split("\n").filter((line) => line !== "")
             .map((line) => JSON.stringify(line))
             .map((line) => JSON.parse(line));
 
           for (const parsedLine of lines) {
             if (parsedLine) {
               setData((e) => (e ? `${e}\n${parsedLine}` : parsedLine));
-           
             }
           }
         }
       } catch (error) {
         console.error(error);
       } finally {
-         setIsFetching(false);
-           setIsFetched(true);
+        setIsFetching(false);
+        setIsFetched(true);
       }
     };
 
@@ -69,7 +68,8 @@ const useBotAssistant = ({ q, enabled }: BotQuestionSchemaType) => {
   return {
     data,
     isFetching,
-    isFetched
+    isFetched,
+    setData
   };
 };
 

@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 
 const ChatBox = () => {
   const [enableQuery, setEnableQuery] = useState(false);
+  const [message, setMessage] = useState("What can you do?")
   const [tempId, setTempId] = useState(1)
 
   const { chats, setChatMessage } = ChatSessionState();
@@ -39,15 +40,12 @@ const ChatBox = () => {
   const messageParentRef = useRef<HTMLDivElement>(null);
   const scrollToBottomRef = useRef<HTMLDivElement>(null);
 
-  const latestUserChat = chats.filter((chat) => chat.from === "user").pop()
-    ?.message;
-
   const form = useForm<BotQuestionSchemaType>({
     resolver: zodResolver(botQuestionSchema),
   });
 
-  const { data, isFetching } = useBotAssistant({
-    q: latestUserChat || "",
+  const { data, isFetching, setData } = useBotAssistant({
+    q: message,
     enabled: enableQuery,
   });
 
@@ -62,15 +60,14 @@ const ChatBox = () => {
 
   useEffect(() => {
     if (!isFetching && data) {
-      console.log(data)
-
       setChatMessage({
         tempId,
         from: "bot",
         message: data,
       });
-
+      setData(null)
       setTempId(Date.now())
+
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -90,6 +87,7 @@ const ChatBox = () => {
 
   const onSubmit = () => {
     const formData = form.getValues();
+    setMessage(formData.q)
     form.reset();
     setEnableQuery(true);
     setChatMessage({
@@ -160,3 +158,4 @@ const ChatBox = () => {
 };
 
 export default ChatBox;
+
