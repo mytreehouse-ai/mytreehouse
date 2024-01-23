@@ -27,7 +27,7 @@ import {
 } from "@/schema/bot/botQuestionSchema";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-// import PulseLoader from "../loader/pulseloader";
+import PulseLoader from "../loader/pulseloader";
 import { cn } from "@/lib/utils";
 
 const ChatBox = () => {
@@ -101,7 +101,7 @@ const ChatBox = () => {
 
   return (
     <>
-      <Card className="w-full text-sm shadow-none md:mx-auto md:w-3/4">
+      <Card className="relative w-full text-sm shadow-none md:mx-auto md:w-3/4">
         <CardHeader className="p-4">
           <CardTitle>AI assistant {isFetching ? "..." : ""}</CardTitle>
         </CardHeader>
@@ -118,6 +118,11 @@ const ChatBox = () => {
           ))}
           <div ref={scrollToBottomRef} />
         </CardContent>
+        {isFetching && (
+          <div className="absolute px-1 left-6">
+            <PulseLoader />
+          </div>
+        )}
         <CardFooter className="pb-4">
           <Form {...form}>
             <form
