@@ -70,7 +70,7 @@ const ChatBox = () => {
 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [message, data]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
