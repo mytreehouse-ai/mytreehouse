@@ -32,7 +32,7 @@ import { cn } from "@/lib/utils";
 
 const ChatBox = () => {
   const [enableQuery, setEnableQuery] = useState(false);
-  const [message, setMessage] = useState("What can you do?")
+  const [message, setMessage] = useState({ prompt: "What can you do?", timestamp: 0 })
   const [tempId, setTempId] = useState(1)
 
   const { chats, setChatMessage } = ChatSessionState();
@@ -45,7 +45,7 @@ const ChatBox = () => {
   });
 
   const { data, isFetching, setData } = useBotAssistant({
-    q: message,
+    q: message.prompt,
     enabled: enableQuery,
   });
 
@@ -87,7 +87,7 @@ const ChatBox = () => {
 
   const onSubmit = () => {
     const formData = form.getValues();
-    setMessage(formData.q)
+    setMessage({ prompt: formData.q, timestamp: Date.now() })
     form.reset();
     setEnableQuery(true);
     setChatMessage({
